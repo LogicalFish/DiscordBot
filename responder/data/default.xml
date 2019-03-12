@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ID>
+	<name regex="(default|bot)">Default</name>
+	<game></game>
+	<AI>Normal</AI>
+	<ttt>
+		<open>
+			<elem>Ik heb een nieuw spel gestart. {} als eerste aan de beurt.</elem>
+		</open>
+		<gamestate>
+			<elem>De huidige status van het spel. {} is aan de beurt tegen {}:</elem>
+		</gamestate>
+		<ownmove>
+			<elem>Ik zet {} op {}.</elem>
+		</ownmove>
+		<genericwin>
+			<elem>{} heeft gewonnen van {}!</elem>
+		</genericwin>
+		<win>
+			<elem>Ik heb gewonnen! Volgende keer beter geluk!</elem>
+		</win>
+		<tie>
+			<elem>Gelijk spel. Probeer het nog een keer?</elem>
+		</tie>
+		<loss>
+			<elem>Gefeliciteerd, jij wint!</elem>
+		</loss>
+		<abandon>
+			<elem>Het spel tussen {} en {} is afgelopen.</elem>
+		</abandon>
+		<invalid>
+			<elem>Dat is geen valide zet. Probeer het nog een keer!</elem>
+		</invalid>
+	</ttt>
+	<default>
+		<call>
+			<elem>Hoi!</elem>
+		</call>
+		<morning>
+			<elem>Goedemorgen!</elem>
+		</morning>
+		<night>
+			<elem>Weltrusten!</elem>
+		</night>
+		<thanks>
+			<elem>You're welcome</elem>
+			<elem>No problem</elem>
+			<elem>Graag gedaan</elem>
+		</thanks>
+		<leave>
+			<elem>Goodbye!</elem>
+			<elem>Doei!</elem>
+		</leave>
+		<chatty>
+			<elem>I'll be more chatty from now on.</elem>
+			<elem>Ik zal nu spraakzamer zijn</elem>
+		</chatty>
+		<nonchatty>
+			<elem>I'll be quieter now.</elem>
+			<elem>Ik zal nu stiller zijn.</elem>
+		</nonchatty>
+		<error>
+			<elem>Dat is geen valide commando.</elem>
+		</error>
+		<status>
+			<elem>Ik ben nu {}. Ik ben {}. De huidige interval tussen berichten is {} seconden.</elem>
+		</status>
+	</default>
+</ID>
