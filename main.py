@@ -4,10 +4,10 @@ import asyncio
 import time
 import settings
 from systemstate import System_State
-from commands import command
+from commands import run_command
 from responder import parser
 
-#Secret Token
+# Secret Token
 TOKEN = settings.TOKEN
 
 client = discord.Client()
@@ -34,10 +34,9 @@ async def on_message(message):
     if message.author == client.user:
         #The bot should not respond to its own messages.
         return
-    if message.content.startswith(settings.SIGN):
-        action = command.run_command(message, system)
-        await act(action,message)
-
+    elif message.content.startswith(settings.SIGN):
+        action = run_command.run_command(message, system)
+        await act(action, message)
     elif message.channel not in system.banned_channels:
         #Switch identities based on received message.
         new_id = parser.find_new_id(message.content, system.identities)
@@ -57,12 +56,12 @@ async def on_message(message):
 async def act(action, message):
     """
     Method that acts in response to an action dictionary.
-    :param action: The action dictionary, as detailed in command.py
+    :param action: The action dictionary, as detailed in run_command.py
     :param message: The original message the dictionary was based on.
     """
     if "response" in action:
         await client.send_message(message.channel, action["response"])
-        if "board" in action:
+        if "board" in action and action["board"]:
             await client.send_message(message.channel, action["board"])
     if "react" in action:
         for r in action["react"]:
@@ -110,6 +109,8 @@ async def calendar_task():
                 if channel:
                     await client.send_message(channel, message)
         await asyncio.sleep(30)
+
+
 
 
 client.loop.create_task(calendar_task())

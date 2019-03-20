@@ -1,6 +1,7 @@
 *.xml
 !default.xml
 settings.py
+deprecated/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

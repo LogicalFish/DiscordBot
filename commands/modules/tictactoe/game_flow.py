@@ -12,8 +12,11 @@ def tictactoenewgame(author, opponent, system):
         signifying either a new game, or the game status if a game already existed.
         str(game) (string): A representation of the game board.
     """
-    if author in system.ttt_games:
-        game = system.ttt_games[author]
+    if author in system.ttt_games or opponent in system.ttt_games:
+        if author in system.ttt_games:
+            game = system.ttt_games[author]
+        elif opponent in system.ttt_games:
+            game = system.ttt_games[opponent]
         response = parser.direct_call(system.current_id, "gamestate").format(
             system.get_name(game.players[game.turn]),
             system.get_name(game.players[game.get_other_player()])
@@ -31,6 +34,7 @@ def tictactoenewgame(author, opponent, system):
             response = parser.direct_call(system.current_id, "open").format("{} is".format(system.get_name(current_player)))
     return response, str(game)
 
+
 #Ends a Tic-Tac-Toe game and removes all references to it.
 def tictactoeend(author, system):
     """
@@ -47,11 +51,8 @@ def tictactoeend(author, system):
             system.ttt_games.pop(game.players[key], None)
             if game.players[key] != author:
                 other_player = game.players[key]
-        if other_player == system.bot:
-            other_player_name = "mij"
-        else:
-            other_player_name = system.get_name(other_player)
-        return parser.direct_call(system.current_id, "abandon").format(system.get_name(author), other_player_name)
+        return parser.direct_call(system.current_id, "abandon").format(system.get_name(author),
+                                                                       get_addressable(system, other_player))
     else: return parser.direct_call(system.current_id, "error")
 
 
@@ -79,11 +80,8 @@ def tictactoemove(text, author, system):
     #Replying with a status:
     if text == "" and response == "":
         opponent = game.players[game.get_other_player()]
-        if opponent == system.bot:
-            opponent_name = "mij"
-        else:
-            opponent_name = system.get_name(opponent)
-        player_name = system.get_name(game.players[game.turn])
+        player_name = get_addressable(system, game.players[game.turn])
+        opponent_name = get_addressable(system, opponent)
         response = parser.direct_call(system.current_id, "gamestate").format(player_name, opponent_name)
         return response, game
     #Making a move:
@@ -125,4 +123,8 @@ def tictactoemove(text, author, system):
     return response, str(game)
 
 
-#TODO : Write Helper function that returns the addressable names of the players participating in the game.
+def get_addressable(system, player):
+    if player == system.bot:
+        return "mij"
+    else:
+        return system.get_name(player)

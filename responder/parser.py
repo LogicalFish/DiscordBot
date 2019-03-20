@@ -15,12 +15,12 @@ def find_new_id(message, id_list):
     """
     result = []
     for identity in id_list:
-       try:
+        try:
             matches = re.findall(identity.get_regex().lower(), message.lower())
             if len(matches):
                 result.append(identity)
-       except IdentityError as ie:
-           print("IdentityError: {} Skipping identity.".format(ie))
+        except IdentityError as ie:
+            print("IdentityError: {} Skipping identity.".format(ie))
     return result
 
 
@@ -48,7 +48,7 @@ def get_response(message, identity):
     special_dict = identity.special_list()
     fact_dict = facts.get_listdict()
 
-    full_dict = {**default_dict,**special_dict,**fact_dict}
+    full_dict = {**default_dict, **special_dict, **fact_dict}
 
     for regex in full_dict:
         matches = re.findall(regex.lower(), message.lower())
@@ -78,4 +78,3 @@ def direct_call(identity, tag):
     if len(response_list) == 0:
         response_list = settings.DEFAULT_ID.phrase_list(tag)
     return random.choice(response_list)
-
