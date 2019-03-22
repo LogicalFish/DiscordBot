@@ -1,7 +1,7 @@
-import xml.etree.ElementTree as ET
+from xml.etree import ElementTree
 import settings
 
-root = ET.parse(settings.FACT_FILE).getroot()
+root = ElementTree.parse(settings.FACT_FILE).getroot()
 
 
 def get_fact_list(tag):

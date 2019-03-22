@@ -1,6 +1,6 @@
-import xml.etree.ElementTree as ET
+from xml.etree import ElementTree
 
-#Special tags used in XML documents.
+# Special tags used in XML documents.
 TAG = {
     "NAME": "name",
     "GAME": "game",
@@ -10,7 +10,7 @@ TAG = {
     "AI": "AI",
 }
 
-#Difficulty Translation Table
+# Difficulty Translation Table
 DIF = {
     "simple": 1,
     "easy": 2,
@@ -25,15 +25,13 @@ class Identity:
     This class defines an Identity based on an XML document.
     Each Identity contains a multitude of elements divided amongst categories.
     Each element contains possible dialogue for any bot that is using this identity.
-    Attributes:
-        Root: The Root node of the XML tree.
     """
 
     def __init__(self, location, default=False):
-        self.root = ET.parse(location).getroot()
-        if(not default):
+        self.root = ElementTree.parse(location).getroot()
+        if not default:
             try:
-                #Check if the identity has a name and regex field. Throw an error if it doesn't.
+                # Check if the identity has a name and regex field. Throw an error if it doesn't.
                 self.get_name()
                 self.get_regex()
             except IdentityError as ie:

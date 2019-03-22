@@ -32,13 +32,13 @@ async def on_message(message):
     :param message: The message object that is received.
     """
     if message.author == client.user:
-        #The bot should not respond to its own messages.
+        # The bot should not respond to its own messages.
         return
     elif message.content.startswith(settings.SIGN):
         action = run_command.run_command(message, system)
         await act(action, message)
     elif message.channel not in system.banned_channels:
-        #Switch identities based on received message.
+        # Switch identities based on received message.
         new_id = parser.find_new_id(message.content, system.identities)
         if len(new_id) and system.current_id not in new_id:
             system.current_id = new_id[0]
@@ -46,7 +46,7 @@ async def on_message(message):
             if system.chatty and system.last_msg+system.interval < time.time():
                 await client.send_message(message.channel, parser.direct_call(system.current_id, "call"))
         elif system.chatty and system.last_msg+system.interval < time.time():
-            #Respond to distinct phrases based on identity.
+            # Respond to distinct phrases based on identity.
             response = parser.get_response(message.content, system.current_id)
             if len(response):
                 await client.send_message(message.channel, response)
@@ -96,9 +96,7 @@ async def calendar_task():
     await client.wait_until_ready()
 
     while not client.is_closed:
-        # print("Keep Alive")
         system.tim_man.delete_obsolete()
-        # chan = discord.Object(id='367687226928398348')
         for remind, channel_name, tag_name in system.tim_man.reminders():
             if len(channel_name):
                 channel = get(client.get_all_channels(), name=channel_name)
@@ -109,8 +107,6 @@ async def calendar_task():
                 if channel:
                     await client.send_message(channel, message)
         await asyncio.sleep(30)
-
-
 
 
 client.loop.create_task(calendar_task())

@@ -1,5 +1,5 @@
-from commands.modules.calendar.eventmanager import EventManager
-from commands.modules.calendar.timemanager import TimeManager
+from deprecated.eventmanager import EventManager
+from commands.modules.calendar.clock_manager import TimeManager
 from responder.identity import Identity, IdentityError
 import settings
 import random
@@ -25,7 +25,7 @@ class System_State:
         self.identities = []
         for file in settings.IDENTITY_FILES:
             try:
-                self.identities.append(Identity(settings.DATA_DIR+file))
+                self.identities.append(Identity(settings.XML_DIR + file))
             except IdentityError as ie:
                 print("IdentityError: {} Skipping identity {}.".format(ie, file))
                 continue

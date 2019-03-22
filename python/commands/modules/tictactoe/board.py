@@ -1,6 +1,7 @@
 import copy
 import settings as s
 
+
 class Board:
     """
     BOARD class. Keeps track of a Tic-Tac-Toe board, and handles any changes to it.

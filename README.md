@@ -34,7 +34,5 @@ In addition, you should add at least one file example to the IDENTITY_FILES list
 - Continue work on Calendar Module.
 - Add functionality for an Admin User, capable of editing and deleting events that are not his.
 - Improve Error Messages
-- Rework unwieldy command.py methods
-- Add /help command to list available commands.
 - Add additional capability of reacting using emojis.
 - Ensure the Bot runs fine on multiple servers at the same time.

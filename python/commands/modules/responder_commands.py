@@ -96,7 +96,7 @@ class IntervalCommand(Command):
             if old_val == system.interval:
                 return {"response": StatusCommand.get_status(system)}
             elif old_val < system.interval:
-                return {"response": parser.direct_call(system.current_id, "nonchatty") }
+                return {"response": parser.direct_call(system.current_id, "nonchatty")}
             else:
                 return {"response": parser.direct_call(system.current_id, "chatty")}
 

@@ -61,14 +61,14 @@ class CreateEventCommand(Command):
 class EditEventCommand(Command):
 
     def __init__(self):
-        call = ["eventedit"]
+        call = ["eventedit", "eventupdate"]
         parameters = "\t**id**: The ID of the event you wish to edit. *(required)*\n" \
                      "\tSee {}eventadd for other parameters.".format(settings.SIGN)
         description = "Edits the parameters of a given event."
         super().__init__(call, parameters, description)
 
     def in_call(self, command):
-        if "event" in command and "edit" in command:
+        if "event" in command and ("edit" in command or "update" in command):
             return True
         return False
 

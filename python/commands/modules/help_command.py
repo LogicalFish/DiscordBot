@@ -19,14 +19,20 @@ class HelpCommand(Command):
             except ValueError:
                 return {"response": "[ERROR]: Command *{}{}* not found.".format(settings.SIGN, param)}
         else:
-            return {"response": "**List of Commands:** {}".format(self.get_list_of_commands())}
+            return {"response": "**List of Commands:** {}"
+                                "*Type *``{}{} <command>``* for more information.*".format(self.get_list_of_commands(),
+                                                                                           settings.SIGN,
+                                                                                           self.call[0])}
 
     @staticmethod
     def get_list_of_commands():
         result = ""
-        for command in run_command.commands_list:
-            if result:
-                result += ", "
-            result += "*{}*".format(command.call[0])
-        result += "."
+        for i, command in enumerate(run_command.commands_list):
+            result += "\t{}{}".format(settings.SIGN, command.call[0])
+            if i % 3 == 2:
+                result += "\n"
+            else:
+                for i in range(15-len(command.call[0])):
+                    result += " "
+        result = "```{}```".format(result)
         return result
