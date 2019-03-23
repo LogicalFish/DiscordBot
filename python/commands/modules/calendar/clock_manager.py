@@ -1,5 +1,5 @@
 import math
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class TimeManager:
@@ -7,30 +7,29 @@ class TimeManager:
     def __init__(self, event_manager):
         self.event_manager = event_manager
 
-    def delete_obsolete(self):
-        key_list = list(self.event_manager.events.keys())
-        for key in key_list:
-            event = self.event_manager.events[key]
-            if event.planning < datetime.now():
-                if event.recurring:
-                    event.planning += event.recurring
-                else:
-                    self.event_manager.events.pop(key)
+    def event_recur(self, id_no):
+        event = self.event_manager.get_event(id_no)
+        if event["recur"]:
+            next_time = timedelta(days=event["recur"])
+            new_date = event["date"] + next_time
+            self.event_manager.update_event(id_no, {"date": new_date})
 
-    def reminders(self):
-        result = []
-        for key in self.event_manager.events:
-            event = self.event_manager.events[key]
-            for i, reminder in enumerate(event.reminders):
-                if reminder < datetime.now():
-                    delta = event.planning - datetime.now()
-                    message = "Event {}: **{}** happens in {}!".format(key, event.name, get_time_string(delta))
-                    result.append((message, event.channel, event.tag))
-                    if event.recurring:
-                        event.reminders[i] = reminder + event.recurring
-                    else:
-                        event.reminders.remove(reminder)
-        return result
+    def delete_obsolete(self):
+        #Get all events. Automatically sorted by date.
+        events = self.event_manager.get_all_events()
+        for event in events:
+            if event["date"] < datetime.now():
+                if event["recur"]:
+                    self.event_recur(event["event_id"])
+                else:
+                    self.event_manager.delete_event(events[0][self.event_manager.primary_key])
+            else:
+                break
+
+    def get_reminder(self, id_no):
+        event = self.event_manager.get_event(id_no)
+        #Pass Reminder Code
+
 
 
 def get_time_string(delta):

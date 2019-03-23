@@ -109,6 +109,6 @@ async def calendar_task():
         await asyncio.sleep(30)
 
 
-client.loop.create_task(calendar_task())
+# client.loop.create_task(calendar_task())
 
 client.run(TOKEN)

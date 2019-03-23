@@ -14,6 +14,6 @@ class CursorDecorator:
                 cur.close()
                 return value
             except (Exception, psycopg2.DatabaseError) as error:
-                print(error)
-                raise ValueError
+                # print(error)
+                raise error
         return wrapped_func

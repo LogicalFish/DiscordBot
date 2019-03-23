@@ -1,22 +1,11 @@
 import settings as s
+from commands.modules.calendar.event_model import EventModel
 from database.db_connection import DatabaseConnection
 from database.decorators import CursorDecorator
 
 db = DatabaseConnection()
-event_table = """
-    CREATE TABLE events (
-        event_id SERIAL PRIMARY KEY,
-        name VARCHAR({}) NOT NULL,
-        date TIMESTAMP NOT NULL,
-        creator VARCHAR(255) NOT NULL,
-        description VARCHAR({}),
-        channel VARCHAR(255),
-        tag VARCHAR(255),
-        reminder VARCHAR(255),
-        recur INTEGER
-    )         
-    """.format(s.MAX_EVENT_NAME, s.MAX_EVENT_DESCRIPTION)
-
+em = EventModel()
+event_table = em.create_table_sql()
 
 @CursorDecorator(db.conn)
 def create_tables(commands, cur=None):
