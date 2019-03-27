@@ -24,6 +24,11 @@ def describe_long(event):
     return description
 
 
+def describe_reminder(event, hours):
+    description = "Event {}: **{}** happens in {} hours!".format(event["event_id"], event["name"], hours)
+    return description
+
+
 def create_event_dict(string):
     parsed = re.findall("(\\w*)\\s*=\\s*\"(.*?)\"", string)
     output_dict = {}

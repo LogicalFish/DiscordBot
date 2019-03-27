@@ -1,7 +1,7 @@
 
 from commands.modules.calendar.clock_manager import TimeManager
 from commands.modules.calendar.event_manager import EventManager
-from database.db_manager import DatabaseManager
+from database.database_manager import DatabaseManager
 from responder.identity import Identity, IdentityError
 import settings
 import random
@@ -41,9 +41,9 @@ class System_State:
         self.last_msg = 0
         self.bot = None
         self.nicknames = {}
-        self.db_man = DatabaseManager()
-        self.event_man = EventManager(self.db_man)
-        self.tim_man = TimeManager(self.event_man)
+        self.database_manager = DatabaseManager()
+        self.event_manager = EventManager(self.database_manager)
+        self.time_manager = TimeManager(self.event_manager)
 
     # def change_id(self, identity):
     #     self.current_id = identity

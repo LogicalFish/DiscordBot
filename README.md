@@ -25,6 +25,9 @@ In addition, this bot requires the following libraries:
 - pip install emoji --upgrade
 - pip install python-dateutil
 
+Also:
+- pip install psycopg2-binary
+
 ## Settings
 default_settings.py is an example that contains malleable settings the bot can use.
 This file should be renamed to settings.py, and the Secret Token of your Discord Bot should be added as the value of TOKEN.

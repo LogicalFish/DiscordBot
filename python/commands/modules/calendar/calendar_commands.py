@@ -1,6 +1,7 @@
 import settings
 from commands.command import Command
 from commands.modules.calendar import event_reader as reader
+from commands.modules.calendar.event_model import EventError
 
 
 class EventCommand(Command):
@@ -14,7 +15,7 @@ class EventCommand(Command):
     def execute(self, param, message, system):
         try:
             event_id = int(param)
-            event = system.event_man.get_event(event_id)
+            event = system.event_manager.get_event(event_id)
             if event:
                 response = reader.describe_long(event)
             else:
@@ -38,7 +39,7 @@ class ListEventCommand(Command):
         return False
 
     def execute(self, param, message, system):
-        events_list = system.event_man.get_all_events()
+        events_list = system.event_manager.get_all_events()
         list_message = ""
         for event in events_list:
             list_message += reader.describe_short(event)
@@ -74,14 +75,14 @@ class CreateEventCommand(Command):
     def execute(self, param, message, system):
         try:
             event_dict = reader.create_event_dict(param)
-            system.event_man.model.clean_data(event_dict)
-            event_dict[system.event_man.model.author_key] = message.author.id
+            system.event_manager.model.clean_data(event_dict)
+            event_dict[system.event_manager.model.key_author] = message.author.id
             if "channel" not in event_dict.keys():
                 event_dict["channel"] = message.channel.name
-            event = system.event_man.create_event(event_dict)
-            return {"response": "Created event {}:\n{}".format(event[system.event_man.model.PRIMARY_KEY],
+            event = system.event_manager.create_event(event_dict)
+            return {"response": "Created event {}:\n{}".format(event[system.event_manager.model.PRIMARY_KEY],
                                                                reader.describe_long(event))}
-        except ValueError as error:
+        except EventError as error:
             return {"response": "[ERROR]: {}".format(error)}
 
 
@@ -110,12 +111,11 @@ class EditEventCommand(Command):
         except ValueError:
             return {"response": "[ERROR]: Id '{}' is geen valide ID".format(id_str)}
         try:
-            system.event_man.model.clean_data(event_dict)
-            event = system.event_man.update_event(identifier, event_dict, message.author.id)
+            system.event_manager.model.clean_data(event_dict)
+            event = system.event_manager.update_event(identifier, event_dict, message.author.id)
             return {"response": "Updated event {}:\n{}".format(identifier, reader.describe_long(event))}
-        except ValueError as error:
+        except EventError as error:
             return {"response": "[ERROR]: {}".format(error)}
-
 
 
 class DeleteEventCommand(Command):
@@ -134,7 +134,7 @@ class DeleteEventCommand(Command):
     def execute(self, param, message, system):
         try:
             event_id = int(param)
-            response = system.event_man.delete_event(event_id, message.author.id)
+            response = system.event_manager.delete_event(event_id, message.author.id)
         except ValueError:
             response = "[ERROR]: ID '{}' is geen valide ID".format(param)
         return {"response": response}

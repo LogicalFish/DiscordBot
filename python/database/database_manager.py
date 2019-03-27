@@ -1,5 +1,5 @@
 from database import sql_helper
-from database.db_connection import DatabaseConnection
+from database.database_connection import DatabaseConnection
 from database.decorators import CursorDecorator
 
 

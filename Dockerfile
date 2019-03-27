@@ -8,7 +8,8 @@ RUN apk add --no-cache --virtual .build-deps \
 
 RUN pip install --upgrade discord.py python-dateutil \
  && python3 -m pip install -U https://github.com/Rapptz/discord.py/archive/async.zip#egg=discord.py[voice] \
- && pip install --upgrade aiohttp websockets emoji
+ && pip install --upgrade aiohttp websockets emoji \
+ && pip install --upgrade psycopg2-binary
 
 ENV GID 10000
 ENV UID 10000

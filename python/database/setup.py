@@ -1,6 +1,6 @@
 import settings as s
 from commands.modules.calendar.event_model import EventModel
-from database.db_connection import DatabaseConnection
+from database.database_connection import DatabaseConnection
 from database.decorators import CursorDecorator
 
 db = DatabaseConnection()

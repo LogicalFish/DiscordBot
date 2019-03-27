@@ -1,11 +1,13 @@
-import math
 from datetime import datetime, timedelta
+
+from commands.modules.calendar.reminder_queue import ReminderQueue
 
 
 class TimeManager:
 
     def __init__(self, event_manager):
         self.event_manager = event_manager
+        self.queue = ReminderQueue(self.event_manager.get_all_events())
 
     def event_recur(self, id_no):
         event = self.event_manager.get_event(id_no)
@@ -26,20 +28,21 @@ class TimeManager:
             else:
                 break
 
-    def get_reminder(self, id_no):
-        event = self.event_manager.get_event(id_no)
-        #Pass Reminder Code
+    def check_reminders(self):
+        if self.event_manager.altered:
+            self.queue.clear()
+            self.queue.build_queue(self.event_manager.get_all_events())
 
+    def send_reminders(self):
+        list_of_reminders = []
+        next_reminder = self.queue.pop_queue()
+        while next_reminder:
+            list_of_reminders.append(next_reminder)
+            next_reminder = self.queue.pop_queue()
+        return list_of_reminders
 
-
-def get_time_string(delta):
-    if delta.days > 0:
-        accurate_time = round(delta.total_seconds / (60 * 60 * 24))
-        result = "{} day".format(accurate_time)
-        if accurate_time > 1:
-            result += "s"
-        return result
-    minutes = math.ceil(delta.total_seconds()/60)
-    if minutes > 120:
-        return "{0:g} hours".format(round(minutes/60, 1))
-    return "{} minutes".format(minutes)
+    def clock_pass(self):
+        reminders = self.send_reminders()
+        self.delete_obsolete()
+        self.check_reminders()
+        return reminders

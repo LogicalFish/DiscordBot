@@ -32,9 +32,10 @@ def run_command(message, system):
     print("Attempting to execute the {} command from {}".format(user_call, message.author.name))
     try:
         command = get_command(user_call)
-        return command.execute(user_param, message, system)
     except ValueError:
         return {"response": parser.direct_call(system.current_id, "error")}
+    finally:
+        return command.execute(user_param, message, system)
 
 
 def get_command(call):
@@ -53,7 +54,7 @@ def split_message(message):
     """
     # Split the message contents in two halves.
     # One containing the command (first word in the string), the other the command parameters.
-    splittext = message.content.split(' ', 1)
+    splittext = message.clean_content.split(' ', 1)
     command = splittext[0][len(settings.SIGN):]
     user_param = ""
     if len(splittext) > 1:
