@@ -1,7 +1,6 @@
 from datetime import datetime
-import re
-
 from dateutil import parser
+import re
 
 
 def validate_varchar(char_input, varchar_value):
