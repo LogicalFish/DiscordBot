@@ -3,25 +3,26 @@ import random
 import settings as s
 from .board import Board
 
-#GAME class. Keeps track of a tic-tac-toe game, including players, turns, and NPC moves
+
+# GAME class. Keeps track of a tic-tac-toe game, including players, turns, and NPC moves
 class Game:
     """
     Attributes:
         turn: The Token of the player whose turn it is.
     """
-    turn = s.TOKENS[0]
+    turn = s.TTT_PIECES[0]
 
-    def __init__(self, players):
+    def __init__(self, input_players):
         """
         Initializes the game
-        :param players: A list containing two players.
+        :param input_players: A list containing two players.
         """
         self.game_board = Board()
         self.players = {}
-        if len(players) == 2:
-            random.shuffle(players)
+        if len(input_players) == 2:
+            random.shuffle(input_players)
             for i in range(2):
-                self.players[s.TOKENS[i]] = players[i]
+                self.players[s.TTT_PIECES[i]] = input_players[i]
         else:
             raise ValueError
 
@@ -37,7 +38,7 @@ class Game:
         """
         :return: Returns the token representing the player other than the one whose turn it is.
         """
-        for p in s.TOKENS:
+        for p in s.TTT_PIECES:
             if p != self.turn:
                 return p
 
