@@ -3,7 +3,7 @@ from discord.utils import get
 import asyncio
 import time
 import settings
-from systemstate import System_State
+from system_manager import SystemManager
 from commands import run_command
 from responder import parser
 
@@ -11,7 +11,8 @@ from responder import parser
 TOKEN = settings.TOKEN
 
 client = discord.Client()
-system = System_State()
+system = SystemManager()
+identities = system.id_manager
 
 
 @client.event
@@ -37,17 +38,17 @@ async def on_message(message):
     elif message.content.startswith(settings.SIGN):
         action = run_command.run_command(message, system)
         await act(action, message)
-    elif message.channel not in system.banned_channels:
+    elif message.channel not in identities.banned_channels:
         # Switch identities based on received message.
-        new_id = parser.find_new_id(message.content, system.identities)
-        if len(new_id) and system.current_id not in new_id:
-            system.current_id = new_id[0]
+        new_id = parser.find_new_id(message.content, identities.identities)
+        if len(new_id) and identities.current_id not in new_id:
+            identities.current_id = new_id[0]
             await change_visual_id()
-            if system.chatty and system.last_msg+system.interval < time.time():
-                await client.send_message(message.channel, parser.direct_call(system.current_id, "call"))
-        elif system.chatty and system.last_msg+system.interval < time.time():
+            if identities.chatty and system.last_msg+identities.interval < time.time():
+                await client.send_message(message.channel, parser.direct_call(identities.current_id, "call"))
+        elif identities.chatty and system.last_msg+identities.interval < time.time():
             # Respond to distinct phrases based on identity.
-            response = parser.get_response(message.content, system.current_id)
+            response = parser.get_response(message.content, identities.current_id)
             if len(response):
                 await client.send_message(message.channel, response)
                 system.last_msg = time.time()
@@ -60,6 +61,7 @@ async def act(action, message):
     :param message: The original message the dictionary was based on.
     """
     if "response" in action:
+        response = action["response"].format(error=parser.direct_call(identities.current_id, "error"))
         await client.send_message(message.channel, action["response"])
         if "board" in action and action["board"]:
             await client.send_message(message.channel, action["board"])
@@ -70,18 +72,18 @@ async def act(action, message):
         for c in action["c_react"]:
             await client.add_reaction(message, get(client.get_all_emojis(), name=c))
     if "leave" in action:
-        if system.chatty and system.last_msg+system.interval < time.time():
-            await client.send_message(message.channel, parser.direct_call(system.current_id, "leave"))
-        system.current_id = action["leave"]
+        if identities.chatty and system.last_msg+identities.interval < time.time():
+            await client.send_message(message.channel, parser.direct_call(identities.current_id, "leave"))
+        identities.current_id = action["leave"]
         await change_visual_id()
-        if system.chatty and system.last_msg+system.interval < time.time():
-            await client.send_message(message.channel, parser.direct_call(system.current_id, "call"))
+        if identities.chatty and system.last_msg+identities.interval < time.time():
+            await client.send_message(message.channel, parser.direct_call(identities.current_id, "call"))
 
 
 async def change_visual_id():
     """Helper function that changes the bot's nickname and game that is displayed"""
-    name_str = system.current_id.get_name()
-    game_str = system.current_id.get_game()
+    name_str = identities.current_id.get_name()
+    game_str = identities.current_id.get_game()
     print("Changing responder to {}".format(name_str))
 
     for server in client.servers:

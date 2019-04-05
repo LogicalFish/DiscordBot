@@ -36,7 +36,7 @@ def run_command(message, system):
     try:
         command = get_command(user_call)
     except ValueError:
-        return {"response": parser.direct_call(system.current_id, "error")}
+        return {"response": parser.direct_call(system.id_manager.current_id, "error")}
     return command.execute(user_param, message, system)
 
 

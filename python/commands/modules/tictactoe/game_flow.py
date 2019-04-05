@@ -17,7 +17,7 @@ def tictactoenewgame(author, opponent, system):
             game = system.ttt_games[author]
         elif opponent in system.ttt_games:
             game = system.ttt_games[opponent]
-        response = parser.direct_call(system.current_id, "gamestate").format(
+        response = parser.direct_call(system.id_manager.current_id, "gamestate").format(
             system.get_name(game.players[game.turn]),
             system.get_name(game.players[game.get_other_player()])
         )
@@ -28,10 +28,12 @@ def tictactoenewgame(author, opponent, system):
             system.ttt_games[opponent] = game
         current_player = game.players[game.turn]
         if current_player == system.bot:
-            response = parser.direct_call(system.current_id, "open").format("Ik ben")
+            response = parser.direct_call(system.id_manager.current_id, "open").format("Ik ben")
             tictactoemove("cpu", author, system)
         else:
-            response = parser.direct_call(system.current_id, "open").format("{} is".format(system.get_name(current_player)))
+            response = parser.direct_call(system.id_manager.current_id, "open").format(
+                "{} is".format(system.get_name(current_player))
+            )
     return response, str(game)
 
 
@@ -51,9 +53,9 @@ def tictactoeend(author, system):
             system.ttt_games.pop(game.players[key], None)
             if game.players[key] != author:
                 other_player = game.players[key]
-        return parser.direct_call(system.current_id, "abandon").format(system.get_name(author),
-                                                                       get_addressable(system, other_player))
-    else: return parser.direct_call(system.current_id, "error")
+        return parser.direct_call(system.id_manager.current_id, "abandon").format(system.get_name(author),
+                                                                                  get_addressable(system, other_player))
+    else: return parser.direct_call(system.id_manager.current_id, "error")
 
 
 def tictactoemove(text, author, system):
@@ -82,38 +84,38 @@ def tictactoemove(text, author, system):
         opponent = game.players[game.get_other_player()]
         player_name = get_addressable(system, game.players[game.turn])
         opponent_name = get_addressable(system, opponent)
-        response = parser.direct_call(system.current_id, "gamestate").format(player_name, opponent_name)
+        response = parser.direct_call(system.id_manager.current_id, "gamestate").format(player_name, opponent_name)
         return response, game
     #Making a move:
     move = ""
     if game.players[game.turn] == system.bot:
-        move = game.get_cpu_move(system.get_current_ai())
-        response += parser.direct_call(system.current_id, "ownmove").format(game.turn, move) +"\n"
+        move = game.get_cpu_move(system.id_manager.get_current_ai())
+        response += parser.direct_call(system.id_manager.current_id, "ownmove").format(game.turn, move) +"\n"
     elif game.players[game.turn] == author:
         move = text[:2].upper()
         if game.players[game.get_other_player()] != system.bot:
-            response = parser.direct_call(system.current_id, "gamestate").format(
+            response = parser.direct_call(system.id_manager.current_id, "gamestate").format(
                 system.get_name(game.players[game.get_other_player()]),
                 system.get_name(game.players[game.turn])
             )
     valid = game.make_move(move)
 
     if not valid and text != "":
-        response = parser.direct_call(system.current_id, "invalid")
+        response = parser.direct_call(system.id_manager.current_id, "invalid")
         return response, str(game)
     #Handling a winstate
     win_state, w_p = game.get_status()
     if win_state:
         tictactoeend(author, system)
         if w_p == "T":
-            response += parser.direct_call(system.current_id, "tie")
+            response += parser.direct_call(system.id_manager.current_id, "tie")
         else:
             if game.players[w_p] == system.bot:
-                response += parser.direct_call(system.current_id, "win")
+                response += parser.direct_call(system.id_manager.current_id, "win")
             elif system.bot in game.players.values():
-                response += parser.direct_call(system.current_id, "loss")
+                response += parser.direct_call(system.id_manager.current_id, "loss")
             else:
-                response += parser.direct_call(system.current_id, "genericwin").format(
+                response += parser.direct_call(system.id_manager.current_id, "genericwin").format(
                     system.get_name(game.players[w_p]),
                     system.get_name(game.players[game.turn]))
         return response, str(game)
