@@ -1,5 +1,6 @@
 from commands.modules.calendar.time_manager import TimeManager
 from commands.modules.calendar.event_manager import EventManager
+from commands.modules.nicknames.nickname_manager import NicknameManager
 from database.database_manager import DatabaseManager
 from responder.identity_manager import IdentityManager
 
@@ -17,17 +18,9 @@ class SystemManager:
     def __init__(self):
         self.last_msg = 0
         self.bot = None
-        self.nicknames = {}
         self.ttt_games = {}
         self.database_manager = DatabaseManager()
         self.id_manager = IdentityManager(self.database_manager)
         self.event_manager = EventManager(self.database_manager)
         self.time_manager = TimeManager(self.event_manager)
-
-    def get_name(self, user):
-        if user in self.nicknames:
-            return self.nicknames[user]
-        if user.nick is not None:
-            return user.nick
-        else:
-            return user.name
+        self.nickname_manager = NicknameManager(self.database_manager)

@@ -1,7 +1,7 @@
 
 
-def generate_insert_sql(var_dict, table):
-    sql = """INSERT INTO {} ({}) VALUES ({}) RETURNING event_id;"""
+def generate_insert_sql(var_dict, table, return_value):
+    sql = """INSERT INTO {} ({}) VALUES ({}) {};"""
     columns = ""
     values = ""
     for key in var_dict.keys():
@@ -10,7 +10,10 @@ def generate_insert_sql(var_dict, table):
             values += ", "
         columns += key
         values += "'{}'".format(var_dict[key])
-    return sql.format(table, columns, values)
+    if return_value:
+        return sql.format(table, columns, values, "RETURNING " + return_value)
+    else:
+        return sql.format(table, columns, values, "")
 
 
 def generate_update_sql(var_dict, pk, pk_name, table):
@@ -37,7 +40,7 @@ def generate_column_sql(table):
 def generate_all_rows_sql(table, sort=None):
     sql = "SELECT * FROM {}".format(table)
     if sort:
-        sql += " ORDER BY {};".format(sort)
+        sql += " ORDER BY {}".format(sort)
     sql += ";"
     return sql
 

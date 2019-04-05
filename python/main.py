@@ -38,7 +38,7 @@ async def on_message(message):
     elif message.content.startswith(settings.SIGN):
         action = run_command.run_command(message, system)
         await act(action, message)
-    elif message.channel not in identities.banned_channels:
+    elif message.channel.id not in identities.banned_channels:
         # Switch identities based on received message.
         new_id = parser.find_new_id(message.content, identities.identities)
         if len(new_id) and identities.current_id not in new_id:
@@ -61,16 +61,16 @@ async def act(action, message):
     :param message: The original message the dictionary was based on.
     """
     if "response" in action:
-        response = action["response"].format(error=parser.direct_call(identities.current_id, "error"))
-        await client.send_message(message.channel, action["response"])
+        response = action["response"].replace("[ERROR]:", parser.direct_call(identities.current_id, "error"))
+        await client.send_message(message.channel, response)
         if "board" in action and action["board"]:
             await client.send_message(message.channel, action["board"])
     if "react" in action:
-        for r in action["react"]:
-            await client.add_reaction(message, r)
+        for emoji in action["react"]:
+            await client.add_reaction(message, emoji)
     if "c_react" in action:
-        for c in action["c_react"]:
-            await client.add_reaction(message, get(client.get_all_emojis(), name=c))
+        for custom_emoji in action["c_react"]:
+            await client.add_reaction(message, get(client.get_all_emojis(), name=custom_emoji))
     if "leave" in action:
         if identities.chatty and system.last_msg+identities.interval < time.time():
             await client.send_message(message.channel, parser.direct_call(identities.current_id, "leave"))

@@ -19,9 +19,9 @@ class EventCommand(Command):
             if event:
                 response = event_reader.describe_long(event)
             else:
-                response = "[ERROR]: Geen event met ID '{}' gevonden".format(param)
+                response = "[ERROR]: Geen event met ID '{}' gevonden.".format(param)
         except ValueError:
-            response = "[ERROR]: ID '{}' is geen valide ID".format(param)
+            response = "[ERROR]: ID '{}' is geen valide ID.".format(param)
         return {"response": response}
 
 
@@ -114,7 +114,7 @@ class EditEventCommand(Command):
         try:
             identifier = int(id_str)
         except ValueError:
-            return {"response": "[ERROR]: Id '{}' is geen valide ID".format(id_str)}
+            return {"response": "[ERROR]: Id '{}' is geen valide ID.".format(id_str)}
         try:
             system.event_manager.model.clean_data(event_dict)
             event = system.event_manager.update_event(identifier, event_dict, message.author.id)
@@ -141,7 +141,7 @@ class DeleteEventCommand(Command):
             event_id = int(param)
             response = system.event_manager.delete_event(event_id, message.author.id)
         except ValueError:
-            response = "[ERROR]: ID '{}' is geen valide ID".format(param)
+            response = "[ERROR]: ID '{}' is geen valide ID.".format(param)
         except EventError as error:
             response = "[ERROR]: {}".format(error)
         return {"response": response}

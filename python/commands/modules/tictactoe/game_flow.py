@@ -18,8 +18,8 @@ def tictactoenewgame(author, opponent, system):
         elif opponent in system.ttt_games:
             game = system.ttt_games[opponent]
         response = parser.direct_call(system.id_manager.current_id, "gamestate").format(
-            system.get_name(game.players[game.turn]),
-            system.get_name(game.players[game.get_other_player()])
+            get_addressable(system, game.players[game.turn]),
+            get_addressable(system, game.players[game.get_other_player()])
         )
     else:
         game = Game([author, opponent])
@@ -32,7 +32,7 @@ def tictactoenewgame(author, opponent, system):
             tictactoemove("cpu", author, system)
         else:
             response = parser.direct_call(system.id_manager.current_id, "open").format(
-                "{} is".format(system.get_name(current_player))
+                "{} is".format(get_addressable(system, current_player))
             )
     return response, str(game)
 
@@ -53,7 +53,7 @@ def tictactoeend(author, system):
             system.ttt_games.pop(game.players[key], None)
             if game.players[key] != author:
                 other_player = game.players[key]
-        return parser.direct_call(system.id_manager.current_id, "abandon").format(system.get_name(author),
+        return parser.direct_call(system.id_manager.current_id, "abandon").format(get_addressable(system, author),
                                                                                   get_addressable(system, other_player))
     else: return parser.direct_call(system.id_manager.current_id, "error")
 
@@ -95,8 +95,8 @@ def tictactoemove(text, author, system):
         move = text[:2].upper()
         if game.players[game.get_other_player()] != system.bot:
             response = parser.direct_call(system.id_manager.current_id, "gamestate").format(
-                system.get_name(game.players[game.get_other_player()]),
-                system.get_name(game.players[game.turn])
+                get_addressable(system, game.players[game.get_other_player()]),
+                get_addressable(system, game.players[game.turn])
             )
     valid = game.make_move(move)
 
@@ -116,8 +116,8 @@ def tictactoemove(text, author, system):
                 response += parser.direct_call(system.id_manager.current_id, "loss")
             else:
                 response += parser.direct_call(system.id_manager.current_id, "genericwin").format(
-                    system.get_name(game.players[w_p]),
-                    system.get_name(game.players[game.turn]))
+                    get_addressable(system, game.players[w_p]),
+                    get_addressable(system, game.players[game.turn]))
         return response, str(game)
     #If there's a CPU, have him make a move.
     if game.players[game.turn] == system.bot:
@@ -129,4 +129,4 @@ def get_addressable(system, player):
     if player == system.bot:
         return "mij"
     else:
-        return system.get_name(player)
+        return system.nickname_manager.get_name(player)

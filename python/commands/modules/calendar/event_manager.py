@@ -10,7 +10,7 @@ class EventManager:
 
     def get_event(self, id_no):
         columns = self.database.get_columns(self.model.TABLE_NAME)
-        row = self.database.select_one(id_no, self.model.PRIMARY_KEY, self.model.TABLE_NAME)
+        row = self.database.select_one_row(id_no, self.model.PRIMARY_KEY, self.model.TABLE_NAME)
         if row:
             return dict(zip(columns, row))
         else:
@@ -27,7 +27,7 @@ class EventManager:
 
     def create_event(self, event_dict):
         self.model.validate_required_fields(event_dict)
-        new_event_id = self.database.insert(event_dict, self.model.TABLE_NAME)
+        new_event_id = self.database.insert(event_dict, self.model.TABLE_NAME, self.model.PRIMARY_KEY)
         self.altered = True
         return self.get_event(new_event_id)
 
@@ -41,7 +41,7 @@ class EventManager:
             else:
                 raise EventError("Jij bent niet de eigenaar van dit evenement.")
         else:
-            raise EventError("Geen event met ID '{}' gevonden".format(id_no))
+            raise EventError("Geen event met ID '{}' gevonden.".format(id_no))
 
     def delete_event(self, id_no, user=None):
         event = self.get_event(id_no)
@@ -53,4 +53,4 @@ class EventManager:
             else:
                 raise EventError("Jij bent niet de eigenaar van dit evenement.")
         else:
-            raise EventError("Geen event met ID '{}' gevonden".format(id_no))
+            raise EventError("Geen event met ID '{}' gevonden.".format(id_no))

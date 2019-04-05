@@ -3,6 +3,9 @@ import settings
 
 from responder.identity import Identity, IdentityError
 
+BAN_TABLE = "banned_channels"
+PRIMARY_KEY = "channel_id"
+
 
 class IdentityManager:
     """
@@ -15,8 +18,16 @@ class IdentityManager:
     """
 
     def __init__(self, database_manager):
-
+        self.database = database_manager
         self.identities = []
+        self.initialize_identities()
+        self.current_id = self.identities[0]
+        self.chatty = True
+        self.interval = 0
+        self.banned_channels = []
+        self.initialize_ban_list()
+
+    def initialize_identities(self):
         for file in settings.IDENTITY_FILES:
             try:
                 self.identities.append(Identity(settings.XML_DIR + file))
@@ -26,33 +37,41 @@ class IdentityManager:
             except FileNotFoundError:
                 print("File {0} not found. Skipping identity {0}.".format(file))
                 continue
-        self.current_id = self.identities[0]
-        self.chatty = True
-        self.interval = 0
-        self.banned_channels = []
 
-    def ban(self, channel):
+    def initialize_ban_list(self):
+        rows = self.database.get_rows(BAN_TABLE, sort=PRIMARY_KEY)
+        self.banned_channels = [row[0] for row in rows]
+
+    def ban(self, channel_id):
         """Adds a channel to the banned list and logs the change."""
-        print("Banning the following channel: {}".format(channel))
-        self.banned_channels.append(channel)
+        if channel_id not in self.banned_channels:
+            print("Banning the following channel: {}".format(channel_id))
+            self.database.insert({PRIMARY_KEY: channel_id}, BAN_TABLE)
+            self.banned_channels.append(channel_id)
+        else:
+            raise ValueError("Can't ban a channel that is already banned.")
 
-    def unban(self, channel):
+    def un_ban(self, channel_id):
         """Removes a channel from the banned list and logs the change."""
-        print("Unbanning the following channel: {}".format(channel))
-        self.banned_channels.remove(channel)
+        if channel_id in self.banned_channels:
+            print("Unbanning the following channel: {}".format(channel_id))
+            self.database.delete("'{}'".format(channel_id), PRIMARY_KEY, BAN_TABLE)
+            self.banned_channels.remove(channel_id)
+        else:
+            raise ValueError("Can't unban a channel that is not banned.")
 
-    def get_bans(self):
+    def get_bans_string(self):
         """Returns a list of banned channels (if any)"""
         if len(self.banned_channels) == 0:
             # "banned nowhere"
             return "Nergens verbannen"
         # "banned in"
         result = "Verbannen in "
-        for channel in self.banned_channels:
-            result += "#{},".format(channel.name)
+        for channel_id in self.banned_channels:
+            result += "<#{}>,".format(channel_id)
         return result[:-1]
 
-    def chatty_str(self):
+    def get_chatty_string(self):
         """Returns a string based on whether the bot is chatty or not."""
         if self.chatty:
             # "chatty"
