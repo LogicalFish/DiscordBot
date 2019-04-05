@@ -1,4 +1,5 @@
 import random
+import settings
 from commands.modules.dice.diceroll import StandardDiceRoller
 
 
