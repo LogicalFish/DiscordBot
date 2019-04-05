@@ -1,7 +1,7 @@
 import emoji
 import re
 
-from commands.command import Command
+from commands.command_superclass import Command
 
 
 class PollCommand(Command):

@@ -1,5 +1,5 @@
 import settings
-from commands.command import Command
+from commands.command_superclass import Command
 from commands import run_command
 
 

@@ -1,6 +1,6 @@
 import random
 import settings
-from commands.command import Command
+from commands.command_superclass import Command
 
 
 class CallmeCommand(Command):
