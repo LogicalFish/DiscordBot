@@ -97,13 +97,12 @@ async def calendar_task():
 
     while not client.is_closed:
         reminders = system.time_manager.clock_pass()
-        for date, reminder_message, channel_name in reminders:
+        for date, reminder_message, channel_name, tag_name in reminders:
             if len(channel_name):
                 channel = get(client.get_all_channels(), name=channel_name)
-                # tag = get(channel.server.roles, name=tag_name)
-                # if tag:
-                #     message = "Reminder for {}! ".format(tag.mention)
-                #     message += remind
+                tag = get(channel.server.roles, name=tag_name)
+                if tag:
+                    reminder_message = "Reminder for {}! {}".format(tag.mention, reminder_message)
                 if channel:
                     await client.send_message(channel, reminder_message)
         await asyncio.sleep(30)

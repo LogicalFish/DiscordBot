@@ -1,5 +1,5 @@
 
-from commands.modules.calendar.clock_manager import TimeManager
+from commands.modules.calendar.time_manager import TimeManager
 from commands.modules.calendar.event_manager import EventManager
 from database.database_manager import DatabaseManager
 from responder.identity import Identity, IdentityError

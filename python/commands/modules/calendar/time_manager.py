@@ -22,9 +22,9 @@ class TimeManager:
         for event in events:
             if event["date"] < datetime.now():
                 if event["recur"]:
-                    self.event_recur(event["event_id"])
+                    self.event_recur(event[self.event_manager.model.PRIMARY_KEY])
                 else:
-                    self.event_manager.delete_event(events[0][self.event_manager.primary_key])
+                    self.event_manager.delete_event(event[self.event_manager.model.PRIMARY_KEY])
             else:
                 break
 
