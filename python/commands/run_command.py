@@ -1,7 +1,9 @@
 import settings
 from responder import parser
 from commands.modules.help_command import HelpCommand
-from commands.modules.diceroll_command import RollCommand
+from commands.modules.dice.diceroll_command import RollCommand
+from commands.modules.dice.godroll_command import GodRollCommand
+from commands.modules.dice.cheat_dice_command import CheatRollCommand
 from commands.modules.poll_command import PollCommand
 from commands.modules.miscellaneous_commands import CallmeCommand, EchoCommand
 from commands.modules.responder_commands import StatusCommand, BanCommand, UnbanCommand,\
@@ -10,7 +12,8 @@ from commands.modules.tictactoe.ttt_commands import ChallengeCommand, PlayGameCo
 from commands.modules.calendar.calendar_commands import EventCommand, ListEventCommand, CreateEventCommand,\
     EditEventCommand, DeleteEventCommand
 
-commands_list = [CallmeCommand(), EchoCommand(), HelpCommand(), PollCommand(), RollCommand(),
+commands_list = [CallmeCommand(), EchoCommand(), HelpCommand(), PollCommand(),
+                 RollCommand(), GodRollCommand(), CheatRollCommand(),
                  StatusCommand(), BanCommand(), UnbanCommand(), ChatToggleCommand(), IntervalCommand(), LeaveCommand(),
                  ChallengeCommand(), PlayGameCommand(), AbandonGameCommand(),
                  EventCommand(), ListEventCommand(), CreateEventCommand(), EditEventCommand(), DeleteEventCommand()]
@@ -34,8 +37,7 @@ def run_command(message, system):
         command = get_command(user_call)
     except ValueError:
         return {"response": parser.direct_call(system.current_id, "error")}
-    finally:
-        return command.execute(user_param, message, system)
+    return command.execute(user_param, message, system)
 
 
 def get_command(call):
