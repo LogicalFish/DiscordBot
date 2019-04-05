@@ -51,6 +51,6 @@ class EventManager:
                 self.altered = True
                 return "Event {}: {} deleted.".format(id_no, event["name"])
             else:
-                raise EventError("[ERROR]: Jij bent niet de eigenaar van dit evenement.")
+                raise EventError("Jij bent niet de eigenaar van dit evenement.")
         else:
-            raise EventError("[ERROR]: Geen event met ID '{}' gevonden".format(id_no))
+            raise EventError("Geen event met ID '{}' gevonden".format(id_no))

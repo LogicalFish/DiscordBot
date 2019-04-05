@@ -142,4 +142,6 @@ class DeleteEventCommand(Command):
             response = system.event_manager.delete_event(event_id, message.author.id)
         except ValueError:
             response = "[ERROR]: ID '{}' is geen valide ID".format(param)
+        except EventError as error:
+            response = "[ERROR]: {}".format(error)
         return {"response": response}
