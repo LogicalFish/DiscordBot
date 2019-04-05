@@ -33,5 +33,7 @@ class EchoCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        print("Received '{}' in channel *{}*".format(param, message.channel.id))
+        print("Received '{}' in channel *{}* from user with ID *{}*.".format(param,
+                                                                             message.channel.id,
+                                                                             message.author.id))
         return {"response": param}

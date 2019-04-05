@@ -10,13 +10,13 @@ class StatusCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        return {"response": self.get_status(system)}
+        return {"response": self.get_status(system.id_manager)}
 
     @staticmethod
-    def get_status(system):
-        return parser.direct_call(system.current_id, "status").format(system.chatty_str(),
-                                                                      system.get_bans().lower(),
-                                                                      system.interval)
+    def get_status(id_manager):
+        return parser.direct_call(id_manager.current_id, "status").format(id_manager.chatty_str(),
+                                                                          id_manager.get_bans().lower(),
+                                                                          id_manager.interval)
 
 
 class BanCommand(Command):
@@ -27,8 +27,8 @@ class BanCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        system.ban(message.channel)
-        return {"response": parser.direct_call(system.current_id, "leave")}
+        system.id_manager.ban(message.channel)
+        return {"response": parser.direct_call(system.id_manager.current_id, "leave")}
 
 
 class UnbanCommand(Command):
@@ -39,8 +39,8 @@ class UnbanCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        system.unban(message.channel)
-        return {"response": parser.direct_call(system.current_id, "call")}
+        system.id_manager.unban(message.channel)
+        return {"response": parser.direct_call(system.id_manager.current_id, "call")}
 
 
 class ChatToggleCommand(Command):
@@ -55,14 +55,14 @@ class ChatToggleCommand(Command):
 
     def execute(self, param, message, system):
         i = self.translate_param(param)
-        if not system.chatty and i != 0:
-            system.chatty = True
-            return {"response": parser.direct_call(system.current_id, "chatty")}
-        elif system.chatty and i != 1:
-            system.chatty = False
-            return {"response": parser.direct_call(system.current_id, "nonchatty")}
+        if not system.id_manager.chatty and i != 0:
+            system.id_manager.chatty = True
+            return {"response": parser.direct_call(system.id_manager.current_id, "chatty")}
+        elif system.id_manager.chatty and i != 1:
+            system.id_manager.chatty = False
+            return {"response": parser.direct_call(system.id_manager.current_id, "nonchatty")}
         else:
-            return {"response": StatusCommand.get_status(system)}
+            return {"response": StatusCommand.get_status(system.id_manager)}
 
     @staticmethod
     def translate_param(param):
@@ -89,19 +89,20 @@ class IntervalCommand(Command):
         :param system: The system meta-object, containing information about the current state of the bot.
         :return: A response that signifies whether the bot will speak more often or less often.
         """
+        identities = system.id_manager
         try:
-            old_val = system.interval
-            system.interval = int(param)
-            print("Changing the interval from {} to {}".format(old_val, system.interval))
-            if old_val == system.interval:
-                return {"response": StatusCommand.get_status(system)}
-            elif old_val < system.interval:
-                return {"response": parser.direct_call(system.current_id, "nonchatty")}
+            old_val = identities.interval
+            identities.interval = int(param)
+            print("Changing the interval from {} to {}".format(old_val, identities.interval))
+            if old_val == identities.interval:
+                return {"response": StatusCommand.get_status(identities)}
+            elif old_val < identities.interval:
+                return {"response": parser.direct_call(identities.current_id, "nonchatty")}
             else:
-                return {"response": parser.direct_call(system.current_id, "chatty")}
+                return {"response": parser.direct_call(identities.current_id, "chatty")}
 
         except ValueError:
-            return {"response": parser.direct_call(system.current_id, "error")}
+            return {"response": parser.direct_call(identities.current_id, "error")}
 
 
 class LeaveCommand(Command):
@@ -112,5 +113,5 @@ class LeaveCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        return {"leave": system.get_random_other_id()}
+        return {"leave": system.id_manager.get_random_other_id()}
 
