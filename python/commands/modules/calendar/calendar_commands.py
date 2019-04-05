@@ -1,5 +1,5 @@
 import settings
-from commands.command import Command
+from commands.command_superclass import Command
 from commands.modules.calendar import event_reader, shadow_events
 from commands.modules.calendar.event_model import EventError
 
