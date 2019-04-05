@@ -14,6 +14,7 @@ class Board:
     DIMENSION = 3
     ROWS = "123"
     COLUMNS = "ABC"
+    TIE_TOKEN = "T"
 
     def __init__(self):
         """
@@ -42,7 +43,7 @@ class Board:
 
     def __copy__(self):
         """
-        :return: A copy of the board, which does not change the current board..
+        :return: A copy of the board, which does not change the current board.
         """
         board_copy = Board()
         board_copy.board = copy.deepcopy(self.board)
@@ -55,6 +56,8 @@ class Board:
         :param player: The piece that is to be placed on the board.
         :return: True if the move is valid. False if the move could not be made.
         """
+        if not isinstance(move, str):
+            return False
         if len(move) >= 2 and move[0] in self.COLUMNS and move[1] in self.ROWS:
             v = ord(move[0].lower()) - 97 #Converts Alphabetical order to number. (A=0)
             h = int(move[1])-1
@@ -81,7 +84,7 @@ class Board:
             elif self.board[2][0] == self.board[1][1] == self.board[0][2]:
                 return self.board[1][1]
         if len(self.get_set(s.FREE_SPACE)) == 0:
-            return "T"
+            return self.TIE_TOKEN
         return False
 
     def get_set(self, token):
@@ -93,8 +96,8 @@ class Board:
         squares = []
         for i in range(self.DIMENSION):
             for j in range(self.DIMENSION):
-                if self.board[i][j] == token:
-                    squares.append("{}{}".format(self.COLUMNS[j], self.ROWS[i]))
+                if self.board[j][i] == token:
+                    squares.append("{}{}".format(self.COLUMNS[i], self.ROWS[j]))
         return squares
 
     def get_adjacent(self, tile):
