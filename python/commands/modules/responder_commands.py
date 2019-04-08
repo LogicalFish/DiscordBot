@@ -14,8 +14,8 @@ class StatusCommand(Command):
 
     @staticmethod
     def get_status(id_manager):
-        return parser.direct_call(id_manager.current_id, "status").format(id_manager.chatty_str(),
-                                                                          id_manager.get_bans().lower(),
+        return parser.direct_call(id_manager.current_id, "status").format(id_manager.get_chatty_string(),
+                                                                          id_manager.get_bans_string().lower(),
                                                                           id_manager.interval)
 
 
@@ -27,11 +27,14 @@ class BanCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        system.id_manager.ban(message.channel)
-        return {"response": parser.direct_call(system.id_manager.current_id, "leave")}
+        try:
+            system.id_manager.ban(message.channel.id)
+            return {"response": parser.direct_call(system.id_manager.current_id, "leave")}
+        except ValueError as error:
+            return {"response": "[ERROR]: {}".format(error)}
 
 
-class UnbanCommand(Command):
+class UnBanCommand(Command):
     def __init__(self):
         call = ["unban"]
         parameters = "None."
@@ -39,8 +42,11 @@ class UnbanCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        system.id_manager.unban(message.channel)
-        return {"response": parser.direct_call(system.id_manager.current_id, "call")}
+        try:
+            system.id_manager.un_ban(message.channel.id)
+            return {"response": parser.direct_call(system.id_manager.current_id, "call")}
+        except ValueError as error:
+            return {"response": "[ERROR]: {}".format(error)}
 
 
 class ChatToggleCommand(Command):

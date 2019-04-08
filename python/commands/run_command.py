@@ -5,8 +5,9 @@ from commands.modules.dice.diceroll_command import RollCommand
 from commands.modules.dice.godroll_command import GodRollCommand
 from commands.modules.dice.cheat_dice_command import CheatRollCommand
 from commands.modules.poll_command import PollCommand
-from commands.modules.miscellaneous_commands import CallmeCommand, EchoCommand
-from commands.modules.responder_commands import StatusCommand, BanCommand, UnbanCommand,\
+from commands.modules.miscellaneous_commands import EchoCommand
+from commands.modules.nicknames.callme_command import CallmeCommand
+from commands.modules.responder_commands import StatusCommand, BanCommand, UnBanCommand,\
     ChatToggleCommand, IntervalCommand, LeaveCommand
 from commands.modules.tictactoe.ttt_commands import ChallengeCommand, PlayGameCommand, AbandonGameCommand
 from commands.modules.calendar.calendar_commands import EventCommand, ListEventCommand, CreateEventCommand,\
@@ -14,7 +15,7 @@ from commands.modules.calendar.calendar_commands import EventCommand, ListEventC
 
 commands_list = [CallmeCommand(), EchoCommand(), HelpCommand(), PollCommand(),
                  RollCommand(), GodRollCommand(), CheatRollCommand(),
-                 StatusCommand(), BanCommand(), UnbanCommand(), ChatToggleCommand(), IntervalCommand(), LeaveCommand(),
+                 StatusCommand(), BanCommand(), UnBanCommand(), ChatToggleCommand(), IntervalCommand(), LeaveCommand(),
                  ChallengeCommand(), PlayGameCommand(), AbandonGameCommand(),
                  EventCommand(), ListEventCommand(), CreateEventCommand(), EditEventCommand(), DeleteEventCommand()]
 

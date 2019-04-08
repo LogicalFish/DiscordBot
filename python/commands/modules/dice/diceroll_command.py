@@ -16,7 +16,7 @@ class RollCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        author = system.get_name(message.author)
+        author = system.nickname_manager.get_name(message.author)
         action = {"response": "{}, ".format(author)}
 
         parallel_list = param.split("|")

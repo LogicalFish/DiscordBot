@@ -59,7 +59,7 @@ class EventModel:
             sql += ", {} {} NOT NULL".format(key, self.required_fields[key])
         for key in self.optional_fields.keys():
             sql += ", {} {}".format(key, self.optional_fields[key])
-        sql = "CREATE TABLE {} ( {} );".format(self.TABLE_NAME, sql)
+        sql = "{} ( {} );".format(self.TABLE_NAME, sql)
         return sql
 
 
