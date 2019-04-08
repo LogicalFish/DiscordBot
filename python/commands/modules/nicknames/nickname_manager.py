@@ -27,7 +27,7 @@ class NicknameManager:
 
     def add_nickname(self, user_id, nickname):
         if user_id in self.nicknames.keys():
-            self.database.update({SECONDARY: nickname}, user_id, PRIMARY_KEY, NAME_TABLE)
+            self.database.update({SECONDARY: nickname}, "'{}'".format(user_id), PRIMARY_KEY, NAME_TABLE)
         else:
             self.database.insert({PRIMARY_KEY: user_id, SECONDARY: nickname}, NAME_TABLE)
         self.nicknames[user_id] = nickname

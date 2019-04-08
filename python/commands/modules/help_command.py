@@ -15,7 +15,7 @@ class HelpCommand(Command):
     def execute(self, param, message, system):
         if len(param):
             try:
-                return {"response": run_command.get_command(param)}
+                return {"response": str(run_command.get_command(param))}
             except ValueError:
                 return {"response": "[ERROR]: Command *{}{}* not found.".format(settings.SIGN, param)}
         else:
