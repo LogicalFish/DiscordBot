@@ -10,13 +10,14 @@ from commands.modules.nicknames.callme_command import CallmeCommand
 from commands.modules.responder_commands import StatusCommand, BanCommand, UnBanCommand,\
     ChatToggleCommand, IntervalCommand, LeaveCommand
 from commands.modules.tictactoe.ttt_commands import ChallengeCommand, PlayGameCommand, AbandonGameCommand
+from commands.modules.minesweeper.minesweeper_command import MineSweeperCommand
 from commands.modules.calendar.calendar_commands import EventCommand, ListEventCommand, CreateEventCommand,\
     EditEventCommand, DeleteEventCommand
 
 commands_list = [CallmeCommand(), EchoCommand(), HelpCommand(), PollCommand(),
                  RollCommand(), GodRollCommand(), CheatRollCommand(),
                  StatusCommand(), BanCommand(), UnBanCommand(), ChatToggleCommand(), IntervalCommand(), LeaveCommand(),
-                 ChallengeCommand(), PlayGameCommand(), AbandonGameCommand(),
+                 ChallengeCommand(), PlayGameCommand(), AbandonGameCommand(), MineSweeperCommand(),
                  EventCommand(), ListEventCommand(), CreateEventCommand(), EditEventCommand(), DeleteEventCommand()]
 
 
