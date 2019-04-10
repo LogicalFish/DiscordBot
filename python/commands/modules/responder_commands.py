@@ -1,4 +1,5 @@
 from commands.command_superclass import Command
+from commands.command_error import CommandError
 from responder import parser
 
 
@@ -31,7 +32,7 @@ class BanCommand(Command):
             system.id_manager.ban(message.channel.id)
             return {"response": parser.direct_call(system.id_manager.current_id, "leave")}
         except ValueError as error:
-            return {"response": "[ERROR]: {}".format(error)}
+            raise CommandError(str(error), None)
 
 
 class UnBanCommand(Command):
@@ -46,7 +47,7 @@ class UnBanCommand(Command):
             system.id_manager.un_ban(message.channel.id)
             return {"response": parser.direct_call(system.id_manager.current_id, "call")}
         except ValueError as error:
-            return {"response": "[ERROR]: {}".format(error)}
+            raise CommandError(str(error), None)
 
 
 class ChatToggleCommand(Command):
@@ -108,7 +109,7 @@ class IntervalCommand(Command):
                 return {"response": parser.direct_call(identities.current_id, "chatty")}
 
         except ValueError:
-            return {"response": parser.direct_call(identities.current_id, "error")}
+            raise CommandError("number_not_valid", param)
 
 
 class LeaveCommand(Command):

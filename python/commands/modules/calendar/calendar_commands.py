@@ -2,6 +2,7 @@ import settings
 from commands.command_superclass import Command
 from commands.modules.calendar import event_reader, shadow_events
 from commands.modules.calendar.event_model import EventError
+from commands.command_error import CommandError
 
 
 class EventCommand(Command):
@@ -19,9 +20,9 @@ class EventCommand(Command):
             if event:
                 response = event_reader.describe_long(event)
             else:
-                response = "[ERROR]: Geen event met ID '{}' gevonden.".format(param)
+                raise CommandError("event_not_found", param)
         except ValueError:
-            response = "[ERROR]: ID '{}' is geen valide ID.".format(param)
+            raise CommandError("number_not_valid", param)
         return {"response": response}
 
 
@@ -88,7 +89,7 @@ class CreateEventCommand(Command):
             return {"response": "Created event {}:\n{}".format(event[system.event_manager.model.PRIMARY_KEY],
                                                                event_reader.describe_long(event))}
         except EventError as error:
-            return {"response": "[ERROR]: {}".format(error)}
+            raise CommandError(error.message, error.parameters)
 
 
 class EditEventCommand(Command):
@@ -112,15 +113,15 @@ class EditEventCommand(Command):
         else:
             id_str = param.split(' ', 1)[0]
         try:
-            identifier = int(id_str)
+            event_id = int(id_str)
         except ValueError:
-            return {"response": "[ERROR]: Id '{}' is geen valide ID.".format(id_str)}
+            raise CommandError("number_not_valid", id_str)
         try:
             system.event_manager.model.clean_data(event_dict)
-            event = system.event_manager.update_event(identifier, event_dict, message.author.id)
-            return {"response": "Updated event {}:\n{}".format(identifier, event_reader.describe_long(event))}
+            event = system.event_manager.update_event(event_id, event_dict, message.author.id)
+            return {"response": "Updated event {}:\n{}".format(event_id, event_reader.describe_long(event))}
         except EventError as error:
-            return {"response": "[ERROR]: {}".format(error)}
+            raise CommandError(error.message, event_id)
 
 
 class DeleteEventCommand(Command):
@@ -141,7 +142,7 @@ class DeleteEventCommand(Command):
             event_id = int(param)
             response = system.event_manager.delete_event(event_id, message.author.id)
         except ValueError:
-            response = "[ERROR]: ID '{}' is geen valide ID.".format(param)
+            raise CommandError("number_not_valid", param)
         except EventError as error:
-            response = "[ERROR]: {}".format(error)
+            raise CommandError(error.message, event_id)
         return {"response": response}

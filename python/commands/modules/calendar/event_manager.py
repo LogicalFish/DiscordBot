@@ -39,9 +39,9 @@ class EventManager:
                 self.altered = True
                 return self.get_event(id_no)
             else:
-                raise EventError("Jij bent niet de eigenaar van dit evenement.")
+                raise EventError("not_authorized", None)
         else:
-            raise EventError("Geen event met ID '{}' gevonden.".format(id_no))
+            raise EventError("event_not_found", id_no)
 
     def delete_event(self, id_no, user=None):
         event = self.get_event(id_no)
@@ -51,6 +51,6 @@ class EventManager:
                 self.altered = True
                 return "Event {}: {} deleted.".format(id_no, event["name"])
             else:
-                raise EventError("Jij bent niet de eigenaar van dit evenement.")
+                raise EventError("not_authorized", None)
         else:
-            raise EventError("Geen event met ID '{}' gevonden.".format(id_no))
+            raise EventError("event_not_found", id_no)

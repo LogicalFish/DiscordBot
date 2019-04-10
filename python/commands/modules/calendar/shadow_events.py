@@ -29,12 +29,3 @@ def get_list_shadow(events, quantity):
             list_with_shadow.append(event_tuple)
     list_with_shadow = sorted(list_with_shadow)
     return list_with_shadow
-
-
-# from dateutil import parser
-#
-# test_event = {"event_id": 1, "name": "noym", "date": parser.parse("25 March, 12:00", dayfirst=True), "recur": 7}
-# print("{}: {}".format(test_event["date"], test_event))
-# shadow_events = get_shadow_events(test_event, 3)
-# for event in shadow_events:
-#     print("{}: {}".format(event["date"],event))

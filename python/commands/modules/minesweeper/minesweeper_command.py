@@ -3,6 +3,8 @@ import re
 from commands.command_superclass import Command
 from commands.modules.minesweeper import minesweeper
 
+from commands.command_error import CommandError
+
 
 class MineSweeperCommand(Command):
 
@@ -13,11 +15,11 @@ class MineSweeperCommand(Command):
     def __init__(self):
         call = ["minesweeper", "mine"]
         parameters = "A set of dimensions, as well as the bomb count. (Example: (10, 10), 15"
-        description = "This command will give a minesweeper board."
+        description = "This command will give a random minesweeper board."
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        match = re.search("\\((\\d+)[,x.\\-](\\d+)\\).*?(\\d+)?", param.replace(" ", ""))
+        match = re.search("\\((\\d+)[,x.\\-](\\d+)\\),?(\\d+)?", param.replace(" ", ""))
         if match and int(match[1])*int(match[2]) < self.MAX_LENGTH:
             dimensions = (int(match[1]), int(match[2]))
             if match[3]:
@@ -28,6 +30,8 @@ class MineSweeperCommand(Command):
         else:
             dimensions = self.AI_table[system.id_manager.get_current_ai()]
             bomb_count = self.bomb_table[system.id_manager.get_current_ai()]
-
-        minefield = minesweeper.create_minefield(dimensions, bomb_count)
-        return {"response": minesweeper.minefield_to_string(minefield)}
+        try:
+            minefield = minesweeper.create_minefield(dimensions, bomb_count)
+            return {"response": minesweeper.minefield_to_string(minefield)}
+        except ValueError as error:
+            raise CommandError(str(error), param)

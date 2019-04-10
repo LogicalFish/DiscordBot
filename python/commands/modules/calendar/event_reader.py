@@ -12,6 +12,7 @@ def describe_short(event):
     description = "*{}* - **Event {}:** {}.\n".format(display_date(event["date"]), event["event_id"], event["name"])
     return description
 
+
 def describe_shadow(event):
     description = "*{} - Event {}: {}.*\n".format(display_date(event["date"]), event["event_id"], event["name"])
     return description

@@ -7,6 +7,8 @@ NUMBERS = ["⬜", "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣"
 
 def create_minefield(dimensions, bomb_amount):
     minefield = []
+    if dimensions[0] < 2 or dimensions[1] < 2:
+        raise ValueError("board_too_small")
     for i in range(dimensions[1]):
         row = []
         for j in range(dimensions[0]):
@@ -42,7 +44,7 @@ def generate_random_spots(dimensions, spots):
                 result_matrix.append(random_square)
         return result_matrix
     else:
-        raise ValueError("Can't have more bombs than squares.")
+        raise ValueError("too_many_bombs")
 
 
 def upgrade_number(number):

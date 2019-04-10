@@ -15,8 +15,8 @@ class NicknameManager:
     def get_name(self, user):
         if user.id in self.nicknames:
             return self.nicknames[user.id]
-        if user.nick is not None:
-            return user.nick
+        if user.display_name is not None:
+            return user.display_name
         else:
             return user.name
 

@@ -15,8 +15,7 @@ class DiceRoller:
             message = self.format_response(dice_pairs, results, too_many_dice)
             return message
         else:
-            raise ValueError("[ERROR]: Did not read valid dice. "
-                             "(Reminder: Any dice higher than a d{} are ignored.)\n".format(settings.MAXDIETYPE))
+            raise ValueError("invalid_dice")
 
     def format_response(self):
         raise NotImplementedError

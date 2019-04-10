@@ -61,8 +61,7 @@ async def act(action, message):
     :param message: The original message the dictionary was based on.
     """
     if "response" in action:
-        response = action["response"].replace("[ERROR]:", parser.direct_call(identities.current_id, "error"))
-        await client.send_message(message.channel, response)
+        await client.send_message(message.channel, action["response"])
         if "board" in action and action["board"]:
             await client.send_message(message.channel, action["board"])
     if "react" in action:

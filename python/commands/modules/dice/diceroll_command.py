@@ -1,4 +1,5 @@
 import settings
+from commands.command_error import CommandError
 from commands.command_superclass import Command
 from commands.modules.dice.diceroll import StandardDiceRoller
 
@@ -21,5 +22,8 @@ class RollCommand(Command):
 
         parallel_list = param.split("|")
         for parallel_input in parallel_list:
-            action["response"] += self.dice_roller.main_dice_method(parallel_input)
+            try:
+                action["response"] += self.dice_roller.main_dice_method(parallel_input)
+            except ValueError as error:
+                raise CommandError(str(error), None)
         return action

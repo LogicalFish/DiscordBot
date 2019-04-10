@@ -24,7 +24,7 @@ class Game:
             for i in range(2):
                 self.players[s.TTT_PIECES[i]] = input_players[i]
         else:
-            raise ValueError
+            raise ValueError("invalid_amount_of_players")
 
     def __str__(self):
         """

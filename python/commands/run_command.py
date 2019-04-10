@@ -1,4 +1,5 @@
 import settings
+import error_handler
 from responder import parser
 from commands.modules.help_command import HelpCommand
 from commands.modules.dice.diceroll_command import RollCommand
@@ -13,6 +14,8 @@ from commands.modules.tictactoe.ttt_commands import ChallengeCommand, PlayGameCo
 from commands.modules.minesweeper.minesweeper_command import MineSweeperCommand
 from commands.modules.calendar.calendar_commands import EventCommand, ListEventCommand, CreateEventCommand,\
     EditEventCommand, DeleteEventCommand
+from commands.command_error import CommandError
+
 
 commands_list = [CallmeCommand(), EchoCommand(), HelpCommand(), PollCommand(),
                  RollCommand(), GodRollCommand(), CheatRollCommand(),
@@ -37,16 +40,18 @@ def run_command(message, system):
     print("Attempting to execute the {} command from {}".format(user_call, message.author.name))
     try:
         command = get_command(user_call)
-    except ValueError:
-        return {"response": parser.direct_call(system.id_manager.current_id, "error")}
-    return command.execute(user_param, message, system)
+        return command.execute(user_param, message, system)
+    except CommandError as error:
+        response = "{} {}".format(parser.direct_call(system.id_manager.current_id, "error"),
+                                  error_handler.ERROR_DICT[error.type].format(error.key))
+        return {"response": response}
 
 
 def get_command(call):
     for c in commands_list:
         if c.in_call(call):
             return c
-    raise ValueError
+    raise CommandError("command_not_found", call)
 
 
 def split_message(message):

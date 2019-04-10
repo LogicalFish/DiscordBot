@@ -55,7 +55,8 @@ def tictactoeend(author, system):
                 other_player = game.players[key]
         return parser.direct_call(system.id_manager.current_id, "abandon").format(get_addressable(system, author),
                                                                                   get_addressable(system, other_player))
-    else: return parser.direct_call(system.id_manager.current_id, "error")
+    else:
+        return parser.direct_call(system.id_manager.current_id, "error")
 
 
 def tictactoemove(text, author, system):
@@ -107,22 +108,27 @@ def tictactoemove(text, author, system):
     win_state, w_p = game.get_status()
     if win_state:
         tictactoeend(author, system)
-        if w_p == "T":
-            response += parser.direct_call(system.id_manager.current_id, "tie")
-        else:
-            if game.players[w_p] == system.bot:
-                response += parser.direct_call(system.id_manager.current_id, "win")
-            elif system.bot in game.players.values():
-                response += parser.direct_call(system.id_manager.current_id, "loss")
-            else:
-                response += parser.direct_call(system.id_manager.current_id, "genericwin").format(
-                    get_addressable(system, game.players[w_p]),
-                    get_addressable(system, game.players[game.turn]))
+        response += get_win_response(w_p, game, system)
+
         return response, str(game)
     #If there's a CPU, have him make a move.
     if game.players[game.turn] == system.bot:
         response += tictactoemove("cpu", author, system)[0]
     return response, str(game)
+
+
+def get_win_response(winning_player, game, system):
+    if winning_player == "T":
+        return parser.direct_call(system.id_manager.current_id, "tie")
+    else:
+        if game.players[winning_player] == system.bot:
+            return parser.direct_call(system.id_manager.current_id, "win")
+        elif system.bot in game.players.values():
+            return parser.direct_call(system.id_manager.current_id, "loss")
+        else:
+            return parser.direct_call(system.id_manager.current_id, "genericwin").format(
+                get_addressable(system, game.players[winning_player]),
+                get_addressable(system, game.players[game.turn]))
 
 
 def get_addressable(system, player):

@@ -13,4 +13,5 @@ class EchoCommand(Command):
         print("Received '{}' in channel *{}* from user with ID *{}*.".format(message.content,
                                                                              message.channel.id,
                                                                              message.author.id))
-        return {"response": param}
+        if param:
+            return {"response": param}
