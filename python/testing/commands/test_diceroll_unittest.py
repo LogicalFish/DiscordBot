@@ -1,6 +1,6 @@
 import unittest
 
-from commands.modules.dice import diceroll
+from modules.dice import diceroll
 import settings
 
 

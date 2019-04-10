@@ -1,6 +1,6 @@
 from commands.command_superclass import Command
 from commands.command_error import CommandError
-from responder import parser
+from bot_identity import parser
 
 
 class StatusCommand(Command):

@@ -1,5 +1,5 @@
 from commands.command_superclass import Command
-from commands.modules.tictactoe import game_flow as game
+from modules.games.tictactoe import game_flow as game
 
 
 class ChallengeCommand(Command):

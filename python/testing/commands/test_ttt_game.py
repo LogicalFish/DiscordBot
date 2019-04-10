@@ -1,6 +1,6 @@
 import unittest
 
-from commands.modules.tictactoe.game_state import Game
+from modules.games.tictactoe.game_state import Game
 import settings
 
 

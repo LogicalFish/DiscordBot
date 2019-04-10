@@ -1,8 +1,8 @@
-from commands.modules.calendar.time_manager import TimeManager
-from commands.modules.calendar.event_manager import EventManager
-from commands.modules.nicknames.nickname_manager import NicknameManager
 from database.database_manager import DatabaseManager
-from responder.identity_manager import IdentityManager
+from bot_identity.identity_manager import IdentityManager
+from modules.calendar.event_manager import EventManager
+from modules.calendar.time_manager import TimeManager
+from modules.nicknames.nickname_manager import NicknameManager
 
 
 class SystemManager:

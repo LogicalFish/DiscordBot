@@ -1,7 +1,6 @@
 import unittest
 
-from commands.modules.minesweeper import minesweeper
-import settings
+from modules.games.minesweeper import minesweeper
 
 
 class TestMinesweeper(unittest.TestCase):

@@ -1,6 +1,6 @@
 import random
 import settings
-from commands.modules.dice.diceroll import StandardDiceRoller
+from modules.dice.diceroll import StandardDiceRoller
 
 
 class CheatDice(StandardDiceRoller):

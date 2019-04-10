@@ -1,7 +1,7 @@
 import re
 import random
-from responder.identity import IdentityError
-from responder import facts
+from bot_identity.identity import IdentityError
+from bot_identity import facts
 import settings
 
 

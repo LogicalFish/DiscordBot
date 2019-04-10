@@ -1,21 +1,20 @@
 import settings
-import error_handler
-from responder import parser
-from commands.modules.help_command import HelpCommand
-from commands.modules.dice.diceroll_command import RollCommand
-from commands.modules.dice.godroll_command import GodRollCommand
-from commands.modules.dice.cheat_dice_command import CheatRollCommand
-from commands.modules.poll_command import PollCommand
-from commands.modules.miscellaneous_commands import EchoCommand
-from commands.modules.nicknames.callme_command import CallmeCommand
-from commands.modules.responder_commands import StatusCommand, BanCommand, UnBanCommand,\
-    ChatToggleCommand, IntervalCommand, LeaveCommand
-from commands.modules.tictactoe.ttt_commands import ChallengeCommand, PlayGameCommand, AbandonGameCommand
-from commands.modules.minesweeper.minesweeper_command import MineSweeperCommand
-from commands.modules.calendar.calendar_commands import EventCommand, ListEventCommand, CreateEventCommand,\
-    EditEventCommand, DeleteEventCommand
+from commands import error_handler
 from commands.command_error import CommandError
-
+from bot_identity import parser
+from bot_identity.response_commands import StatusCommand, BanCommand, UnBanCommand, ChatToggleCommand, LeaveCommand, \
+    IntervalCommand
+from commands.miscellaneous.help_command import HelpCommand
+from commands.miscellaneous.miscellaneous_commands import EchoCommand
+from commands.miscellaneous.poll_command import PollCommand
+from modules.calendar.calendar_commands import EventCommand, ListEventCommand, CreateEventCommand, EditEventCommand, \
+    DeleteEventCommand
+from modules.dice.cheat_dice_command import CheatRollCommand
+from modules.dice.diceroll_command import RollCommand
+from modules.dice.godroll_command import GodRollCommand
+from modules.games.minesweeper.minesweeper_command import MineSweeperCommand
+from modules.games.tictactoe.ttt_commands import ChallengeCommand, PlayGameCommand, AbandonGameCommand
+from modules.nicknames.nickname_command import CallmeCommand
 
 commands_list = [CallmeCommand(), EchoCommand(), HelpCommand(), PollCommand(),
                  RollCommand(), GodRollCommand(), CheatRollCommand(),

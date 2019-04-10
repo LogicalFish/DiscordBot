@@ -1,7 +1,7 @@
 import settings
 from commands.command_superclass import Command
-from commands.modules.calendar import event_reader, shadow_events
-from commands.modules.calendar.event_model import EventError
+from modules.calendar import shadow_events, event_reader
+from modules.calendar.event_model import EventError
 from commands.command_error import CommandError
 
 
@@ -124,7 +124,7 @@ class EditEventCommand(Command):
             event = system.event_manager.update_event(event_id, event_dict, message.author.id)
             return {"response": "Updated event {}:\n{}".format(event_id, event_reader.describe_long(event))}
         except EventError as error:
-            raise CommandError(error.message, event_id)
+            raise CommandError(error.message, error.parameters)
 
 
 class DeleteEventCommand(Command):
@@ -147,5 +147,5 @@ class DeleteEventCommand(Command):
         except ValueError:
             raise CommandError("number_not_valid", param)
         except EventError as error:
-            raise CommandError(error.message, event_id)
+            raise CommandError(error.message, error.parameters)
         return {"response": response}

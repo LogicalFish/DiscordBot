@@ -1,5 +1,5 @@
 from .game_state import Game
-from responder import parser
+from bot_identity import parser
 
 
 def tictactoenewgame(author, opponent, system):
