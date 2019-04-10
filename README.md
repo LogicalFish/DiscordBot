@@ -24,8 +24,6 @@ If you are running Python 3.7, you will have a keyword conflict. If that is the 
 In addition, this bot requires the following libraries:
 - pip install emoji --upgrade
 - pip install python-dateutil
-
-Also:
 - pip install psycopg2-binary
 
 ## Settings

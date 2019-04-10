@@ -24,3 +24,6 @@ class SystemManager:
         self.event_manager = EventManager(self.database_manager)
         self.time_manager = TimeManager(self.event_manager)
         self.nickname_manager = NicknameManager(self.database_manager)
+
+    def shutdown(self):
+        self.database_manager.db.close_connection()

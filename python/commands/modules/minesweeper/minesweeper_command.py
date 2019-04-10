@@ -9,8 +9,8 @@ from commands.command_error import CommandError
 class MineSweeperCommand(Command):
 
     MAX_LENGTH = 198
-    AI_table = {1: (6, 4), 2: (8, 6), 3: (10, 10), 4: (14, 10), 5: (18, 11)}
-    bomb_table = {1: 1, 2: 5, 3: 17, 4: 25, 5: 40}
+    AI_table = {1: (6, 4), 2: (8, 6), 3: (12, 8), 4: (14, 10), 5: (18, 11)}
+    bomb_table = {1: 1, 2: 5, 3: 14, 4: 25, 5: 40}
 
     def __init__(self):
         call = ["minesweeper", "mine"]

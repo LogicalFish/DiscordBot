@@ -6,6 +6,9 @@ from commands.command_error import CommandError
 
 
 class EventCommand(Command):
+    """
+
+    """
 
     def __init__(self):
         call = ["event"]

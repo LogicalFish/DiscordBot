@@ -109,6 +109,15 @@ async def calendar_task():
         await asyncio.sleep(30)
 
 
-client.loop.create_task(calendar_task())
-
-client.run(TOKEN)
+try:
+    task = client.loop.create_task(calendar_task())
+    client.run(TOKEN)
+except TypeError:
+    print("\nKeyboard interrupt received. Shutting down...")
+    system.shutdown()
+    if not client.loop.is_closed():
+        task.cancel()
+        client.loop.close()
+    client.close()
+finally:
+    print("Client Closed. Goodbye.")
