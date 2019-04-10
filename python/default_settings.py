@@ -1,12 +1,12 @@
 import os
-from responder.identity import Identity
+from bot_identity.identity import Identity
 
 #SECRET TOKEN, DO NOT SHARE
 TOKEN = "[SECRET TOKEN GOES HERE]"
 
 #Directories and Files
 BASEDIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = BASEDIR + "/responder/data/"
+DATA_DIR = BASEDIR + "/bot_identity/data/"
 
 IDENTITY_FILES = ["default.xml"]
 FACT_FILE = DATA_DIR + "facts.xml"

@@ -1,7 +1,7 @@
 import re
 
 from commands.command_superclass import Command
-from commands.modules.minesweeper import minesweeper
+from modules.games.minesweeper import minesweeper
 
 from commands.command_error import CommandError
 

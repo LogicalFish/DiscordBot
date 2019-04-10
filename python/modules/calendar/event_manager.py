@@ -1,4 +1,4 @@
-from commands.modules.calendar.event_model import EventModel, EventError
+from modules.calendar.event_model import EventModel, EventError
 
 
 class EventManager:

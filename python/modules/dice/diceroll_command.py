@@ -1,7 +1,7 @@
 import settings
 from commands.command_error import CommandError
 from commands.command_superclass import Command
-from commands.modules.dice.diceroll import StandardDiceRoller
+from modules.dice.diceroll import StandardDiceRoller
 
 
 class RollCommand(Command):

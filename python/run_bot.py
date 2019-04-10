@@ -5,7 +5,7 @@ import time
 import settings
 from system_manager import SystemManager
 from commands import run_command
-from responder import parser
+from bot_identity import parser
 
 # Secret Token
 TOKEN = settings.TOKEN
@@ -45,12 +45,12 @@ async def on_message(message):
             identities.current_id = new_id[0]
             await change_visual_id()
             if identities.chatty and system.last_msg+identities.interval < time.time():
-                await client.send_message(message.channel, parser.direct_call(identities.current_id, "call"))
+                await message.channel.send(parser.direct_call(identities.current_id, "call"))
         elif identities.chatty and system.last_msg+identities.interval < time.time():
             # Respond to distinct phrases based on identity.
             response = parser.get_response(message.content, identities.current_id)
             if len(response):
-                await client.send_message(message.channel, response)
+                await message.channel.send(response)
                 system.last_msg = time.time()
 
 
@@ -61,33 +61,34 @@ async def act(action, message):
     :param message: The original message the dictionary was based on.
     """
     if "response" in action:
-        await client.send_message(message.channel, action["response"])
+        await message.channel.send(action["response"])
         if "board" in action and action["board"]:
-            await client.send_message(message.channel, action["board"])
+            await message.channel.send(action["board"])
     if "react" in action:
         for emoji in action["react"]:
-            await client.add_reaction(message, emoji)
+            await message.add_reaction(emoji)
     if "c_react" in action:
         for custom_emoji in action["c_react"]:
-            await client.add_reaction(message, get(client.get_all_emojis(), name=custom_emoji))
+            await message.add_reaction(get(client.emojis, name=custom_emoji))
     if "leave" in action:
         if identities.chatty and system.last_msg+identities.interval < time.time():
-            await client.send_message(message.channel, parser.direct_call(identities.current_id, "leave"))
+            await message.channel.send(parser.direct_call(identities.current_id, "leave"))
         identities.current_id = action["leave"]
         await change_visual_id()
         if identities.chatty and system.last_msg+identities.interval < time.time():
-            await client.send_message(message.channel, parser.direct_call(identities.current_id, "call"))
+            await message.channel.send(parser.direct_call(identities.current_id, "call"))
 
 
 async def change_visual_id():
     """Helper function that changes the bot's nickname and game that is displayed"""
-    name_str = identities.current_id.get_name()
-    game_str = identities.current_id.get_game()
-    print("Changing responder to {}".format(name_str))
+    new_nickname = identities.current_id.get_name()
+    new_game = identities.current_id.get_game()
+    print("Changing bot identity to {}".format(new_nickname))
 
-    for server in client.servers:
-        await client.change_nickname(server.me, name_str)
-    await client.change_presence(game=discord.Game(name=game_str))
+    for server in client.guilds:
+        await server.me.edit(nick=new_nickname)
+        # await client.change_nickname(server.me, new_nickname)
+    await client.change_presence(activity=discord.Game(name=new_game))
 
 
 async def calendar_task():
@@ -105,7 +106,7 @@ async def calendar_task():
                 if tag:
                     reminder_message = "Reminder for {}! {}".format(tag.mention, reminder_message)
                 if channel:
-                    await client.send_message(channel, reminder_message)
+                    await channel.send(reminder_message)
         await asyncio.sleep(30)
 
 

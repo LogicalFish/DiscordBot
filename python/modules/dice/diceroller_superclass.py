@@ -1,5 +1,5 @@
 import settings
-import commands.modules.dice.dicehelper as helper
+import modules.dice.dicehelper as helper
 
 
 class DiceRoller:
@@ -17,8 +17,8 @@ class DiceRoller:
         else:
             raise ValueError("invalid_dice")
 
-    def format_response(self):
+    def format_response(self, dice_pairs, results, too_many_dice):
         raise NotImplementedError
 
-    def roll_the_dice(self):
+    def roll_the_dice(self, dice_pairs):
         raise NotImplementedError

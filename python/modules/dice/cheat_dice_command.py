@@ -1,5 +1,5 @@
-from commands.modules.dice.diceroll_command import RollCommand
-from commands.modules.dice.cheat_dice import CheatDice
+from modules.dice.diceroll_command import RollCommand
+from modules.dice.cheat_dice import CheatDice
 
 
 class CheatRollCommand(RollCommand):

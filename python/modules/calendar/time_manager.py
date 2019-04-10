@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from commands.modules.calendar.reminder_queue import ReminderQueue
+from modules.calendar.reminder_queue import ReminderQueue
 
 
 class TimeManager:

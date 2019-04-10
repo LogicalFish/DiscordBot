@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from commands.modules.calendar import event_reader
+from modules.calendar import event_reader
 
 
 class ReminderQueue:

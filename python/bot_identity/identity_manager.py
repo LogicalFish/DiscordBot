@@ -1,7 +1,7 @@
 import random
 import settings
 
-from responder.identity import Identity, IdentityError
+from bot_identity.identity import Identity, IdentityError
 
 BAN_TABLE = "banned_channels"
 PRIMARY_KEY = "channel_id"

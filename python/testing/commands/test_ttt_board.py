@@ -1,7 +1,7 @@
 import copy
 import unittest
 
-from commands.modules.tictactoe.board import Board
+from modules.games.tictactoe.board import Board
 import settings
 
 

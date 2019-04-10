@@ -1,7 +1,7 @@
 import random
 import settings
-import commands.modules.dice.dicehelper as helper
-from commands.modules.dice.diceroller_superclass import DiceRoller
+import modules.dice.dicehelper as helper
+from modules.dice.diceroller_superclass import DiceRoller
 
 
 class StandardDiceRoller(DiceRoller):
@@ -47,5 +47,3 @@ class StandardDiceRoller(DiceRoller):
             elif y == 1:
                 results.append(x)
         return results
-
-

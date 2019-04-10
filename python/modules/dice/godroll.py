@@ -1,25 +1,27 @@
 import random
 import settings
-from commands.modules.dice.diceroll import StandardDiceRoller
+from modules.dice.diceroll import StandardDiceRoller
+
+
+def get_modifier(dice_pairs):
+    modifier = 0
+    for x, y in dice_pairs:
+        if y == 1:
+            modifier += x
+    return modifier
+
+
+def translate_number(number):
+    if number < 2:
+        return 0
+    if number < 6:
+        return 1
+    if number < 10:
+        return 2
+    return 4
 
 
 class GodRoller(StandardDiceRoller):
-
-    def get_modifier(self, dice_pairs):
-        modifier = 0
-        for x, y in dice_pairs:
-            if y == 1:
-                modifier += x
-        return modifier
-
-    def translate_number(self, number):
-        if number < 2:
-            return 0
-        if number < 6:
-            return 1
-        if number < 10:
-            return 2
-        return 4
 
     def dice_result_to_string(self, dice_results):
         result_response = ""
@@ -44,7 +46,7 @@ class GodRoller(StandardDiceRoller):
         :return: A list containing a random number for each dice in the dice_pairs list.
         """
         results = []
-        modifier = self.get_modifier(dice_pairs)
+        modifier = get_modifier(dice_pairs)
         for pair in dice_pairs:
             x, y = pair
             signbit = -1 if x < 0 else 1
@@ -52,7 +54,6 @@ class GodRoller(StandardDiceRoller):
                 amount = min(abs(x), settings.DHARDCAP - len(results))
                 for i in range(amount):
                     straight_roll = random.randint(1, y)*signbit
-                    final_number = self.translate_number(straight_roll + modifier)
+                    final_number = translate_number(straight_roll + modifier)
                     results.append((final_number, straight_roll, modifier))
         return results
-

@@ -1,19 +1,19 @@
 import settings
-from commands.modules.calendar.event_model import EventModel
+from modules.calendar.event_model import EventModel
 from database.database_connection import DatabaseConnection
 from database.decorators import CursorDecorator
-from commands.modules.nicknames import nickname_manager
-from responder import identity_manager
+from modules.nicknames import nickname_manager
+from bot_identity import identity_manager
 
 db = DatabaseConnection()
 em = EventModel()
 event_table = em.create_table_sql()
 ban_table = "{} ( {} VARCHAR(255) PRIMARY KEY );".format(identity_manager.BAN_TABLE,
                                                          identity_manager.PRIMARY_KEY)
-name_table = "{} ( {} VARCHAR(255) PRIMARY KEY, {} VARCHAR({}) );".format(nickname_manager.NAME_TABLE,
-                                                                          nickname_manager.PRIMARY_KEY,
-                                                                          nickname_manager.SECONDARY,
-                                                                          settings.MAX_NICK_NAME)
+name_table = "{} ( {} BIGINT PRIMARY KEY, {} VARCHAR({}) );".format(nickname_manager.NAME_TABLE,
+                                                                 nickname_manager.PRIMARY_KEY,
+                                                                 nickname_manager.SECONDARY,
+                                                                 settings.MAX_NICK_NAME)
 
 
 @CursorDecorator(db.conn)

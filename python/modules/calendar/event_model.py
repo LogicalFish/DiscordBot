@@ -16,7 +16,7 @@ class EventModel:
 
     required_fields = {"name": "VARCHAR({})".format(settings.MAX_EVENT_NAME),
                        key_date: "TIMESTAMP",
-                       key_author: "VARCHAR(255)"
+                       key_author: "BIGINT"
                        }
 
     optional_fields = {"description": "VARCHAR({})".format(settings.MAX_EVENT_DESCRIPTION),
@@ -47,7 +47,7 @@ class EventModel:
                 self.validate_varchar(input_fields[key], model[key], key)
             elif model[key] == "TIMESTAMP":
                 input_fields[key] = self.clean_future_date(input_fields[key])
-            elif model[key] == "INTEGER":
+            elif model[key] == "INTEGER" or model[key] == "BIGINT":
                 input_fields[key] = self.clean_integer(input_fields[key])
             elif model[key] == "INTEGER[]":
                 if re.match("^(\\d+,\\s*)+\\d+$", input_fields[key]):
@@ -73,15 +73,15 @@ class EventModel:
         try:
             return int(number_input)
         except ValueError:
-            raise ValueError("number_not_valid", number_input)
+            raise EventError("number_not_valid", number_input)
 
     def clean_future_date(self, date_input):
         try:
             date_output = parser.parse(date_input, dayfirst=True)
         except ValueError:
-            raise ValueError("invalid_date", date_input)
+            raise EventError("invalid_date", date_input)
         if date_output < datetime.now():
-            raise ValueError("invalid_future_date", date_input)
+            raise EventError("invalid_future_date", date_input)
         return date_output
 
 
