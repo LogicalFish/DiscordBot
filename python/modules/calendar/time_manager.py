@@ -17,7 +17,7 @@ class TimeManager:
             self.event_manager.update_event(id_no, {"date": new_date})
 
     def delete_obsolete(self):
-        #Get all events. Automatically sorted by date.
+        # Get all events. Automatically sorted by date.
         events = self.event_manager.get_all_events()
         for event in events:
             if event["date"] < datetime.now():

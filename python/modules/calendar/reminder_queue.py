@@ -11,7 +11,7 @@ class ReminderQueue:
     def __str__(self):
         string = ""
         for event in self.queue:
-            string += "{} : {}\n".format(event[0],event[1])
+            string += "{} : {}\n".format(event[0], event[1])
         return string
 
     def build_queue(self, events):

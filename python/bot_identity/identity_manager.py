@@ -9,12 +9,14 @@ PRIMARY_KEY = "channel_id"
 
 class IdentityManager:
     """
+    The manager for keeping track of identities and identity-related settings.
     Attributes:
-        identities (list): A list containing all identities found in the settings.
+        database (database_manager):
+        identities (list): A list that should contain all identities.
         current_id (Identity): The current identity of the bot.
-        chatty (bool): Whether the bot is currently speaking or not
-        banned_channels (list): List of channels where the bot is 'banned'
+        chatty (bool): Whether the bot is currently speaking or not.
         interval (int): the minimum interval in seconds between messages.
+        banned_channels (list): List of channels where the bot is 'banned'.
     """
 
     def __init__(self, database_manager):
@@ -28,6 +30,9 @@ class IdentityManager:
         self.initialize_ban_list()
 
     def initialize_identities(self):
+        """
+        A method for initialize all identities based on the settings.
+        """
         for file in settings.IDENTITY_FILES:
             try:
                 self.identities.append(Identity(settings.XML_DIR + file))

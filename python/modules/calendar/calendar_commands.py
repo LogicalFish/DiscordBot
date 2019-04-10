@@ -124,7 +124,7 @@ class EditEventCommand(Command):
             event = system.event_manager.update_event(event_id, event_dict, message.author.id)
             return {"response": "Updated event {}:\n{}".format(event_id, event_reader.describe_long(event))}
         except EventError as error:
-            raise CommandError(error.message, event_id)
+            raise CommandError(error.message, error.parameters)
 
 
 class DeleteEventCommand(Command):
@@ -147,5 +147,5 @@ class DeleteEventCommand(Command):
         except ValueError:
             raise CommandError("number_not_valid", param)
         except EventError as error:
-            raise CommandError(error.message, event_id)
+            raise CommandError(error.message, error.parameters)
         return {"response": response}

@@ -96,17 +96,19 @@ async def calendar_task():
     A separate thread, keeping track of tasks on the calendar.
     """
     await client.wait_until_ready()
-
-    while not client.is_closed:
+    while not client.is_closed():
         reminders = system.time_manager.clock_pass()
         for date, reminder_message, channel_name, tag_name in reminders:
             if len(channel_name):
-                channel = get(client.get_all_channels(), name=channel_name)
-                tag = get(channel.server.roles, name=tag_name)
-                if tag:
-                    reminder_message = "Reminder for {}! {}".format(tag.mention, reminder_message)
-                if channel:
-                    await channel.send(reminder_message)
+                channels = filter(lambda ch: ch.name == channel_name, client.get_all_channels())
+                for channel in channels:
+                    if isinstance(channel, discord.TextChannel):
+                        tag = get(channel.guild.roles, name=tag_name)
+                        if tag:
+                            new_message = "Reminder for {}! {}".format(tag.mention, reminder_message)
+                        else:
+                            new_message = reminder_message
+                        await channel.send(new_message)
         await asyncio.sleep(30)
 
 
