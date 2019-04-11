@@ -9,8 +9,8 @@ class DatabaseManager:
 
     @CursorDecorator(db.conn)
     def insert(self, var_dict, table, value_request=None, cur=None):
-        statement = sql_helper.generate_insert_sql(var_dict, table, value_request)
-        cur.execute(statement)
+        statement, values = sql_helper.generate_insert_sql(var_dict, table, value_request)
+        cur.execute(statement, values)
         self.db.conn.commit()
         if value_request is not None:
             return_value = cur.fetchone()[0]
@@ -18,8 +18,8 @@ class DatabaseManager:
 
     @CursorDecorator(db.conn)
     def update(self, var_dict, id_no, primary_key, table, cur=None):
-        statement = sql_helper.generate_update_sql(var_dict, id_no, primary_key, table)
-        cur.execute(statement)
+        statement, values = sql_helper.generate_update_sql(var_dict, id_no, primary_key, table)
+        cur.execute(statement, values)
         self.db.conn.commit()
 
     @CursorDecorator(db.conn)

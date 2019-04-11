@@ -19,10 +19,10 @@ class ReminderQueue:
             if event["reminder"]:
                 reminder_list = sorted(event["reminder"], reverse=True)
                 for reminder in reminder_list:
-                    message = event_reader.describe_reminder(event, reminder)
+                    embed = event_reader.describe_reminder(event, reminder)
                     reminder_time = event["date"] - timedelta(hours=reminder)
                     if reminder_time > datetime.now():
-                        self.queue.append((reminder_time, message, event["channel"], event["tag"]))
+                        self.queue.append((reminder_time, embed, event["channel"], event["tag"]))
         self.queue.sort()
 
     def clear(self):

@@ -3,28 +3,32 @@
 def generate_insert_sql(var_dict, table, return_value):
     sql = """INSERT INTO {} ({}) VALUES ({}) {};"""
     columns = ""
-    values = ""
+    s_vals = ""
+    value_list = []
     for key in var_dict.keys():
-        if columns and values:
+        if columns and s_vals:
             columns += ", "
-            values += ", "
+            s_vals += ", "
         columns += key
-        values += "'{}'".format(var_dict[key])
+        s_vals += "%s"
+        value_list.append(var_dict[key])
     if return_value:
-        return sql.format(table, columns, values, "RETURNING " + return_value)
+        return sql.format(table, columns, s_vals, "RETURNING " + return_value), tuple(value_list)
     else:
-        return sql.format(table, columns, values, "")
+        return sql.format(table, columns, s_vals, ""), tuple(value_list)
 
 
 def generate_update_sql(var_dict, pk, pk_name, table):
     sql = "UPDATE {} SET {} WHERE {} = {};"
-    new_values = ""
+    s_vals = ""
+    new_values = []
     for key in var_dict.keys():
-        if new_values:
-            new_values += ","
-        new_values += "{} = '{}'".format(key, var_dict[key])
+        if s_vals:
+            s_vals += ","
+        s_vals += "{} = %s".format(key)
+        new_values.append(var_dict[key])
 
-    return sql.format(table, new_values, pk_name, pk)
+    return sql.format(table, s_vals, pk_name, pk), tuple(new_values)
 
 
 def generate_delete_sql(pk, pk_name, table):

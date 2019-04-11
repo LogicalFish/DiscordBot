@@ -64,6 +64,11 @@ async def act(action, message):
         await message.channel.send(action["response"])
         if "board" in action and action["board"]:
             await message.channel.send(action["board"])
+    if "event_embed" in action:
+        embed = action["event_embed"][0]
+        new_footer = embed.footer.text + system.nickname_manager.get_name(client.get_user(action["event_embed"][1]))
+        embed.set_footer(text=new_footer)
+        await message.channel.send(embed=embed)
     if "react" in action:
         for emoji in action["react"]:
             await message.add_reaction(emoji)
@@ -98,17 +103,16 @@ async def calendar_task():
     await client.wait_until_ready()
     while not client.is_closed():
         reminders = system.time_manager.clock_pass()
-        for date, reminder_message, channel_name, tag_name in reminders:
+        for date, reminder_embed, channel_name, tag_name in reminders:
             if len(channel_name):
                 channels = filter(lambda ch: ch.name == channel_name, client.get_all_channels())
                 for channel in channels:
                     if isinstance(channel, discord.TextChannel):
                         tag = get(channel.guild.roles, name=tag_name)
+                        message = ""
                         if tag:
-                            new_message = "Reminder for {}! {}".format(tag.mention, reminder_message)
-                        else:
-                            new_message = reminder_message
-                        await channel.send(new_message)
+                            message = "Reminder for {}!:".format(tag.mention)
+                        await channel.send(message, embed=reminder_embed)
         await asyncio.sleep(30)
 
 

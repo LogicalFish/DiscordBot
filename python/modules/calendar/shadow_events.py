@@ -2,6 +2,7 @@ from datetime import timedelta
 from modules.calendar import event_reader
 
 MAX_SHADOW = 9
+DEFAULT_SHADOW = 3
 
 
 def get_shadow_events(event, quantity):

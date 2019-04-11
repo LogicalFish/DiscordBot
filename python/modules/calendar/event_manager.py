@@ -49,7 +49,7 @@ class EventManager:
             if user is None or event[self.model.key_author] == user:
                 self.database.delete(id_no, self.model.PRIMARY_KEY, self.model.TABLE_NAME)
                 self.altered = True
-                return "Event {}: {} deleted.".format(id_no, event["name"])
+                return event["name"]
             else:
                 raise EventError("not_authorized", None)
         else:

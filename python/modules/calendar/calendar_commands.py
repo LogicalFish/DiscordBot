@@ -21,12 +21,12 @@ class EventCommand(Command):
             event_id = int(param)
             event = system.event_manager.get_event(event_id)
             if event:
-                response = event_reader.describe_long(event)
+                embed = event_reader.get_event_embed(event)
             else:
                 raise CommandError("event_not_found", param)
         except ValueError:
             raise CommandError("number_not_valid", param)
-        return {"response": response}
+        return {"event_embed": (embed, event["author"])}
 
 
 class ListEventCommand(Command):
@@ -46,12 +46,13 @@ class ListEventCommand(Command):
         try:
             shadow_size = int(param)
         except ValueError:
-            shadow_size = 4
+            shadow_size = shadow_events.DEFAULT_SHADOW
         events_list = system.event_manager.get_all_events()
         shadow_list = shadow_events.get_list_shadow(events_list, shadow_size)
-        list_message = ""
+        list_message = "De volgende evenementen zijn gepland:\n\n"
         for date, shadow_message in shadow_list:
-            list_message += shadow_message
+            if len(list_message) + len(shadow_message) < 2000:
+                list_message += shadow_message
         if not events_list:
             list_message = "Er zijn geen evenementen gevonden."
         return {"response": list_message}
@@ -89,8 +90,8 @@ class CreateEventCommand(Command):
             if "channel" not in event_dict.keys():
                 event_dict["channel"] = message.channel.name
             event = system.event_manager.create_event(event_dict)
-            return {"response": "Created event {}:\n{}".format(event[system.event_manager.model.PRIMARY_KEY],
-                                                               event_reader.describe_long(event))}
+            return {"response": "Created event {}:".format(event[system.event_manager.model.PRIMARY_KEY]),
+                    "event_embed": (event_reader.get_event_embed(event), event["author"])}
         except EventError as error:
             raise CommandError(error.message, error.parameters)
 
@@ -122,7 +123,8 @@ class EditEventCommand(Command):
         try:
             system.event_manager.model.clean_data(event_dict)
             event = system.event_manager.update_event(event_id, event_dict, message.author.id)
-            return {"response": "Updated event {}:\n{}".format(event_id, event_reader.describe_long(event))}
+            return {"response": "Updated event {}:".format(event_id),
+                    "event_embed": (event_reader.get_event_embed(event), event["author"])}
         except EventError as error:
             raise CommandError(error.message, error.parameters)
 
@@ -143,7 +145,8 @@ class DeleteEventCommand(Command):
     def execute(self, param, message, system):
         try:
             event_id = int(param)
-            response = system.event_manager.delete_event(event_id, message.author.id)
+            event_name = system.event_manager.delete_event(event_id, message.author.id)
+            response = "Event {}: {} deleted.".format(event_id, event_name)
         except ValueError:
             raise CommandError("number_not_valid", param)
         except EventError as error:
