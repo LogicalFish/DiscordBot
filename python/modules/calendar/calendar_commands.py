@@ -7,7 +7,7 @@ from commands.command_error import CommandError
 
 class EventCommand(Command):
     """
-
+    Command class for showing an event.
     """
 
     def __init__(self):
@@ -17,6 +17,13 @@ class EventCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
+        """
+        Accepts a single digit as parameter.
+        :param param: A single digit. Throws an error otherwise.
+        :param message: Unused parameter.
+        :param system: Used to call the event_manager.
+        :return: An Embed with the event-data within it.
+        """
         try:
             event_id = int(param)
             event = system.event_manager.get_event(event_id)
@@ -30,10 +37,13 @@ class EventCommand(Command):
 
 
 class ListEventCommand(Command):
+    """
+    Command class for listing all events, including future recurring events.
+    """
 
     def __init__(self):
         call = ["events", "listevents"]
-        parameters = "None."
+        parameters = "The amount of 'shadow' events should be shown."
         description = "A list of all events."
         super().__init__(call, parameters, description)
 
@@ -59,6 +69,9 @@ class ListEventCommand(Command):
 
 
 class CreateEventCommand(Command):
+    """
+    Command class for creating an event.
+    """
 
     def __init__(self):
         call = ["eventadd", "eventcreate"]
@@ -68,11 +81,8 @@ class CreateEventCommand(Command):
                      '\t\t*Reminder*: The times in hours, separated by commas, when you want to show reminders.\n' \
                      '\t\t*Tag*: The role you wish to tag during reminders.\n' \
                      '\t\t*Channel*: The channel you wish to show reminders in. Current channel is the default.\n' \
-                     '\t\t*Recurring*: Integer designating in how many days event will reoccur after the last. ' \
-                     'If not supplied, event does not reoccur.\n' \
-                     '\t\t*Multiply*: Two integers in the format *"*X,+Y"*. ' \
-                     '*X* designates how many events are created. ' \
-                     '*Y* designates how many days apart each created event is.\n'
+                     '\t\t*Recur*: Integer designating in how many days event will reoccur after the last. ' \
+                     'If not supplied, event does not reoccur.\n'
         description = 'Creates a new event based on the supplied parameters. ' \
                       '\n\t\tExample: *{}createdate name="Christmas" date="December 25th"*'.format(settings.SIGN)
         super().__init__(call, parameters, description)
@@ -97,6 +107,9 @@ class CreateEventCommand(Command):
 
 
 class EditEventCommand(Command):
+    """
+    Command class for updating an event
+    """
 
     def __init__(self):
         call = ["eventedit", "eventupdate"]
@@ -130,6 +143,9 @@ class EditEventCommand(Command):
 
 
 class DeleteEventCommand(Command):
+    """
+    Command class for deleting an event.
+    """
 
     def __init__(self):
         call = ["eventdelete"]

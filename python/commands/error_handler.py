@@ -1,5 +1,7 @@
 import settings
 
+# Dictionary translating error-codes to phrases.
+
 ERROR_DICT = {"command_not_found": "Het commando '*{}*' is niet gevonden.",
               "string_too_long": "Het veld '*{}*' is te lang.",
               "number_not_valid": "'*{}*' is geen valide getal.",

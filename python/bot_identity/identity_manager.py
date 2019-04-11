@@ -14,7 +14,7 @@ class IdentityManager:
         database (database_manager):
         identities (list): A list that should contain all identities.
         current_id (Identity): The current identity of the bot.
-        chatty (bool): Whether the bot is currently speaking or not.
+        chatty (bool): Whether the bot is currently allowed to speak or not.
         interval (int): the minimum interval in seconds between messages.
         banned_channels (list): List of channels where the bot is 'banned'.
     """
@@ -44,6 +44,9 @@ class IdentityManager:
                 continue
 
     def initialize_ban_list(self):
+        """
+        Initializes the list of banned channels, taking from the database.
+        """
         rows = self.database.get_rows(BAN_TABLE, sort=PRIMARY_KEY)
         self.banned_channels = [row[0] for row in rows]
 

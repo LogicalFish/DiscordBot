@@ -4,6 +4,9 @@ from bot_identity import parser
 
 
 class StatusCommand(Command):
+    """
+    Command for responding with the bot's (identity manager) status, including banned channels and chat intervals.
+    """
     def __init__(self):
         call = ["status"]
         parameters = "None."
@@ -15,12 +18,16 @@ class StatusCommand(Command):
 
     @staticmethod
     def get_status(id_manager):
+        """Method for getting the status string. Can be used by other classes if necessary."""
         return parser.direct_call(id_manager.current_id, "status").format(id_manager.get_chatty_string(),
                                                                           id_manager.get_bans_string().lower(),
                                                                           id_manager.interval)
 
 
 class BanCommand(Command):
+    """
+    Command for banning the bot's response module from responding from the current channel.
+    """
     def __init__(self):
         call = ["ban"]
         parameters = "None."
@@ -36,6 +43,9 @@ class BanCommand(Command):
 
 
 class UnBanCommand(Command):
+    """
+    Command for unbanning the bot's response module from the current channel.
+    """
     def __init__(self):
         call = ["unban"]
         parameters = "None."
@@ -51,6 +61,9 @@ class UnBanCommand(Command):
 
 
 class ChatToggleCommand(Command):
+    """
+    Command for toggling the bot's response module.
+    """
     def __init__(self):
         call = ["chat", "chatty"]
         parameters = "*(optional)* T(rue) or Y(es) to allow all chat. F(alse) or N(o) to suppress all chat."
@@ -61,11 +74,11 @@ class ChatToggleCommand(Command):
         return command.startswith(self.call[0])
 
     def execute(self, param, message, system):
-        i = self.translate_param(param)
-        if not system.id_manager.chatty and i != 0:
+        param_bool = self.translate_param(param)
+        if not system.id_manager.chatty and param_bool is not False:
             system.id_manager.chatty = True
             return {"response": parser.direct_call(system.id_manager.current_id, "chatty")}
-        elif system.id_manager.chatty and i != 1:
+        elif system.id_manager.chatty and param_bool is not True:
             system.id_manager.chatty = False
             return {"response": parser.direct_call(system.id_manager.current_id, "nonchatty")}
         else:
@@ -73,19 +86,26 @@ class ChatToggleCommand(Command):
 
     @staticmethod
     def translate_param(param):
+        """
+        Helper method for deciding whether a parameter corresponds to true or false.
+        :param param: The parameter.
+        :return: boolean: Whether or not the parameter corresponds to True, False, or neither.
+        """
         if param.lower().startswith("t") or param.lower().startswith("y"):
-            return 1
+            return True
         if param.lower().startswith("f") or param.lower().startswith("n"):
-            return 0
-        else:
-            return -1
+            return False
+        return None
 
 
 class IntervalCommand(Command):
+    """
+    Command for changing the interval at which the bot is allowed to send messages.
+    """
     def __init__(self):
         call = ["interval"]
         parameters = "An integer representing the seconds between response."
-        description = "This function will disallow the bot to chat for the amount of seconds supplied."
+        description = "This function will set the interval between chat messages sent by the bot."
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
@@ -113,6 +133,9 @@ class IntervalCommand(Command):
 
 
 class LeaveCommand(Command):
+    """
+    Command for randomly selecting another bot persona.
+    """
     def __init__(self):
         call = ["leave"]
         parameters = "None."

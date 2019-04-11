@@ -2,6 +2,9 @@ import psycopg2
 
 
 class CursorDecorator:
+    """
+    Decorator class for the database manager.
+    """
 
     def __init__(self, conn):
         self.conn = conn

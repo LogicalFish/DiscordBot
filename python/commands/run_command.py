@@ -16,6 +16,7 @@ from modules.games.minesweeper.minesweeper_command import MineSweeperCommand
 from modules.games.tictactoe.ttt_commands import ChallengeCommand, PlayGameCommand, AbandonGameCommand
 from modules.nicknames.nickname_command import CallmeCommand
 
+# Complete list of commands that people can access through the bots.
 commands_list = [CallmeCommand(), EchoCommand(), HelpCommand(), PollCommand(),
                  RollCommand(), GodRollCommand(), CheatRollCommand(),
                  StatusCommand(), BanCommand(), UnBanCommand(), ChatToggleCommand(), IntervalCommand(), LeaveCommand(),
@@ -28,8 +29,9 @@ def run_command(message, system):
     Method to run a specified command.
     :param message: The message object containing the command.
     :param system: The system meta-object, containing information about the current state of the bot.
-    :return: a action dictionary containing five possible actions:
+    :return: a action dictionary containing six possible actions:
         action["response"] : String: The string reply to the message.
+        action["event_embed"] : Embed: A specific type of message, allowing for greater customization.
         action["react"] : List (String): The emojis the bot needs to react with.
         action["c_react"] : List (String): The custom emojis the bot needs to react with.
         action["leave"] : Identity: The identity the bot should change to.
@@ -47,6 +49,11 @@ def run_command(message, system):
 
 
 def get_command(call):
+    """
+    Method to get a specific command based on a call. Raises an error if no command is found.
+    :param call: The command string given by the client.
+    :return: The command class the call belongs to.
+    """
     for c in commands_list:
         if c.in_call(call):
             return c

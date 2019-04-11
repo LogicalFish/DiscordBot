@@ -4,28 +4,33 @@ import settings
 
 
 class DatabaseConnection:
+    """
+    Class that maintains a connection with a database.
+    """
 
     def __init__(self, filename=settings.DB_INI, section='postgresql'):
+        """Initializes the instance."""
         self.filename = filename
         self.section = section
         self.conn = self.connect()
 
     def config(self):
-        # create a parser
+        """ Read the .ini file and get configurations."""
+        # Create a parser
         parser = ConfigParser()
-        # read config file
+        # Read config file
         parser.read(self.filename)
 
-        # get section, default to postgresql
-        db = {}
+        # Get section
+        database_parameters = {}
         if parser.has_section(self.section):
-            params = parser.items(self.section)
-            for param in params:
-                db[param[0]] = param[1]
+            ini_params = parser.items(self.section)
+            for param in ini_params:
+                database_parameters[param[0]] = param[1]
         else:
             raise Exception('Section {0} not found in the {1} file'.format(self.section, self.filename))
 
-        return db
+        return database_parameters
 
     def connect(self):
         """ Connect to the PostgreSQL database server """
@@ -41,6 +46,7 @@ class DatabaseConnection:
             print(error)
 
     def close_connection(self):
+        """Close the database connection."""
         if self.conn is not None:
             self.conn.close()
             print('Database connection closed.')
