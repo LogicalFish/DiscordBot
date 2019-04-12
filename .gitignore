@@ -2,6 +2,7 @@
 !default.xml
 settings.py
 deprecated/
+watbeer.py
 *.ini
 
 # Byte-compiled / optimized / DLL files

@@ -94,7 +94,7 @@ class CreateEventCommand(Command):
 
     def execute(self, param, message, system):
         try:
-            event_dict = event_reader.create_event_dict(param)
+            event_dict = system.event_manager.model.create_event_dict(param)
             system.event_manager.model.clean_data(event_dict)
             event_dict[system.event_manager.model.key_author] = message.author.id
             if "channel" not in event_dict.keys():
@@ -124,7 +124,7 @@ class EditEventCommand(Command):
         return False
 
     def execute(self, param, message, system):
-        event_dict = event_reader.create_event_dict(param)
+        event_dict = system.event_manager.model.create_event_dict(param)
         if "id" in event_dict:
             id_str = event_dict["id"]
         else:

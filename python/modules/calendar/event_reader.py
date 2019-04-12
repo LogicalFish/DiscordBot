@@ -4,7 +4,6 @@ import discord
 DATE_FORMAT = "%a %d %B, %Y"
 TIME_FORMAT = "%H:%M"
 
-
 def display_date(datetime):
     return datetime.strftime("{}, {}".format(DATE_FORMAT, TIME_FORMAT))
 
@@ -68,11 +67,3 @@ def describe_reminder(event, hours):
 
     return reminder_embed
 
-
-def create_event_dict(string):
-    parsed = re.findall("(\\w*)\\s*=\\s*\"(.*?)\"", string)
-    output_dict = {}
-    for r in parsed:
-        output_dict[r[0].lower()] = r[1]
-
-    return output_dict

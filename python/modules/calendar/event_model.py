@@ -6,6 +6,7 @@ from dateutil import parser
 # from database import input_validator as validator
 
 
+
 class EventModel:
 
     TABLE_NAME = "events"
@@ -25,6 +26,11 @@ class EventModel:
                        "reminder": "INTEGER[]",
                        "recur": "INTEGER"
                        }
+
+    SYNONYMS = {"mention": "tag",
+                "title": "name",
+                "time": "date",
+                "reminders": "reminder"}
 
     def validate_required_fields(self, fields):
         for key in self.required_fields.keys():
@@ -83,6 +89,15 @@ class EventModel:
         if date_output < datetime.now():
             raise EventError("invalid_future_date", date_input)
         return date_output
+
+    def create_event_dict(self, string):
+        parsed = re.findall("(\\w*)\\s*=\\s*\"(.*?)\"", string)
+        output_dict = {}
+        for r in parsed:
+            output_dict[r[0].lower()] = r[1]
+            if r[0].lower() in self.SYNONYMS:
+                output_dict[self.SYNONYMS[r[0].lower()]] = r[1]
+        return output_dict
 
 
 class EventError(Exception):
