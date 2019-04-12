@@ -15,10 +15,11 @@ class NicknameManager:
     def get_name(self, user):
         if user.id in self.nicknames:
             return self.nicknames[user.id]
-        if user.display_name is not None:
-            return user.display_name
-        else:
-            return user.name
+        return user.display_name
+        # if user.display_name is not None:
+        #     return user.display_name
+        # else:
+        #     return user.name
 
     def initialize_nicknames(self):
         rows = self.database.get_rows(NAME_TABLE)

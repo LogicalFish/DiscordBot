@@ -23,7 +23,7 @@ class ReminderQueue:
                     reminder_time = event["date"] - timedelta(hours=reminder)
                     if reminder_time > datetime.now():
                         self.queue.append((reminder_time, embed, event["channel"], event["tag"]))
-        self.queue.sort()
+        self.queue.sort(key=lambda tup: tup[0])
 
     def clear(self):
         self.queue.clear()

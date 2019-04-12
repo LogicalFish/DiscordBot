@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from modules.calendar.event_model import EventModel, EventError
 
 
@@ -50,6 +52,30 @@ class EventManager:
                 self.database.delete(id_no, self.model.PRIMARY_KEY, self.model.TABLE_NAME)
                 self.altered = True
                 return event["name"]
+            else:
+                raise EventError("not_authorized", None)
+        else:
+            raise EventError("event_not_found", id_no)
+
+    def event_recur(self, id_no):
+        event = self.get_event(id_no)
+        if event["recur"]:
+            next_time = timedelta(days=event["recur"])
+            new_date = event["date"] + next_time
+            self.update_event(id_no, {"date": new_date})
+
+    def pop_event(self, id_no, user=None):
+        event = self.get_event(id_no)
+        if event:
+            if user is None or event[self.model.key_author] == user:
+                if event["recur"]:
+                    event.pop("recur")
+                    event.pop(self.model.PRIMARY_KEY)
+                    new_event = self.create_event(event)
+                    self.event_recur(id_no)
+                    return new_event
+                else:
+                    raise EventError("invalid_shadow", id_no)
             else:
                 raise EventError("not_authorized", None)
         else:

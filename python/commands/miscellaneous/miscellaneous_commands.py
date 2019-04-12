@@ -15,3 +15,5 @@ class EchoCommand(Command):
                                                                              message.author.id))
         if param:
             return {"response": param}
+        else:
+            return {}

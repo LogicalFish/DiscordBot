@@ -45,7 +45,7 @@ async def on_message(message):
 @client.event
 async def on_reaction_add(reaction, user):
     if not reaction.me:
-        action = reactor.get_reaction(reaction, user, system)
+        action = reactor.get_reaction_to_reaction(reaction)
         await bot_responder.act(action, reaction.message)
 
 

@@ -3,9 +3,6 @@ import settings
 from datetime import datetime
 from dateutil import parser
 
-# from database import input_validator as validator
-
-
 
 class EventModel:
 
@@ -42,7 +39,7 @@ class EventModel:
         for key in key_list:
             if key not in self.required_fields and key not in self.optional_fields:
                 fields.pop(key)
-            elif key == "creator":
+            elif key == self.key_author:
                 fields.pop(key)
 
     def clean_data(self, input_fields):

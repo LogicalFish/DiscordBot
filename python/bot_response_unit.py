@@ -2,7 +2,7 @@ import discord
 from discord.utils import get
 import time
 from bot_identity import parser
-from modules.reactions import heartful
+from modules.reactions import reactor
 
 
 class Responder:
@@ -27,7 +27,8 @@ class Responder:
                 await message.channel.send(action["board"])
         if "event_embed" in action:
             embed = action["event_embed"][0]
-            new_footer = embed.footer.text + self.system.nickname_manager.get_name(self.client.get_user(action["event_embed"][1]))
+            event_author = self.client.get_user(action["event_embed"][1])
+            new_footer = embed.footer.text + self.system.nickname_manager.get_name(event_author)
             embed.set_footer(text=new_footer)
             await message.channel.send(embed=embed)
         if "react" in action:
@@ -64,7 +65,7 @@ class Responder:
                 self.system.last_msg = time.time()
         if identity_switch:
             action["switch"] = identity_switch
-        action["react"] = heartful.get_heart_in_message(message.content)
+        action["react"], action["c_react"] = reactor.get_reaction_to_message(message)
         await self.act(action, message)
 
     def identity_response(self, message):

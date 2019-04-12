@@ -1,3 +1,4 @@
+import re
 import settings
 from commands.command_superclass import Command
 from modules.calendar import shadow_events, event_reader
@@ -113,7 +114,7 @@ class EditEventCommand(Command):
 
     def __init__(self):
         call = ["eventedit", "eventupdate"]
-        parameters = "\t**id**: The ID of the event you wish to edit. *(required)*\n" \
+        parameters = "\n\t*id*: The ID of the event you wish to edit. *(required)*\n" \
                      "\tSee {}eventadd for other parameters.".format(settings.SIGN)
         description = "Edits the parameters of a given event."
         super().__init__(call, parameters, description)
@@ -165,6 +166,43 @@ class DeleteEventCommand(Command):
             response = "Event {}: {} deleted.".format(event_id, event_name)
         except ValueError:
             raise CommandError("number_not_valid", param)
+        except EventError as error:
+            raise CommandError(error.message, error.parameters)
+        return {"response": response}
+
+
+class UnShadowCommand(Command):
+    """
+    Command class for allowing an event's shadow to be edited.
+    """
+
+    def __init__(self):
+        call = ["unshadow", "revealevent", "deshadow"]
+        parameters = "The Event ID of the shadow event you wish to access. Example: 1-2."
+        description = "Makes the shadow of an event accessible."
+        super().__init__(call, parameters, description)
+
+    def in_call(self, command):
+        if "shadow" in command:
+            return True
+        elif "reveal" in command and "event" in command:
+            return True
+        return False
+
+    def execute(self, param, message, system):
+        try:
+            parameter_match = re.search("(\\d+)-(\\d+)", param.replace(" ", ""))
+            if parameter_match is None:
+                raise CommandError("event_not_found", param)
+            event_id = int(parameter_match[1])
+            shadow_id = int(parameter_match[2])
+            if 0 < shadow_id < shadow_events.MAX_SHADOW:
+                for i in range(shadow_id+1):
+                    new_event = system.event_manager.pop_event(event_id, message.author.id)
+            else:
+                raise CommandError("invalid_shadow", param)
+
+            response = event_reader.get_reveal_message(param, new_event[system.event_manager.model.PRIMARY_KEY])
         except EventError as error:
             raise CommandError(error.message, error.parameters)
         return {"response": response}

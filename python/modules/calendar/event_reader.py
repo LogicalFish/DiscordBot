@@ -1,8 +1,8 @@
-import re
 import discord
 
 DATE_FORMAT = "%a %d %B, %Y"
 TIME_FORMAT = "%H:%M"
+
 
 def display_date(datetime):
     return datetime.strftime("{}, {}".format(DATE_FORMAT, TIME_FORMAT))
@@ -27,6 +27,10 @@ def describe_long(event):
                                         event["date"].strftime(DATE_FORMAT),
                                         event["date"].strftime(TIME_FORMAT))
     return description
+
+
+def get_reveal_message(shadow_event_id, new_event_id):
+    return "Schaduw Evenement {} is nu evenement {}.".format(shadow_event_id, new_event_id)
 
 
 def get_event_embed(event):

@@ -8,7 +8,7 @@ from commands.miscellaneous.help_command import HelpCommand
 from commands.miscellaneous.miscellaneous_commands import EchoCommand
 from commands.miscellaneous.poll_command import PollCommand
 from modules.calendar.calendar_commands import EventCommand, ListEventCommand, CreateEventCommand, EditEventCommand, \
-    DeleteEventCommand
+    DeleteEventCommand, UnShadowCommand
 from modules.dice.cheat_dice_command import CheatRollCommand
 from modules.dice.diceroll_command import RollCommand
 from modules.dice.godroll_command import GodRollCommand
@@ -21,7 +21,8 @@ commands_list = [CallmeCommand(), EchoCommand(), HelpCommand(), PollCommand(),
                  RollCommand(), GodRollCommand(), CheatRollCommand(),
                  StatusCommand(), BanCommand(), UnBanCommand(), ChatToggleCommand(), IntervalCommand(), LeaveCommand(),
                  ChallengeCommand(), PlayGameCommand(), AbandonGameCommand(), MineSweeperCommand(),
-                 EventCommand(), ListEventCommand(), CreateEventCommand(), EditEventCommand(), DeleteEventCommand()]
+                 EventCommand(), ListEventCommand(), CreateEventCommand(), EditEventCommand(), DeleteEventCommand(),
+                 UnShadowCommand()]
 
 
 def run_command(message, system):
