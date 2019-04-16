@@ -2,6 +2,7 @@
 Contains helper functions for generating proper SQL statements.
 """
 
+
 def generate_insert_sql(var_dict, table, return_value):
     sql = """INSERT INTO {} ({}) VALUES ({}) {};"""
     columns = ""

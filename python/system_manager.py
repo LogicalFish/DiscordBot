@@ -3,6 +3,7 @@ from bot_identity.identity_manager import IdentityManager
 from modules.calendar.event_manager import EventManager
 from modules.calendar.time_manager import TimeManager
 from modules.nicknames.nickname_manager import NicknameManager
+from modules.birthday.birthday_manager import BirthdayManager
 
 
 class SystemManager:
@@ -24,6 +25,7 @@ class SystemManager:
         self.event_manager = EventManager(self.database_manager)
         self.time_manager = TimeManager(self.event_manager)
         self.nickname_manager = NicknameManager(self.database_manager)
+        self.birthday_manager = BirthdayManager(self.database_manager)
 
     def shutdown(self):
         self.database_manager.db.close_connection()

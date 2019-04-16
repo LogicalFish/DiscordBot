@@ -27,8 +27,10 @@ class Responder:
                 await message.channel.send(action["board"])
         if "event_embed" in action:
             embed = action["event_embed"][0]
-            event_author = self.client.get_user(action["event_embed"][1])
-            new_footer = embed.footer.text + self.system.nickname_manager.get_name(event_author)
+            event_author = self.system.nickname_manager.get_name_from_id(action["event_embed"][1],
+                                                                         self.client,
+                                                                         message.guild)
+            new_footer = embed.footer.text + event_author
             embed.set_footer(text=new_footer)
             await message.channel.send(embed=embed)
         if "react" in action:

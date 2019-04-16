@@ -3,6 +3,7 @@ from modules.calendar.event_model import EventModel
 from database.database_connection import DatabaseConnection
 from database.decorators import CursorDecorator
 from modules.nicknames import nickname_manager
+from modules.birthday import birthday_manager
 from bot_identity import identity_manager
 
 db = DatabaseConnection()
@@ -11,9 +12,12 @@ event_table = em.create_table_sql()
 ban_table = "{} ( {} VARCHAR(255) PRIMARY KEY );".format(identity_manager.BAN_TABLE,
                                                          identity_manager.PRIMARY_KEY)
 name_table = "{} ( {} BIGINT PRIMARY KEY, {} VARCHAR({}) );".format(nickname_manager.NAME_TABLE,
-                                                                 nickname_manager.PRIMARY_KEY,
-                                                                 nickname_manager.SECONDARY,
-                                                                 settings.MAX_NICK_NAME)
+                                                                    nickname_manager.PRIMARY_KEY,
+                                                                    nickname_manager.SECONDARY,
+                                                                    settings.MAX_NICK_NAME)
+birthday_table = "{} ( {} BIGINT PRIMARY KEY, {} TIMESTAMP );".format(birthday_manager.NAME_TABLE,
+                                                                      birthday_manager.PRIMARY_KEY,
+                                                                      birthday_manager.SECONDARY)
 
 
 @CursorDecorator(db.conn)
@@ -24,5 +28,5 @@ def create_tables(commands, cur=None):
 
 
 if __name__ == '__main__':
-    create_tables([event_table, ban_table, name_table])
+    create_tables([event_table, ban_table, name_table, birthday_table])
     db.close_connection()

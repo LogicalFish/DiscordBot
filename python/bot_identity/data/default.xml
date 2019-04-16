@@ -65,5 +65,10 @@
 		<status>
 			<elem>Ik ben nu {}. Ik ben {}. De huidige interval tussen berichten is {} seconden.</elem>
 		</status>
+		<birthday>
+			<elem>Van harte gefeliciteerd, {}!</elem>
+			<elem>Er is er een jarig, hoera, hoera, dat kun je wel zien, dat is {}!</elem>
+			<elem>Van harte gefeliciteerd, {}</elem>
+		</birthday>
 	</default>
 </ID>

@@ -32,3 +32,10 @@ class NicknameManager:
         else:
             self.database.insert({PRIMARY_KEY: user_id, SECONDARY: nickname}, NAME_TABLE)
         self.nicknames[user_id] = nickname
+
+    def get_name_from_id(self, user_id, client, guild=None):
+        if guild:
+            user_object = guild.get_member(user_id)
+        else:
+            user_object = client.get_user(user_id)
+        return self.get_name(user_object)
