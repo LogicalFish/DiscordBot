@@ -1,9 +1,6 @@
 import random
 import settings
 
-MINE = "💣"
-NUMBERS = ["⬜", "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣"]
-
 
 def create_minefield(dimensions, bomb_amount):
     minefield = []
@@ -17,7 +14,7 @@ def create_minefield(dimensions, bomb_amount):
 
     bombs = generate_random_spots(dimensions, bomb_amount)
     for bomb in bombs:
-        minefield[bomb[1]][bomb[0]] = MINE
+        minefield[bomb[1]][bomb[0]] = settings.SWEEPER_MINE
 
     minefield = allocate_numbers(minefield)
 
@@ -48,16 +45,16 @@ def generate_random_spots(dimensions, spots):
 
 
 def upgrade_number(number):
-    number_index = NUMBERS.index(number)
-    return NUMBERS[number_index+1]
+    number_index = settings.SWEEPER_NUMBERS.index(number)
+    return settings.SWEEPER_NUMBERS[number_index + 1]
 
 
 def allocate_numbers(board):
     for i in range(len(board)):
         for j in range(len(board[i])):
-            if board[i][j] is MINE:
+            if board[i][j] is settings.SWEEPER_MINE:
                 for n in range(i-1, i+2):
                     for m in range(j-1, j+2):
-                        if 0 <= n < len(board) and 0 <= m < len(board[n]) and board[n][m] is not MINE:
+                        if 0 <= n < len(board) and 0 <= m < len(board[n]) and board[n][m] is not settings.SWEEPER_MINE:
                             board[n][m] = upgrade_number(board[n][m])
     return board

@@ -1,11 +1,8 @@
 import discord
-
-DATE_FORMAT = "%a %d %B, %Y"
-TIME_FORMAT = "%H:%M"
-
+import settings
 
 def display_date(datetime):
-    return datetime.strftime("{}, {}".format(DATE_FORMAT, TIME_FORMAT))
+    return datetime.strftime("{}, {}".format(settings.DATE_FORMAT, settings.TIME_FORMAT))
 
 
 def describe_short(event):
@@ -24,8 +21,8 @@ def describe_long(event):
                   "**Date:** {}\t" \
                   "**Time:** {}".format(event["name"],
                                         event["description"],
-                                        event["date"].strftime(DATE_FORMAT),
-                                        event["date"].strftime(TIME_FORMAT))
+                                        event["date"].strftime(settings.DATE_FORMAT),
+                                        event["date"].strftime(settings.TIME_FORMAT))
     return description
 
 
@@ -35,8 +32,8 @@ def get_reveal_message(shadow_event_id, new_event_id):
 
 def get_event_embed(event):
     embed = discord.Embed(title=event["name"], description=event["description"], color=13138175)
-    embed.add_field(name="Date", value=event["date"].strftime(DATE_FORMAT), inline=True)
-    embed.add_field(name="Time", value=event["date"].strftime(TIME_FORMAT), inline=True)
+    embed.add_field(name="Date", value=event["date"].strftime(settings.DATE_FORMAT), inline=True)
+    embed.add_field(name="Time", value=event["date"].strftime(settings.TIME_FORMAT), inline=True)
     embed.add_field(name="Reminders", value=embed_reminder_in_event(event), inline=False)
     embed.set_footer(text="ID: {} ● Author: ".format(event["event_id"]))
     return embed

@@ -1,8 +1,6 @@
 from datetime import timedelta
 from modules.calendar import event_reader
-
-MAX_SHADOW = 9
-DEFAULT_SHADOW = 3
+import settings
 
 
 def get_shadow_events(event, quantity):
@@ -10,7 +8,7 @@ def get_shadow_events(event, quantity):
     if "recur" in event and event["recur"] is not None:
         new_event = event.copy()
         shadow_time = timedelta(days=event["recur"])
-        for i in range(min(quantity, MAX_SHADOW)):
+        for i in range(min(quantity, settings.MAX_SHADOW)):
             new_event["date"] = new_event["date"] + shadow_time
             new_event["event_id"] = "{}-{}".format(event["event_id"], (i+1))
             shadow_events.append(new_event)

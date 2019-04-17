@@ -57,7 +57,7 @@ class ListEventCommand(Command):
         try:
             shadow_size = int(param)
         except ValueError:
-            shadow_size = shadow_events.DEFAULT_SHADOW
+            shadow_size = settings.DEFAULT_SHADOW
         events_list = system.event_manager.get_all_events()
         shadow_list = shadow_events.get_list_shadow(events_list, shadow_size)
         list_message = "De volgende evenementen zijn gepland:\n\n"
@@ -196,7 +196,7 @@ class UnShadowCommand(Command):
                 raise CommandError("event_not_found", param)
             event_id = int(parameter_match[1])
             shadow_id = int(parameter_match[2])
-            if 0 < shadow_id < shadow_events.MAX_SHADOW:
+            if 0 < shadow_id < settings.MAX_SHADOW:
                 for i in range(shadow_id+1):
                     new_event = system.event_manager.pop_event(event_id, message.author.id)
             else:
