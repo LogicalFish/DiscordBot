@@ -4,14 +4,16 @@ A simple discord bot that is capable of responding to commands and messages.
 ## List of Features
 
 - Capability to respond to messages containing specified triggers.
-- Ability to switch nicknames, as well as triggers based on identity.
-- Dice-rolling module. (Command: Roll)
-- Polling mode (Command: Poll)
-- Tic-tac-toe module (Command: Challenge / TTT)
-- Calendar Module (WIP) (Command: Addevent / Events)
+- Ability to switch the bot's name, as well as adding triggers based on identity.
+- Several commands, which have a variety of functions.
+Use the help command to learn about each feature.
+- Calendar, for organizing group events.
+- A Birthday module, congratulating users on their birthday.
+- Two games, Tic-Tac-Toe and Minesweeper.
+
 
 ## Installation
-***Requires Python 3***
+***Requires Python 3.5.3 or above***
 
 Install the Discord Library:
 - pip install -U discord.py
@@ -32,4 +34,4 @@ Create a database.ini file (see example_database.ini) and add the necessary sett
 After this is done, you can run database_setup.py in order to generate the correct tables.
 
 ## Future Work
-- Add functionality for an Admin User, capable of editing and deleting events that are not his.
+- Add functionality for an Admin User, capable of editing and deleting events that are not theirs.
