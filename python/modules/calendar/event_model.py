@@ -29,18 +29,28 @@ class EventModel:
                 "time": "date",
                 "reminders": "reminder"}
 
-    def validate_required_fields(self, fields):
+    def validate_required_fields(self, dictionary):
+        """
+        Method to check if all required fields are present in a dictionary.
+        :param dictionary: The dictionary.
+        :return:
+        """
         for key in self.required_fields.keys():
-            if key not in fields.keys():
+            if key not in dictionary.keys():
                 raise EventError("required_field_missing", key)
 
-    def prune_fields(self, fields):
-        key_list = list(fields.keys())
+    def prune_fields(self, event_dictionary):
+        """
+        Method to remove all non-necessary fields from a dictionary.
+        Also removes the author key, which can only be set by the bot themselves.
+        :param event_dictionary: The dictionary.
+        """
+        key_list = list(event_dictionary.keys())
         for key in key_list:
             if key not in self.required_fields and key not in self.optional_fields:
-                fields.pop(key)
+                event_dictionary.pop(key)
             elif key == self.key_author:
-                fields.pop(key)
+                event_dictionary.pop(key)
 
     def clean_data(self, input_fields):
         self.prune_fields(input_fields)

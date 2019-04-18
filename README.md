@@ -26,5 +26,10 @@ default_settings.py is an example that contains malleable settings the bot can u
 This file should be renamed to settings.py, and the Secret Token of your Discord Bot should be added as the value of TOKEN.
 In addition, you should add at least one file example to the IDENTITY_FILES list.
 
+## Database
+The bot requires a database to function.
+Create a database.ini file (see example_database.ini) and add the necessary settings.
+After this is done, you can run database_setup.py in order to generate the correct tables.
+
 ## Future Work
 - Add functionality for an Admin User, capable of editing and deleting events that are not his.

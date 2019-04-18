@@ -118,6 +118,13 @@ def tictactoemove(text, author, system):
 
 
 def get_win_response(winning_player, game, system):
+    """
+    Method for getting the response if a game has been won.
+    :param winning_player: The player that won the game.
+    :param game: The game that has been won.
+    :param system: The system meta-object.
+    :return:
+    """
     if winning_player == "T":
         return parser.direct_call(system.id_manager.current_id, "tie")
     else:
@@ -132,6 +139,12 @@ def get_win_response(winning_player, game, system):
 
 
 def get_addressable(system, player):
+    """
+    Method for getting the name used to refer to a player.
+    :param system: The system meta-object.
+    :param player: The player whose addressable name you want.
+    :return: The name.
+    """
     if player == system.bot:
         return "mij"
     else:

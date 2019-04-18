@@ -56,6 +56,7 @@ DISPLAY_COLUMNS = ["🇦", "🇧", "🇨"]
 
 # MINESWEEPER:
 SWEEPER_MINE = "💣"
+SWEEPER_DELIMITER = "||"
 SWEEPER_NUMBERS = ["⬜", "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣"]
 
 SWEEPER_MAX_SIZE = 198

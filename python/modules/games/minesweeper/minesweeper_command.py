@@ -8,10 +8,13 @@ from commands.command_error import CommandError
 
 
 class MineSweeperCommand(Command):
+    """
+    Command for generating a minesweeper board, based either on input or a default size.
+    """
 
     def __init__(self):
         call = ["minesweeper", "mine"]
-        parameters = "A set of dimensions, as well as the bomb count. (Example: (10, 10), 15"
+        parameters = "*(optional)*  A set of dimensions, as well as the bomb count. *(Example: (10, 10), 15)*."
         description = "This command will give a random minesweeper board."
         super().__init__(call, parameters, description)
 
@@ -29,6 +32,7 @@ class MineSweeperCommand(Command):
             bomb_count = settings.SWEEPER_AI_BOMBS[system.id_manager.get_current_ai()]
         try:
             minefield = minesweeper.create_minefield(dimensions, bomb_count)
-            return {"response": minesweeper.minefield_to_string(minefield)}
+            return {"response": "**MIJNENVEGER**",
+                    "board": minesweeper.minefield_to_string(minefield)}
         except ValueError as error:
             raise CommandError(str(error), param)

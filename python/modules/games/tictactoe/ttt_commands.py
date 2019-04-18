@@ -4,9 +4,13 @@ from modules.games.tictactoe import game_flow as game
 
 class ChallengeCommand(Command):
 
+    """
+    Command class for challenging someone to a game of Tic-Tac-Toe.
+    """
+
     def __init__(self):
         call = ["tttchallenge", "challenge", "ttc"]
-        parameters = "*(optional)* A mention of the user you wish to challenge"
+        parameters = "*(optional)* A mention of the user you wish to challenge. Default is the bot."
         description = "Challenge another user to a Tic-Tac-Toe game. " \
                       "This fails if either user is already involved in a game."
         super().__init__(call, parameters, description)
@@ -22,6 +26,10 @@ class ChallengeCommand(Command):
 
 
 class PlayGameCommand(Command):
+
+    """
+    Command class for playing Tic-Tac-Toe.
+    """
 
     def __init__(self):
         call = ["ttt", "tic-tac-toe"]
@@ -46,6 +54,10 @@ class PlayGameCommand(Command):
 
 
 class AbandonGameCommand(Command):
+
+    """
+    Command class for abandoning a game of Tic-Tac-Toe.
+    """
 
     def __init__(self):
         call = ["tttabandon", "abandon", "tta"]

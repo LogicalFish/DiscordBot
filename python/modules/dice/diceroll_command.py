@@ -6,6 +6,10 @@ from modules.dice.diceroll import StandardDiceRoller
 
 class RollCommand(Command):
 
+    """
+    Command class for rolling a dice and returning the result.
+    """
+
     def __init__(self):
         call = ["roll"]
         parameters = "[X]d[Y], repeated one or more times, with X being a(n optional) number between 1 and {}, " \

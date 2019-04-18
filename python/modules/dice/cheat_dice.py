@@ -7,7 +7,8 @@ class CheatDice(StandardDiceRoller):
 
     def roll_the_dice(self, dice_pairs):
         """
-        A method that generates a random number based on a list of dice-pairs.
+        A method that generates a "random" number based on a list of dice-pairs.
+        ('Secretly' rolls two and takes the higher, making favorable results more likely)
         :param dice_pairs: A list of tuples, each tuple having a length of two and representing dice notation.
         :return: A list containing a random number for each dice in the dice_pairs list.
         """

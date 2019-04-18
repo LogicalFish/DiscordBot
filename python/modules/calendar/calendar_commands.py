@@ -8,7 +8,7 @@ from commands.command_error import CommandError
 
 class EventCommand(Command):
     """
-    Command class for showing an event.
+    Command class for Reading an event.
     """
 
     def __init__(self):
@@ -20,7 +20,7 @@ class EventCommand(Command):
     def execute(self, param, message, system):
         """
         Accepts a single digit as parameter.
-        :param param: A single digit. Throws an error otherwise.
+        :param param: A single digit representing the Event ID. Throws an error otherwise.
         :param message: Unused parameter.
         :param system: Used to call the event_manager.
         :return: An Embed with the event-data within it.
@@ -71,7 +71,7 @@ class ListEventCommand(Command):
 
 class CreateEventCommand(Command):
     """
-    Command class for creating an event.
+    Command class for Creating an event.
     """
 
     def __init__(self):
@@ -109,7 +109,7 @@ class CreateEventCommand(Command):
 
 class EditEventCommand(Command):
     """
-    Command class for updating an event
+    Command class for Updating an event
     """
 
     def __init__(self):
@@ -145,7 +145,7 @@ class EditEventCommand(Command):
 
 class DeleteEventCommand(Command):
     """
-    Command class for deleting an event.
+    Command class for Deleting an event.
     """
 
     def __init__(self):

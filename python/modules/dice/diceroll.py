@@ -7,6 +7,14 @@ from modules.dice.diceroller_superclass import DiceRoller
 class StandardDiceRoller(DiceRoller):
 
     def format_response(self, dice_pairs, dice_results, too_many_dice):
+        """
+        This method returns a human-readable response to rolling a dice, confirming the dice that are rolled,
+        the rolled results, and any errors.
+        :param dice_pairs: The dice that have been rolled.
+        :param dice_results: The results of the rolled dice.
+        :param too_many_dice: Whether too many dice have been rolled.
+        :return:
+        """
         confirmation_response = "You have asked to roll the following dice: {}.\n".format(
             helper.dice_pairs_to_string(dice_pairs))
 
@@ -20,6 +28,11 @@ class StandardDiceRoller(DiceRoller):
         return confirmation_response + error_response + result_response
 
     def dice_result_to_string(self, dice_results):
+        """
+        A method that takes a list of results and makes a human-readable list from them, including the final result.
+        :param dice_results: A list of results from rolling dice.
+        :return: A list adding up all items.
+        """
         result_response = ""
         if len(dice_results) < settings.DSOFTCAP:
             for result in dice_results:

@@ -1,6 +1,11 @@
 import discord
 import settings
 
+"""
+Script for taking event data, and returning them in human-readable, easy to parse, form.
+"""
+
+
 def display_date(datetime):
     return datetime.strftime("{}, {}".format(settings.DATE_FORMAT, settings.TIME_FORMAT))
 
@@ -12,17 +17,6 @@ def describe_short(event):
 
 def describe_shadow(event):
     description = "*● {} - Event {}: {}.*\n".format(display_date(event["date"]), event["event_id"], event["name"])
-    return description
-
-
-def describe_long(event):
-    description = "**{}.**\n" \
-                  "*{}* \n" \
-                  "**Date:** {}\t" \
-                  "**Time:** {}".format(event["name"],
-                                        event["description"],
-                                        event["date"].strftime(settings.DATE_FORMAT),
-                                        event["date"].strftime(settings.TIME_FORMAT))
     return description
 
 

@@ -7,6 +7,10 @@ from modules.reactions import reactor
 
 class Responder:
 
+    """
+    A class whose main job it is to response to messages sent by client.
+    """
+
     def __init__(self, client, system):
         self.client = client
         self.system = system
@@ -48,17 +52,22 @@ class Responder:
                 await message.channel.send(parser.direct_call(self.identities.current_id, "call"))
 
     async def change_visual_id(self):
-        """Helper function that changes the bot's nickname and game that is displayed"""
+        """
+        Helper function that changes the bot's nickname and game that is displayed
+        """
         new_nickname = self.identities.current_id.get_name()
         new_game = self.identities.current_id.get_game()
         print("Changing bot identity to {}".format(new_nickname))
 
         for server in self.client.guilds:
             await server.me.edit(nick=new_nickname)
-            # await client.change_nickname(server.me, new_nickname)
         await self.client.change_presence(activity=discord.Game(name=new_game))
 
     async def respond(self, message):
+        """
+        Method that responds to a message that is not a command.
+        :param message: The message that should be responded to.
+        """
         action = {}
         response, identity_switch = self.identity_response(message)
         if len(response):
@@ -71,6 +80,12 @@ class Responder:
         await self.act(action, message)
 
     def identity_response(self, message):
+        """
+        Method that gets a response from an identity.
+        :param message: The message which should be responded to.
+        :return: A string containing a response &
+                A new identity (or false if the identity should not change).
+        """
         new_id = parser.find_new_id(message.content, self.identities.identities)
         if len(new_id) and self.identities.current_id not in new_id:
             identity_switch = new_id[0]

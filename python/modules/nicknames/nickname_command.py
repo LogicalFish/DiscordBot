@@ -5,6 +5,10 @@ from commands.command_superclass import Command
 
 class CallmeCommand(Command):
 
+    """
+    Command class for adding a nickname for the caller.
+    """
+
     def __init__(self):
         call = ["callme"]
         parameters = "The new nickname, up to {} letters long.".format(settings.MAX_NICK_NAME)
@@ -21,4 +25,8 @@ class CallmeCommand(Command):
 
     @staticmethod
     def get_default_name():
+        """
+        Helper method for getting a 'default' name in case a user forgets to actually submit one.
+        :return: A random 'default' name.
+        """
         return random.choice(["The Void", "Ishmael", "maybe", "Spartacus"])

@@ -7,6 +7,10 @@ from bot_identity import parser
 THIRD_DAY = 8*60*60
 main_channel_names = ["main", "general"]
 
+"""
+Various methods that set up additional loops running in the background.
+"""
+
 
 async def calendar_task(client, system):
     """
@@ -29,6 +33,9 @@ async def calendar_task(client, system):
 
 
 async def birthday_task(client, system):
+    """
+    A separate thread, keeping track of birthdays.
+    """
     await client.wait_until_ready()
     while not client.is_closed():
         birthday_ids = system.birthday_manager.get_today_birthdays()
