@@ -25,10 +25,11 @@ async def calendar_task(client, system):
                 for channel in channels:
                     if isinstance(channel, discord.TextChannel):
                         tag = get(channel.guild.roles, name=tag_name)
-                        message = ""
                         if tag:
                             message = "Reminder for {}!:".format(tag.mention)
-                        await channel.send(message, embed=reminder_embed)
+                            await channel.send(content=message, embed=reminder_embed)
+                        else:
+                            await channel.send(content=None, embed=reminder_embed)
         await asyncio.sleep(30)
 
 
