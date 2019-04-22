@@ -6,7 +6,7 @@ raccoon_words = ["raccoon", "wasbeer", "wasberen", "watbeer"]
 
 
 def is_raccoon_emoji(emoji):
-    if emoji.id == EMOJI_ID:
+    if str(emoji) == "<:{}:{}>".format(RACCOON_EMOJI_NAME, EMOJI_ID):
         return True
     return False
 
