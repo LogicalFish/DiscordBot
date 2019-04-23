@@ -32,7 +32,7 @@ class MineSweeperCommand(Command):
             bomb_count = settings.SWEEPER_AI_BOMBS[system.id_manager.get_current_ai()]
         try:
             minefield = minesweeper.create_minefield(dimensions, bomb_count)
-            return {"response": "**MIJNENVEGER**",
-                    "board": minesweeper.minefield_to_string(minefield)}
+            minefield_string = minesweeper.minefield_to_string(minefield)
+            return {"response": "**MIJNENVEGER**\n{}".format(minefield_string)}
         except ValueError as error:
             raise CommandError(str(error), param)
