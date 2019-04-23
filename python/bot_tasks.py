@@ -17,7 +17,7 @@ async def calendar_task(client, system):
     A separate thread, keeping track of tasks on the calendar.
     """
     await client.wait_until_ready()
-    while not client.is_closed():
+    while not client.is_closed() and system.time_manager is not None:
         reminders = system.time_manager.clock_pass()
         for date, reminder_embed, channel_name, tag_name in reminders:
             if len(channel_name):

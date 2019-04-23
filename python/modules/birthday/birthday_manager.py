@@ -12,9 +12,10 @@ class BirthdayManager:
     """
 
     def __init__(self, database_manager):
-        self.database = database_manager
         self.birthdays = []
-        self.initialize_birthdays()
+        self.database = database_manager
+        if self.database is not None:
+            self.initialize_birthdays()
 
     def initialize_birthdays(self):
         """

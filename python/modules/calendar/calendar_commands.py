@@ -25,6 +25,8 @@ class EventCommand(Command):
         :param system: Used to call the event_manager.
         :return: An Embed with the event-data within it.
         """
+        if system.event_manager is None:
+            raise CommandError("database_error", None)
         try:
             event_id = int(param)
             event = system.event_manager.get_event(event_id)
@@ -54,6 +56,8 @@ class ListEventCommand(Command):
         return False
 
     def execute(self, param, message, system):
+        if system.event_manager is None:
+            raise CommandError("database_error", None)
         try:
             shadow_size = int(param)
         except ValueError:
@@ -94,6 +98,8 @@ class CreateEventCommand(Command):
         return False
 
     def execute(self, param, message, system):
+        if system.event_manager is None:
+            raise CommandError("database_error", None)
         try:
             event_dict = system.event_manager.model.create_event_dict(param)
             system.event_manager.model.clean_data(event_dict)
@@ -125,6 +131,8 @@ class EditEventCommand(Command):
         return False
 
     def execute(self, param, message, system):
+        if system.event_manager is None:
+            raise CommandError("database_error", None)
         event_dict = system.event_manager.model.create_event_dict(param)
         if "id" in event_dict:
             id_str = event_dict["id"]
@@ -160,6 +168,8 @@ class DeleteEventCommand(Command):
         return False
 
     def execute(self, param, message, system):
+        if system.event_manager is None:
+            raise CommandError("database_error", None)
         try:
             event_id = int(param)
             event_name = system.event_manager.delete_event(event_id, message.author.id)
@@ -190,6 +200,8 @@ class UnShadowCommand(Command):
         return False
 
     def execute(self, param, message, system):
+        if system.event_manager is None:
+            raise CommandError("database_error", None)
         try:
             parameter_match = re.search("(\\d+)-(\\d+)", param.replace(" ", ""))
             if parameter_match is None:

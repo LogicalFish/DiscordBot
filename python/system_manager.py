@@ -21,9 +21,14 @@ class SystemManager:
         self.bot = None
         self.ttt_games = {}
         self.database_manager = DatabaseManager()
+        if self.database_manager.db.conn is not None:
+            self.event_manager = EventManager(self.database_manager)
+            self.time_manager = TimeManager(self.event_manager)
+        else:
+            self.database_manager = None
+            self.event_manager = None
+            self.time_manager = None
         self.id_manager = IdentityManager(self.database_manager)
-        self.event_manager = EventManager(self.database_manager)
-        self.time_manager = TimeManager(self.event_manager)
         self.nickname_manager = NicknameManager(self.database_manager)
         self.birthday_manager = BirthdayManager(self.database_manager)
 

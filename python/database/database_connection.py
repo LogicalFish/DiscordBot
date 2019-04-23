@@ -1,6 +1,7 @@
 import psycopg2
 from configparser import ConfigParser
 import settings
+from database.database_error import DatabaseError
 
 
 class DatabaseConnection:
@@ -28,7 +29,7 @@ class DatabaseConnection:
             for param in ini_params:
                 database_parameters[param[0]] = param[1]
         else:
-            raise Exception('Section {0} not found in the {1} file'.format(self.section, self.filename))
+            raise DatabaseError('Section {0} not found in the {1} file'.format(self.section, self.filename))
 
         return database_parameters
 
@@ -42,7 +43,8 @@ class DatabaseConnection:
             print('Connecting to the PostgreSQL database...')
             return psycopg2.connect(**params)
 
-        except (Exception, psycopg2.DatabaseError) as error:
+        except (DatabaseError, psycopg2.DatabaseError) as error:
+            # raise DatabaseError(error)
             print(error)
 
     def close_connection(self):

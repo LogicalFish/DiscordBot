@@ -20,14 +20,15 @@ class IdentityManager:
     """
 
     def __init__(self, database_manager):
-        self.database = database_manager
         self.identities = []
         self.initialize_identities()
         self.current_id = self.identities[0]
         self.chatty = True
         self.interval = 0
         self.banned_channels = []
-        self.initialize_ban_list()
+        self.database = database_manager
+        if self.database is not None:
+            self.initialize_ban_list()
 
     def initialize_identities(self):
         """
@@ -46,6 +47,7 @@ class IdentityManager:
     def initialize_ban_list(self):
         """
         Initializes the list of banned channels, taking from the database.
+        DATABASE REQUIRED
         """
         rows = self.database.get_rows(BAN_TABLE, sort=PRIMARY_KEY)
         self.banned_channels = [row[0] for row in rows]
@@ -54,7 +56,8 @@ class IdentityManager:
         """Adds a channel to the banned list and logs the change."""
         if channel_id not in self.banned_channels:
             print("Banning the following channel: {}".format(channel_id))
-            self.database.insert({PRIMARY_KEY: channel_id}, BAN_TABLE)
+            if self.database is not None:
+                self.database.insert({PRIMARY_KEY: channel_id}, BAN_TABLE)
             self.banned_channels.append(channel_id)
         else:
             raise ValueError("Can't ban a channel that is already banned.")
@@ -63,7 +66,8 @@ class IdentityManager:
         """Removes a channel from the banned list and logs the change."""
         if channel_id in self.banned_channels:
             print("Unbanning the following channel: {}".format(channel_id))
-            self.database.delete("'{}'".format(channel_id), PRIMARY_KEY, BAN_TABLE)
+            if self.database is not None:
+                self.database.delete("'{}'".format(channel_id), PRIMARY_KEY, BAN_TABLE)
             self.banned_channels.remove(channel_id)
         else:
             raise ValueError("Can't unban a channel that is not banned.")

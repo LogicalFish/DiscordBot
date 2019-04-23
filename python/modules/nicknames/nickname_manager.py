@@ -15,7 +15,8 @@ class NicknameManager:
     def __init__(self, database_manager):
         self.database = database_manager
         self.nicknames = {}
-        self.initialize_nicknames()
+        if self.database is not None:
+            self.initialize_nicknames()
 
     def get_name(self, user):
         """
@@ -42,10 +43,11 @@ class NicknameManager:
         :param nickname: The nickname the user wishes to have.
         :return:
         """
-        if user_id in self.nicknames.keys():
-            self.database.update({SECONDARY: nickname}, "'{}'".format(user_id), PRIMARY_KEY, NAME_TABLE)
-        else:
-            self.database.insert({PRIMARY_KEY: user_id, SECONDARY: nickname}, NAME_TABLE)
+        if self.database is not None:
+            if user_id in self.nicknames.keys():
+                self.database.update({SECONDARY: nickname}, "'{}'".format(user_id), PRIMARY_KEY, NAME_TABLE)
+            else:
+                self.database.insert({PRIMARY_KEY: user_id, SECONDARY: nickname}, NAME_TABLE)
         self.nicknames[user_id] = nickname
 
     def get_name_from_id(self, user_id, client, guild=None):
