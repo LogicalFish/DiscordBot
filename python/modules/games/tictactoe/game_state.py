@@ -80,7 +80,7 @@ class Game:
         :return: A valid move.
         """
         moves = self.game_board.get_set(s.FREE_SPACE)
-        #DIFFICULTY 3 (Normal Mode) Strategy
+        # DIFFICULTY 3 (Normal Mode) Strategy
         if difficulty > 2:
             order = [self.turn, self.get_other_player()]
             for o in order:
@@ -89,15 +89,16 @@ class Game:
                     board_copy.make_move(move, o)
                     if board_copy.get_win() == o:
                         return move
-            #DIFFICULTY 4 (Normal + / Hard mode) Strategy
+            # DIFFICULTY 4 (Normal + / Hard mode) Strategy
             if difficulty > 3:
                 if "B2" in moves:
                     return "B2"
-                #DIFFICULTY 5 (Expert) Strategy
+                # DIFFICULTY 5 (Expert) Strategy
                 if difficulty > 4:
                     other_moves = self.game_board.get_set(self.get_other_player())
-                    diagonals = ["A1","A3","C1","C3"]
+                    diagonals = ["A1", "A3", "C1", "C3"]
                     if len(other_moves) == 2:
+                        potential_move = "--"
                         if set(other_moves).issubset(set(diagonals)):
                             return "C2"
                         for move in moves:
@@ -112,6 +113,13 @@ class Game:
                             if move in diagonals and self.game_board.get_opposite(move) in moves\
                                     and self.get_other_player() not in self.game_board.get_adjacent(move):
                                 return move
+                # DIFFUCLTY 4 + 5 Default Strategy:
+                good_moves = []
+                for move in moves:
+                    if self.game_board.get_opposite(move) in moves:
+                        good_moves.append(move)
+                if good_moves:
+                    return random.choice(good_moves)
         # DIFFICULTY 1 (Simple) Strategy
         elif difficulty == 1:
             return moves[0]

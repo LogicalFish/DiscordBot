@@ -42,6 +42,8 @@ class PlayGameCommand(Command):
     def in_call(self, command):
         if command in self.call:
             return True
+        if len(command) == 0:
+            return False
         for char in command:
             if char != "t":
                 return False
