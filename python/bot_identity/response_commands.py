@@ -137,7 +137,7 @@ class LeaveCommand(Command):
     Command for randomly selecting another bot persona.
     """
     def __init__(self):
-        call = ["leave"]
+        call = ["leave", "dismiss"]
         parameters = "None."
         description = "This function swaps the current identity out for a new, random one."
         super().__init__(call, parameters, description)
