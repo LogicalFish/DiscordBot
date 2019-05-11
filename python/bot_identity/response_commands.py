@@ -38,8 +38,8 @@ class BanCommand(Command):
         try:
             system.id_manager.ban(message.channel.id)
             return {"response": parser.direct_call(system.id_manager.current_id, "leave")}
-        except ValueError as error:
-            raise CommandError(str(error), None)
+        except ValueError:
+            raise CommandError("already_banned", None)
 
 
 class UnBanCommand(Command):
@@ -56,8 +56,8 @@ class UnBanCommand(Command):
         try:
             system.id_manager.un_ban(message.channel.id)
             return {"response": parser.direct_call(system.id_manager.current_id, "call")}
-        except ValueError as error:
-            raise CommandError(str(error), None)
+        except ValueError:
+            raise CommandError("not_banned", None)
 
 
 class ChatToggleCommand(Command):

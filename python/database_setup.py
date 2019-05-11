@@ -9,8 +9,8 @@ from bot_identity import identity_manager
 db = DatabaseConnection()
 em = EventModel()
 event_table = em.create_table_sql()
-ban_table = "{} ( {} VARCHAR(255) PRIMARY KEY );".format(identity_manager.BAN_TABLE,
-                                                         identity_manager.PRIMARY_KEY)
+ban_table = "{} ( {} BIGINT PRIMARY KEY );".format(identity_manager.BAN_TABLE,
+                                                   identity_manager.PRIMARY_KEY)
 name_table = "{} ( {} BIGINT PRIMARY KEY, {} VARCHAR({}) );".format(nickname_manager.NAME_TABLE,
                                                                     nickname_manager.PRIMARY_KEY,
                                                                     nickname_manager.SECONDARY,
