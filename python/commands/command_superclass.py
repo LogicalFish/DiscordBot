@@ -1,4 +1,4 @@
-import settings
+import config
 
 
 class Command:
@@ -37,7 +37,7 @@ class Command:
         for item in self.call:
             if result:
                 result += ", "
-            result += settings.SIGN + item
+            result += config.SIGN + item
         return result
 
     def in_call(self, command):

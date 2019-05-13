@@ -1,7 +1,7 @@
 import unittest
 
 from modules.games.tictactoe.game_state import Game
-import settings
+from modules.games.tictactoe import ttt_config as config
 
 
 class TestTicTacToeGame(unittest.TestCase):
@@ -23,25 +23,25 @@ class TestTicTacToeGame(unittest.TestCase):
         player_two_name = "Player 2"
         players = [player_one_name, player_two_name]
         game = Game(players)
-        self.assertEqual(settings.TTT_PIECES[0], game.turn, "Piece 1 always goes first.")
-        self.assertEqual(settings.TTT_PIECES[1], game.get_other_player(), "Piece 2 should have the next turn.")
+        self.assertEqual(config.TTT_PIECES[0], game.turn, "Piece 1 always goes first.")
+        self.assertEqual(config.TTT_PIECES[1], game.get_other_player(), "Piece 2 should have the next turn.")
 
     def test_move(self):
         players = ["Player 1", "Player 2"]
         game = Game(players)
         move_validity = game.make_move("B2")
         self.assertTrue(move_validity, "Move should be valid")
-        self.assertEqual(settings.TTT_PIECES[0], game.game_board.board[1][1], "Piece should be placed on the board.")
-        self.assertEqual(settings.TTT_PIECES[1], game.turn, "Piece 2 should have this turn.")
-        self.assertEqual(settings.TTT_PIECES[0], game.get_other_player(), "Piece 1 should have the next turn.")
+        self.assertEqual(config.TTT_PIECES[0], game.game_board.board[1][1], "Piece should be placed on the board.")
+        self.assertEqual(config.TTT_PIECES[1], game.turn, "Piece 2 should have this turn.")
+        self.assertEqual(config.TTT_PIECES[0], game.get_other_player(), "Piece 1 should have the next turn.")
 
     def test_wrong_move(self):
         players = ["Player 1", "Player 2"]
         game = Game(players)
         move_validity = game.make_move("B4")
         self.assertFalse(move_validity, "Move should be invalid.")
-        self.assertEqual(settings.TTT_PIECES[0], game.turn, "Nothing should have changed. Player's 1 turn.")
-        self.assertEqual(settings.TTT_PIECES[1], game.get_other_player(), "Piece 2 should have the next turn.")
+        self.assertEqual(config.TTT_PIECES[0], game.turn, "Nothing should have changed. Player's 1 turn.")
+        self.assertEqual(config.TTT_PIECES[1], game.get_other_player(), "Piece 2 should have the next turn.")
 
     def test_cpu_move_easy_one(self):
         players = ["Player 1", "Player 2"]

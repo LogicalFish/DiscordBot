@@ -1,6 +1,6 @@
 import random
-import settings
 
+from . import config_minesweeper as config
 
 def create_minefield(dimensions, bomb_amount):
     """
@@ -15,12 +15,12 @@ def create_minefield(dimensions, bomb_amount):
     for i in range(dimensions[1]):
         row = []
         for j in range(dimensions[0]):
-            row.append(settings.FREE_SPACE)
+            row.append(config.SWEEPER_NUMBERS[0])
         minefield.append(row)
 
     bombs = generate_random_spots(dimensions, bomb_amount)
     for bomb in bombs:
-        minefield[bomb[1]][bomb[0]] = settings.SWEEPER_MINE
+        minefield[bomb[1]][bomb[0]] = config.SWEEPER_MINE
 
     minefield = allocate_numbers(minefield)
 
@@ -36,7 +36,7 @@ def minefield_to_string(minefield):
     minefield_string = ""
     for row in minefield:
         for square in row:
-            minefield_string += "{0}{1}{0}".format(settings.SWEEPER_DELIMITER, square)
+            minefield_string += "{0}{1}{0}".format(config.SWEEPER_DELIMITER, square)
         minefield_string += "\n"
     return minefield_string
 
@@ -67,8 +67,8 @@ def upgrade_number(number):
     :param number: The number token.
     :return: A number token representing the next number.
     """
-    number_index = settings.SWEEPER_NUMBERS.index(number)
-    return settings.SWEEPER_NUMBERS[number_index + 1]
+    number_index = config.SWEEPER_NUMBERS.index(number)
+    return config.SWEEPER_NUMBERS[number_index + 1]
 
 
 def allocate_numbers(board):
@@ -79,9 +79,9 @@ def allocate_numbers(board):
     """
     for i in range(len(board)):
         for j in range(len(board[i])):
-            if board[i][j] is settings.SWEEPER_MINE:
+            if board[i][j] is config.SWEEPER_MINE:
                 for n in range(i-1, i+2):
                     for m in range(j-1, j+2):
-                        if 0 <= n < len(board) and 0 <= m < len(board[n]) and board[n][m] is not settings.SWEEPER_MINE:
+                        if 0 <= n < len(board) and 0 <= m < len(board[n]) and board[n][m] is not config.SWEEPER_MINE:
                             board[n][m] = upgrade_number(board[n][m])
     return board

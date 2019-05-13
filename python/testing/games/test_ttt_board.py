@@ -2,16 +2,16 @@ import copy
 import unittest
 
 from modules.games.tictactoe.board import Board
-import settings
+from modules.games.tictactoe import ttt_config as config
 
 
 class TestTicTacToeBoard(unittest.TestCase):
 
     def test_initialization(self):
         board = Board()
-        expected_board = [[settings.FREE_SPACE, settings.FREE_SPACE, settings.FREE_SPACE],
-                          [settings.FREE_SPACE, settings.FREE_SPACE, settings.FREE_SPACE],
-                          [settings.FREE_SPACE, settings.FREE_SPACE, settings.FREE_SPACE]]
+        expected_board = [[config.FREE_SPACE, config.FREE_SPACE, config.FREE_SPACE],
+                          [config.FREE_SPACE, config.FREE_SPACE, config.FREE_SPACE],
+                          [config.FREE_SPACE, config.FREE_SPACE, config.FREE_SPACE]]
         self.assertEqual(expected_board, board.board, "Board should contain only empty spaces.")
 
     def test_copy(self):
@@ -25,9 +25,9 @@ class TestTicTacToeBoard(unittest.TestCase):
         board = Board()
         move = "B3"
         player = "X"
-        expected_board = [[settings.FREE_SPACE, settings.FREE_SPACE, settings.FREE_SPACE],
-                          [settings.FREE_SPACE, settings.FREE_SPACE, settings.FREE_SPACE],
-                          [settings.FREE_SPACE, "X", settings.FREE_SPACE]]
+        expected_board = [[config.FREE_SPACE, config.FREE_SPACE, config.FREE_SPACE],
+                          [config.FREE_SPACE, config.FREE_SPACE, config.FREE_SPACE],
+                          [config.FREE_SPACE, "X", config.FREE_SPACE]]
         return_boolean = board.make_move(move, player)
         self.assertTrue(return_boolean, "True means move was valid.")
         self.assertEqual(expected_board, board.board, "Board should have new value.")
@@ -120,7 +120,7 @@ class TestTicTacToeBoard(unittest.TestCase):
         for move in moves_two:
             board.make_move(move, player_two)
         adjacent = board.get_adjacent("B2")
-        expected_adjacent = [player_one, player_two, player_one, settings.FREE_SPACE]
+        expected_adjacent = [player_one, player_two, player_one, config.FREE_SPACE]
         self.assertCountEqual(expected_adjacent, adjacent, "Should contain two X tokens, one O, one Free Space")
 
     def test_get_adjacent_corner(self):

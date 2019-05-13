@@ -1,5 +1,6 @@
 import re
-import settings
+import config as main_config
+from . import calendar_config as config
 from commands.command_superclass import Command
 from modules.calendar import shadow_events, event_reader
 from modules.calendar.event_model import EventError
@@ -61,7 +62,7 @@ class ListEventCommand(Command):
         try:
             shadow_size = int(param)
         except ValueError:
-            shadow_size = settings.DEFAULT_SHADOW
+            shadow_size = config.DEFAULT_SHADOW
         events_list = system.event_manager.get_all_events()
         shadow_list = shadow_events.get_list_shadow(events_list, shadow_size)
         list_message = "De volgende evenementen zijn gepland:\n\n"
@@ -89,7 +90,7 @@ class CreateEventCommand(Command):
                      '\t\t*Recur*: Integer designating in how many days event will reoccur after the last. ' \
                      'If not supplied, event does not reoccur.\n'
         description = 'Creates a new event based on the supplied parameters. ' \
-                      '\n\t\tExample: *{}createdate name="Christmas" date="December 25th"*'.format(settings.SIGN)
+                      '\n\t\tExample: *{}createdate name="Christmas" date="December 25th"*'.format(main_config.SIGN)
         super().__init__(call, parameters, description)
 
     def in_call(self, command):
@@ -121,7 +122,7 @@ class EditEventCommand(Command):
     def __init__(self):
         call = ["eventedit", "eventupdate"]
         parameters = "\n\t*id*: The ID of the event you wish to edit. *(required)*\n" \
-                     "\tSee {}eventadd for other parameters.".format(settings.SIGN)
+                     "\tSee {}eventadd for other parameters.".format(main_config.SIGN)
         description = "Edits the parameters of a given event."
         super().__init__(call, parameters, description)
 
@@ -208,7 +209,7 @@ class UnShadowCommand(Command):
                 raise CommandError("event_not_found", param)
             event_id = int(parameter_match[1])
             shadow_id = int(parameter_match[2])
-            if 0 < shadow_id < settings.MAX_SHADOW:
+            if 0 < shadow_id < config.MAX_SHADOW:
                 for i in range(shadow_id+1):
                     new_event = system.event_manager.pop_event(event_id, message.author.id)
             else:

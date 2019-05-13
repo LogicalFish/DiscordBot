@@ -1,4 +1,4 @@
-import settings
+import config
 from commands.command_superclass import Command
 from commands.command_error import CommandError
 from commands import run_command
@@ -22,14 +22,14 @@ class HelpCommand(Command):
         else:
             return {"response": "**List of Commands:** {}"
                                 "*Type *``{}{} <command>``* for more information.*".format(self.get_list_of_commands(),
-                                                                                           settings.SIGN,
+                                                                                           config.SIGN,
                                                                                            self.call[0])}
 
     @staticmethod
     def get_list_of_commands():
         result = ""
         for i, command in enumerate(run_command.commands_list):
-            result += "\t{}{}".format(settings.SIGN, command.call[0])
+            result += "\t{}{}".format(config.SIGN, command.call[0])
             if i % 3 == 2:
                 result += "\n"
             else:

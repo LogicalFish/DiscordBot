@@ -1,6 +1,8 @@
 *.xml
 !default.xml
 settings.py
+config.py
+identity_config.py
 deprecated/
 *.ini
 

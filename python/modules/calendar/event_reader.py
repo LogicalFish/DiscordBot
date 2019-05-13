@@ -1,5 +1,6 @@
 import discord
-import settings
+
+from . import calendar_config as config
 
 """
 Script for taking event data, and returning them in human-readable, easy to parse, form.
@@ -7,7 +8,7 @@ Script for taking event data, and returning them in human-readable, easy to pars
 
 
 def display_date(datetime):
-    return datetime.strftime("{}, {}".format(settings.DATE_FORMAT, settings.TIME_FORMAT))
+    return datetime.strftime("{}, {}".format(config.DATE_FORMAT, config.TIME_FORMAT))
 
 
 def describe_short(event):
@@ -26,8 +27,8 @@ def get_reveal_message(shadow_event_id, new_event_id):
 
 def get_event_embed(event):
     embed = discord.Embed(title=event["name"], description=event["description"], color=13138175)
-    embed.add_field(name="Date", value=event["date"].strftime(settings.DATE_FORMAT), inline=True)
-    embed.add_field(name="Time", value=event["date"].strftime(settings.TIME_FORMAT), inline=True)
+    embed.add_field(name="Date", value=event["date"].strftime(config.DATE_FORMAT), inline=True)
+    embed.add_field(name="Time", value=event["date"].strftime(config.TIME_FORMAT), inline=True)
     embed.add_field(name="Reminders", value=embed_reminder_in_event(event), inline=False)
     embed.set_footer(text="ID: {} ● Author: ".format(event["event_id"]))
     return embed

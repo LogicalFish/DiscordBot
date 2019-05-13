@@ -1,5 +1,6 @@
 import copy
-import settings as s
+
+from . import ttt_config as config
 
 
 class Board:
@@ -24,7 +25,7 @@ class Board:
         for i in range(self.DIMENSION):
             row = []
             for j in range(self.DIMENSION):
-                row.append(s.FREE_SPACE)
+                row.append(config.FREE_SPACE)
             self.board.append(row)
 
     def __str__(self):
@@ -32,11 +33,11 @@ class Board:
         :return: A string representing the current board state.
         """
         result = "\n"
-        result += s.CANTON
-        result += "".join(s.DISPLAY_COLUMNS)
+        result += config.CANTON
+        result += "".join(config.DISPLAY_COLUMNS)
         for i in range(self.DIMENSION):
             result += "\n"
-            result += s.DISPLAY_ROWS[i]
+            result += config.DISPLAY_ROWS[i]
             for j in range(self.DIMENSION):
                 result += self.board[i][j]
         return result
@@ -62,7 +63,7 @@ class Board:
             v = ord(move[0].lower()) - 97 #Converts Alphabetical order to number. (A=0)
             h = int(move[1])-1
 
-            if self.board[h][v] == s.FREE_SPACE:
+            if self.board[h][v] == config.FREE_SPACE:
                 self.board[h][v] = player
                 return True
         return False
@@ -73,17 +74,17 @@ class Board:
         :return: False if no one has won. String T if the game has tied. Otherwise, the token that has won.
         """
         for i in range(self.DIMENSION):
-            if self.board[i][i] != s.FREE_SPACE:
+            if self.board[i][i] != config.FREE_SPACE:
                 if self.board[i][0] == self.board[i][1] == self.board[i][2]:
                     return self.board[i][0]
                 elif self.board[0][i] == self.board[1][i] == self.board[2][i]:
                     return self.board[0][i]
-        if self.board[1][1] != s.FREE_SPACE:
+        if self.board[1][1] != config.FREE_SPACE:
             if self.board[0][0] == self.board[1][1] == self.board[2][2]:
                 return self.board[1][1]
             elif self.board[2][0] == self.board[1][1] == self.board[0][2]:
                 return self.board[1][1]
-        if len(self.get_set(s.FREE_SPACE)) == 0:
+        if len(self.get_set(config.FREE_SPACE)) == 0:
             return self.TIE_TOKEN
         return False
 

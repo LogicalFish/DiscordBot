@@ -1,7 +1,8 @@
 import re
-import settings
 from datetime import datetime
 from dateutil import parser
+
+from . import calendar_config as config
 
 
 class EventModel:
@@ -12,12 +13,12 @@ class EventModel:
     key_date = "date"
     key_author = "author"
 
-    required_fields = {"name": "VARCHAR({})".format(settings.MAX_EVENT_NAME),
+    required_fields = {"name": "VARCHAR({})".format(config.MAX_EVENT_NAME),
                        key_date: "TIMESTAMP",
                        key_author: "BIGINT"
                        }
 
-    optional_fields = {"description": "VARCHAR({})".format(settings.MAX_EVENT_DESCRIPTION),
+    optional_fields = {"description": "VARCHAR({})".format(config.MAX_EVENT_DESCRIPTION),
                        "channel": "VARCHAR(255)",
                        "tag": "VARCHAR(255)",
                        "reminder": "INTEGER[]",

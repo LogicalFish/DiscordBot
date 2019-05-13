@@ -1,7 +1,7 @@
 from xml.etree import ElementTree
-import settings
+from . import identity_config as config
 
-root = ElementTree.parse(settings.FACT_FILE).getroot()
+root = ElementTree.parse(config.FACT_FILE).getroot()
 
 
 def get_fact_list(tag):

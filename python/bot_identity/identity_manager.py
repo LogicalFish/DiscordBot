@@ -1,5 +1,5 @@
 import random
-import settings
+from . import identity_config as config
 
 from bot_identity.identity import Identity, IdentityError
 
@@ -34,9 +34,9 @@ class IdentityManager:
         """
         A method for initialize all identities based on the settings.
         """
-        for file in settings.IDENTITY_FILES:
+        for file in config.IDENTITY_FILES:
             try:
-                self.identities.append(Identity(settings.XML_DIR + file))
+                self.identities.append(Identity(config.DATA_DIR + file))
             except IdentityError as ie:
                 print("IdentityError: {} Skipping identity {}.".format(ie, file))
                 continue

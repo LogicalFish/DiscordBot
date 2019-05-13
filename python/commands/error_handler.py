@@ -1,4 +1,4 @@
-import settings
+from modules.dice import dice_config
 
 # Dictionary translating error-codes to phrases.
 
@@ -18,7 +18,7 @@ ERROR_DICT = {"command_not_found": "Het commando '*{}*' is niet gevonden.",
               "invalid_shadow": "{} is geen valide schaduw-event.",
               # DICE
               "invalid_dice": "Er zijn geen valide dobbelstenen gevonden. "
-                              "(Dobbelstenen hoger dan een d{} worden genegeerd.)\n".format(settings.MAXDIETYPE),
+                              "(Dobbelstenen hoger dan een d{} worden genegeerd.)\n".format(dice_config.MAXDIETYPE),
               # MINESWEEPER
               "board_too_small": "Het opgegeven bord is te klein.",
               "too_many_bombs": "Er kunnen niet meer bommen dan vakjes zijn.",
@@ -41,7 +41,7 @@ ERROR_DICT_ENGLISH = {"command_not_found": "There is no command '*{}*'.",
                       # DICE
                       "invalid_dice": "Did not read valid dice. "
                                       "(Reminder: Any dice higher than a d{} are ignored.)\n".format(
-                          settings.MAXDIETYPE),
+                          dice_config.MAXDIETYPE),
                       # MINESWEEPER
                       "board_too_small": "The board dimensions are too small.",
                       "too_many_bombs": "Can't have more bombs than squares.",

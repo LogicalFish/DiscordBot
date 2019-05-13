@@ -1,4 +1,4 @@
-import settings
+import config
 from commands import error_handler
 from commands.command_error import CommandError
 from bot_identity import parser
@@ -71,7 +71,7 @@ def split_message(message):
     # Split the message contents in two halves.
     # One containing the command (first word in the string), the other the command parameters.
     splittext = message.clean_content.split(' ', 1)
-    command = splittext[0][len(settings.SIGN):]
+    command = splittext[0][len(config.SIGN):]
     user_param = ""
     if len(splittext) > 1:
         user_param = splittext[1]

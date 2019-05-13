@@ -1,6 +1,6 @@
 import psycopg2
 from configparser import ConfigParser
-import settings
+import config
 from database.database_error import DatabaseError
 
 
@@ -9,7 +9,7 @@ class DatabaseConnection:
     Class that maintains a connection with a database.
     """
 
-    def __init__(self, filename=settings.DB_INI, section='postgresql'):
+    def __init__(self, filename=config.DB_INI, section='postgresql'):
         """Initializes the instance."""
         self.filename = filename
         self.section = section

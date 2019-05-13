@@ -2,7 +2,7 @@ import re
 import random
 from bot_identity.identity import IdentityError
 from bot_identity import facts
-import settings
+from . import identity_config as config
 
 
 def find_new_id(message, id_list):
@@ -26,13 +26,13 @@ def find_new_id(message, id_list):
 
 def get_default_dict(identity):
     """
-    Returns the Global Regex values from settings.py, with the identity names inserted.
+    Returns the Global Regex values from the config, with the identity names inserted.
     :param identity: The identity to be inserted.
     :return: A dictionary containing all default regular expressions
     """
     result = {}
-    for value in settings.GLOBAL_REGEX:
-        result[value.replace(settings.BOT, identity.get_regex())] = settings.GLOBAL_REGEX[value]
+    for value in config.GLOBAL_REGEX:
+        result[value.format(identity.get_regex())] = config.GLOBAL_REGEX[value]
     return result
 
 
@@ -59,7 +59,7 @@ def get_response(message, identity):
                 response_list = identity.phrase_list(full_dict[regex])
             if len(response_list) == 0:
                 if regex in default_dict:
-                    response_list = settings.DEFAULT_ID.phrase_list(default_dict[regex])
+                    response_list = config.DEFAULT_ID.phrase_list(default_dict[regex])
                 else:
                     return ""
             return random.choice(response_list)
@@ -76,5 +76,5 @@ def direct_call(identity, tag):
     """
     response_list = identity.phrase_list(tag)
     if len(response_list) == 0:
-        response_list = settings.DEFAULT_ID.phrase_list(tag)
+        response_list = config.DEFAULT_ID.phrase_list(tag)
     return random.choice(response_list)
