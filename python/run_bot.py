@@ -3,7 +3,8 @@ import config
 from system_manager import SystemManager
 from bot_response_unit import Responder
 from bot_tasks import calendar_task, birthday_task
-from commands import run_command
+from commands import MainCommand
+# from commands import run_command
 from modules.reactions import reactor
 
 # Secret Token
@@ -35,7 +36,7 @@ async def on_message(message):
         # The bot should not respond to its own messages.
         return
     elif message.content.startswith(config.SIGN):
-        action = run_command.run_command(message, system)
+        action = MainCommand.run_command(message, system)
         await bot_responder.act(action, message)
     elif message.channel.id not in system.id_manager.banned_channels:
         # Switch identities based on received message.
