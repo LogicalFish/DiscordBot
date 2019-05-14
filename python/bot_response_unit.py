@@ -48,8 +48,7 @@ class Responder:
                 await message.channel.send(parser.direct_call(self.identities.current_id, "leave"))
             self.identities.current_id = action["leave"]
             await self.change_visual_id()
-            if self.identities.chatty and self.system.last_msg+self.identities.interval < time.time():
-                await message.channel.send(parser.direct_call(self.identities.current_id, "call"))
+            await message.channel.send(parser.direct_call(self.identities.current_id, "call"))
 
     async def change_visual_id(self):
         """
