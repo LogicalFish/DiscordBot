@@ -29,6 +29,9 @@ class Responder:
             await message.channel.send(action["response"])
             if "board" in action and action["board"]:
                 await message.channel.send(action["board"])
+        if "embed" in action:
+            embed = action["embed"]
+            await message.channel.send(embed=embed)
         if "event_embed" in action:
             embed = action["event_embed"][0]
             event_author = self.system.nickname_manager.get_name_from_id(action["event_embed"][1],

@@ -3,8 +3,10 @@
 settings.py
 config.py
 identity_config.py
+list_config.py
 deprecated/
 *.ini
+.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -20,7 +22,7 @@ build/
 develop-eggs/
 dist/
 downloads/
-eggs/
+eggs/w
 .eggs/
 lib/
 lib64/
@@ -119,6 +121,3 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
-# Pyre type checker
-.pyre/

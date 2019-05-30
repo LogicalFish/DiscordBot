@@ -13,12 +13,15 @@ from modules.games.minesweeper.minesweeper_command import MineSweeperCommand
 from modules.games.tictactoe.ttt_commands import ChallengeCommand, PlayGameCommand, AbandonGameCommand
 from modules.nicknames.nickname_command import CallmeCommand
 
+from modules.characterlist.list_commands import ListAllCommand, WhoIsCommand, AddYearCommand, GetYearCommand
+
 # Complete list of commands that people can access through the bots.
 commands_list = [CallmeCommand(), EchoCommand(), PollCommand(),
                  RollCommand(), GodRollCommand(), CheatRollCommand(),
                  StatusCommand(), BanCommand(), UnBanCommand(), ChatToggleCommand(), IntervalCommand(), LeaveCommand(),
                  ChallengeCommand(), PlayGameCommand(), AbandonGameCommand(), MineSweeperCommand(),
                  EventCommand(), ListEventCommand(), CreateEventCommand(), EditEventCommand(), DeleteEventCommand(),
-                 UnShadowCommand()]
+                 UnShadowCommand(),
+                 ListAllCommand(), WhoIsCommand(), GetYearCommand(), AddYearCommand()]
 
 MainCommand = CommandRunner(commands_list)
