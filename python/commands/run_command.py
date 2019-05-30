@@ -3,11 +3,15 @@ from commands import error_handler
 from commands.command_error import CommandError
 from bot_identity import parser
 
+from .miscellaneous.help_command import HelpCommand
+
 
 class CommandRunner:
 
     def __init__(self, commands_list):
         self.commands = commands_list
+        help = HelpCommand(self)
+        self.commands.append(help)
 
     def run_command(self, message, system):
         """

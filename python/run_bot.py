@@ -4,7 +4,6 @@ from system_manager import SystemManager
 from bot_response_unit import Responder
 from bot_tasks import calendar_task, birthday_task
 from commands import MainCommand
-# from commands import run_command
 from modules.reactions import reactor
 
 # Secret Token

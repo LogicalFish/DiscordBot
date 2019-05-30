@@ -2,7 +2,6 @@ from .run_command import CommandRunner
 
 from bot_identity.response_commands import StatusCommand, BanCommand, UnBanCommand, ChatToggleCommand, LeaveCommand, \
     IntervalCommand
-from .miscellaneous.help_command import HelpCommand
 from .miscellaneous.miscellaneous_commands import EchoCommand
 from .miscellaneous.poll_command import PollCommand
 from modules.calendar.calendar_commands import EventCommand, ListEventCommand, CreateEventCommand, EditEventCommand, \
@@ -15,7 +14,7 @@ from modules.games.tictactoe.ttt_commands import ChallengeCommand, PlayGameComma
 from modules.nicknames.nickname_command import CallmeCommand
 
 # Complete list of commands that people can access through the bots.
-commands_list = [CallmeCommand(), EchoCommand(), HelpCommand(), PollCommand(),
+commands_list = [CallmeCommand(), EchoCommand(), PollCommand(),
                  RollCommand(), GodRollCommand(), CheatRollCommand(),
                  StatusCommand(), BanCommand(), UnBanCommand(), ChatToggleCommand(), IntervalCommand(), LeaveCommand(),
                  ChallengeCommand(), PlayGameCommand(), AbandonGameCommand(), MineSweeperCommand(),
