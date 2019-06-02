@@ -6,8 +6,8 @@ class CharacterInfo:
     def __init__(self, npc_dict, current_year):
         self.profile = npc_dict
         self.year = current_year
-        self.sort_key = self.profile['names'].get('surname', "")
-        self.secondary_sort_key = self.profile['names'].get('first', "")
+        self.sort_key = self.profile['names'].get('surname', "zzz")
+        self.secondary_sort_key = self.profile['names'].get('first', "zzz")
 
     def __str__(self):
         return self.get_name()
@@ -18,18 +18,13 @@ class CharacterInfo:
         first_name = names.get("first", None)
         middle_name = names.get("middle", None)
         if middle_name:
-            if type(middle_name) == list:
-                new_middle_name = ""
-                for name in middle_name:
-                    new_middle_name += "{}.".format(name)
-                middle_name = new_middle_name
-            else:
-                middle_name = "{}.".format(middle_name[0])
+            middle_name = self.alter_possible_list_to_string(middle_name, lambda x: "{}.".format(x[0]))
         nickname = names.get("nickname", None)
         if nickname:
-            nickname = '"{}"'.format(nickname)
+            nickname = self.alter_possible_list_to_string(nickname, lambda x: '"{}"'.format(x))
         surname = names.get("surname", None)
         monnicker = names.get("monnicker", None)
+        print([title, first_name, middle_name, nickname, surname])
         name_list = filter(None, [title, first_name, middle_name, nickname, surname])
         full_name = " ".join(name_list)
         if full_name and monnicker:
@@ -39,6 +34,15 @@ class CharacterInfo:
         elif monnicker:
             return monnicker
         return "-"
+
+    def alter_possible_list_to_string(self, list_candidate, alter_function):
+        if type(list_candidate) == list:
+            alter_list = []
+            for item in list_candidate:
+                alter_list.append(alter_function(item))
+            return " ".join(alter_list)
+        else:
+            return alter_function(list_candidate)
 
     def get_organizations(self):
         organizations = self.profile.get("organization", None)

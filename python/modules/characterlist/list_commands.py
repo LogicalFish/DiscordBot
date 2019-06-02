@@ -23,7 +23,7 @@ class ListAllCommand(Command):
 
         npc_list = npc_tracker.get_list_of_npcs(search_tuples)
 
-        preamble = "De volgende NPCs zijn gevonden:\n"
+        preamble = "Er zijn {} NPCs gevonden:\n".format(len(npc_list))
         message = npc_tracker.get_npc_name_list(npc_list, preamble)
         return {"response": message}
 
@@ -44,7 +44,7 @@ class WhoIsCommand(Command):
             npc = npc_list[0]
             action = {"embed": npc.get_npc_embed()}
         elif len(npc_list) > 1:
-            preamble = "De volgende NPCs zijn gevonden. Specificeer welke je zoekt voor meer informatie:\n"
+            preamble = "Er zijn {} NPCs gevonden. Specificeer welke je zoekt voor meer informatie:\n".format(len(npc_list))
             multi_response = npc_tracker.get_npc_name_list(npc_list, preamble)
             action = {"response": multi_response}
         return action
