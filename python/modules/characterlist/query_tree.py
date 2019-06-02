@@ -27,10 +27,11 @@ def find_npcs_by_name(name, search_list=root):
     found_npcs = []
     for npc in search_list:
         score = 0
-        for name_item in npc.find('names'):
-            for name_sought in subnames:
+        for name_sought in subnames:
+            for name_item in npc.find('names'):
                 if name_item.tag != "title" and name_sought.lower() in name_item.text.lower():
                     score += 1
+                    break
         if score > high_score:
             high_score = score
             found_npcs = []
