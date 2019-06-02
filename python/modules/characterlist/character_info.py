@@ -38,7 +38,7 @@ class CharacterInfo:
             return full_name
         elif monnicker:
             return monnicker
-        return None
+        return "-"
 
     def get_organizations(self):
         organizations = self.profile.get("organization", None)
@@ -60,7 +60,7 @@ class CharacterInfo:
         subrace = self.profile.get("subrace", "")
         if subrace:
             subrace = "({}) ".format(subrace)
-        race = subrace + self.profile.get("race", "")
+        race = subrace + self.profile.get("race", "-")
         return race
 
     def get_age(self):
@@ -74,7 +74,7 @@ class CharacterInfo:
                 age = self.year - int(self.profile["birthyear"])
                 return age
         else:
-            return ""
+            return "-"
 
     def get_npc_embed(self):
         embed = discord.Embed(title=self.get_name(), description=self.profile.get("description", ""), color=16744512)
