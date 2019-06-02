@@ -16,7 +16,7 @@ class ListAllCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        parsed = re.findall("(\\w*)\\s*=\\s*\"(.*?)\"", param)
+        parsed = re.findall("([\\w\\.]*)\\s*=\\s*\"(.*?)\"", param)
         search_tuples = []
         for r in parsed:
             search_tuples.append((r[0], r[1]))
