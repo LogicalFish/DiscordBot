@@ -34,7 +34,7 @@ class NPCTracker:
 
     def get_npc_name_list(self, npc_list, preamble):
         npc_name_list = preamble
-        name_list = ["● {}".format(npc.get_name()) for npc in npc_list]
+        name_list = ["**{}.** {}".format(count+1, npc.get_name()) for count, npc in enumerate(npc_list)]
         max_reached = "- *etc. (character limit reached)*"
         for name in name_list:
             if len(npc_name_list) + len(name) + len(max_reached) < config.CHARACTER_MAX:

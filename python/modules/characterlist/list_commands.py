@@ -23,7 +23,7 @@ class ListAllCommand(Command):
 
         npc_list = npc_tracker.get_list_of_npcs(search_tuples)
 
-        preamble = "Er zijn {} NPCs gevonden:\n".format(len(npc_list))
+        preamble = "Er zijn {} karakters gevonden:\n".format(len(npc_list))
         message = npc_tracker.get_npc_name_list(npc_list, preamble)
         return {"response": message}
 
@@ -32,19 +32,31 @@ class WhoIsCommand(Command):
 
     def __init__(self):
         call = ["whois", "findnpc"]
-        parameters = "The name of the NPC you wish to find."
-        description = "This command will find an NPC matching the name, or a list of NPCs if multiple match."
+        parameters = "The name of the character you wish to find."
+        description = "This command will find a character matching the name, or a list of characters if multiple match."
         super().__init__(call, parameters, description)
+        self.saved_list = []
 
     def execute(self, param, message, system):
+        print(param)
+        print(param.isdigit())
+        print(len(self.saved_list))
+        if param.isdigit() and len(self.saved_list) > 0:
+            list_number = int(param) - 1
+            print(list_number)
+            if list_number < len(self.saved_list):
+                npc = self.saved_list[list_number]
+                action = {"embed": npc.get_npc_embed()}
+                return action
         npc_list = npc_tracker.get_list_of_npcs([("name", param)])
         if len(npc_list) == 0:
-            action = {"response": "Er is geen NPC met die naam gevonden."}
+            action = {"response": "Er is geen karakter met die naam gevonden."}
         elif len(npc_list) == 1:
             npc = npc_list[0]
             action = {"embed": npc.get_npc_embed()}
         elif len(npc_list) > 1:
-            preamble = "Er zijn {} NPCs gevonden. Specificeer welke je zoekt voor meer informatie:\n".format(len(npc_list))
+            self.saved_list = npc_list
+            preamble = "Er zijn {} karakters gevonden. Specificeer welke je zoekt voor meer informatie:\n".format(len(npc_list))
             multi_response = npc_tracker.get_npc_name_list(npc_list, preamble)
             action = {"response": multi_response}
         return action
