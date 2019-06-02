@@ -12,7 +12,6 @@ def string_to_dice_pairs(msg):
     :return: A list of tuples, each tuple having a length of two and representing dice notation.
     """
     # Catches all numbers of the format XdY and dY
-    print(msg)
     stringresult = re.findall("(-?\\s*\\d+)?d(\\d+)", msg)
     # Edge-case: Catches solitary numbers.
     stringresult += re.findall("((?:[+\\- ]|^)\\s*\\d+)(?!d|\\d)()", msg)
