@@ -53,7 +53,7 @@ def find_npcs_by_category(category, search_term, search_list=root):
                 nested_nodes += node.findall(sub)
             nodes = nested_nodes
         for node in nodes:
-            if node.text.lower() == search_term.lower():
+            if search_term.lower() in node.text.lower():
                 found_npcs.append(npc)
                 break
 
