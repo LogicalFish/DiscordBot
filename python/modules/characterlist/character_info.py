@@ -7,7 +7,7 @@ class CharacterInfo:
         self.profile = npc_dict
         self.year = current_year
         self.sort_key = self.profile['names'].get('surname', "zzz")
-        self.secondary_sort_key = self.profile['names'].get('first', "zzz")
+        self.secondary_sort_key = self.profile['names'].get('firstname', "zzz")
 
     def __str__(self):
         return self.get_name()
@@ -15,7 +15,7 @@ class CharacterInfo:
     def get_name(self):
         names = self.profile["names"]
         title = names.get("title", None)
-        first_name = names.get("first", None)
+        first_name = names.get("firstname", None)
         middle_name = names.get("middle", None)
         if middle_name:
             middle_name = self.alter_possible_list_to_string(middle_name, lambda x: "{}.".format(x[0]))
