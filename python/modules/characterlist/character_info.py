@@ -24,7 +24,6 @@ class CharacterInfo:
             nickname = self.alter_possible_list_to_string(nickname, lambda x: '"{}"'.format(x))
         surname = names.get("surname", None)
         monnicker = names.get("monnicker", None)
-        print([title, first_name, middle_name, nickname, surname])
         name_list = filter(None, [title, first_name, middle_name, nickname, surname])
         full_name = " ".join(name_list)
         if full_name and monnicker:
@@ -67,6 +66,13 @@ class CharacterInfo:
         race = subrace + self.profile.get("race", "-")
         return race
 
+    def get_profession(self):
+        profession = self.profile.get("class", "-")
+        if type(profession) == list:
+            return ", ".join(profession)
+        else:
+            return profession
+
     def get_age(self):
         if "birthyear" in self.profile:
             if "deathyear" in self.profile and int(self.profile["deathyear"]) < self.year:
@@ -88,7 +94,7 @@ class CharacterInfo:
         embed.add_field(name="Location", value=self.profile.get("location", "-"), inline=True)
 
         embed.add_field(name="Race", value=self.get_race(), inline=True)
-        embed.add_field(name="Class", value=self.profile.get("class", "-"), inline=True)
+        embed.add_field(name="Class", value=self.get_profession(), inline=True)
 
         organizations = self.get_organizations()
         new_orgs = ["● {}".format(x) for x in organizations]
