@@ -38,12 +38,8 @@ class WhoIsCommand(Command):
         self.saved_list = []
 
     def execute(self, param, message, system):
-        print(param)
-        print(param.isdigit())
-        print(len(self.saved_list))
         if param.isdigit() and len(self.saved_list) > 0:
             list_number = int(param) - 1
-            print(list_number)
             if list_number < len(self.saved_list):
                 npc = self.saved_list[list_number]
                 action = {"embed": npc.get_npc_embed()}
