@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.7
 import discord
 import config
 from system_manager import SystemManager
