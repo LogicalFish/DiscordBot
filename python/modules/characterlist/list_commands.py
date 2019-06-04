@@ -12,11 +12,17 @@ class ListAllCommand(Command):
         call = ["list", "listall", "npcs"]
         parameters = "Search parameters (optional)"
         description = "This command will list all NPCs that match the search parameters.\n" \
-                      "A search parameter has the shape x='y'. Example: race='human', or organization.name='winged men'"
+                      "A search parameter has the shape x=\"Y\"." \
+                      "A list of all possible parameters:\n" \
+                      "\t*name*\n" \
+                      "\t*names.title*\n\t*names.firstname*\n\t*middle*\n\t*nickname*\n\t*surname*\n\t*moniker*\n" \
+                      "\t*gender*\n\t*race*\n\t*subrace*\n\t*class*\n\t*location*\n\t*birthyear*\n" \
+                      "\t*organization.name*\n\t*organization.rank*\n\t*organization.status*\n" \
+                      "\t*description*\n"
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        parsed = re.findall("([\\w\\.]*)\\s*=\\s*\"(.*?)\"", param)
+        parsed = re.findall("([\\w\\.]*)\\s*=\\s*[\"'](.*?)[\"']", param)
         search_tuples = []
         for r in parsed:
             search_tuples.append((r[0], r[1]))
@@ -24,8 +30,8 @@ class ListAllCommand(Command):
         npc_list = npc_tracker.get_list_of_npcs(search_tuples)
 
         preamble = "Er zijn {} karakters gevonden:\n".format(len(npc_list))
-        message = npc_tracker.get_npc_name_list(npc_list, preamble)
-        return {"response": message}
+        response = npc_tracker.get_npc_name_list(npc_list, preamble)
+        return {"response": response}
 
 
 class WhoIsCommand(Command):
@@ -67,9 +73,9 @@ class GetYearCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        message = "The current year of the Chaos is {}.".format(npc_tracker.current_year)
+        response = "The current year of the Chaos is {}.".format(npc_tracker.current_year)
 
-        return {"response": message}
+        return {"response": response}
 
 
 class AddYearCommand(Command):
@@ -91,9 +97,23 @@ class AddYearCommand(Command):
                     npc_tracker.year_up()
             else:
                 npc_tracker.year_up()
-            message = "Time has passed since year {} of Chaos. It is now the year {}.".format(old_year,
+            response = "Time has passed since year {} of Chaos. It is now the year {}.".format(old_year,
                                                                                          npc_tracker.current_year)
-            return {"response": message}
+            return {"response": response}
         else:
             raise CommandError("command_not_allowed", None)
 
+
+# class StatisticsCommand(Command):
+#
+#     def __init__(self):
+#         call = ["npcstats", "stats"]
+#         parameters = "The category you want statistics for."
+#         allowed_params = ", ".join(npc_tracker.allowed_stats)
+#         description = "This command can return NPC statistics for one of the following categories: {}.".format(allowed_params)
+#         super().__init__(call, parameters, description)
+#         self.saved_list = []
+#
+#     def execute(self, param, message, system):
+#         response = npc_tracker.get_stats(param)
+#         return {"response": response}
