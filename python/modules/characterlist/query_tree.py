@@ -43,7 +43,7 @@ def find_npcs_by_name(name, search_list=root):
         return []
 
 
-def find_npcs_by_category(category, search_term, search_list=root):
+def find_npcs_by_category(category, search_term, search_list=root, exact=False):
     subcategories = category.split(".")
     found_npcs = []
     for npc in search_list:
@@ -54,10 +54,10 @@ def find_npcs_by_category(category, search_term, search_list=root):
                 nested_nodes += node.findall(sub.lower())
             nodes = nested_nodes
         for node in nodes:
-            if search_term.lower() in node.text.lower():
+            if not exact and search_term.lower() in node.text.lower() \
+                    or exact and search_term.lower() == node.text.lower():
                 found_npcs.append(npc)
                 break
-
     return found_npcs
 
 
@@ -74,18 +74,3 @@ def filter_living_npcs(year, search_list=root, death=False):
         elif not death:
             valid_npcs.append(npc)
     return valid_npcs
-
-
-def get_stats(category):
-    subcategories = category.split(".")
-    statistics = {}
-    for npc in root:
-        nodes = [npc]
-        for sub in subcategories:
-            nested_nodes = []
-            for node in nodes:
-                nested_nodes += node.findall(sub.lower())
-            nodes = nested_nodes
-        for node in nodes:
-            statistics[node.text] = statistics.get(node.text, 0) + 1
-    return statistics

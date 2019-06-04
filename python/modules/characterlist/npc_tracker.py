@@ -9,8 +9,6 @@ class NPCTracker:
     def __init__(self, owner, year):
         self.owner = owner
         self.current_year = year
-        self.forbidden_knowledge = ["deathyear"]
-        # self.allowed_stats = ["gender", "race", "subrace", "class", "location", "birthyear", "organization.name", "organization.rank", "organization.status"]
 
     def year_up(self, number=1):
         self.current_year += number
@@ -21,14 +19,23 @@ class NPCTracker:
             if search_tuple[0].lower() == "name":
                 search_tree = query_tree.find_npcs_by_name(search_tuple[1], search_tree)
             elif search_tuple[0].lower() == "alive":
-                not_alive = False
-                if search_tuple[1].lower() == "false":
-                    not_alive = True
+                not_alive = (search_tuple[1].lower() == "false")
                 search_tree = query_tree.filter_living_npcs(self.current_year, search_list=search_tree, death=not_alive)
-            elif search_tuple[0].lower() in self.forbidden_knowledge:
-                pass
+            elif search_tuple[0].lower() == "deathyear":
+                try:
+                    year_asked = int(search_tuple[1])
+                    if year_asked <= self.current_year:
+                        search_tree = query_tree.find_npcs_by_category(search_tuple[0], search_tuple[1], search_tree)
+                    else:
+                        search_tree = []
+                except ValueError:
+                    search_tree = []
             else:
-                search_tree = query_tree.find_npcs_by_category(search_tuple[0], search_tuple[1], search_tree)
+                exact = (search_tuple[0].lower() == "gender")
+                search_tree = query_tree.find_npcs_by_category(search_tuple[0],
+                                                               search_tuple[1],
+                                                               search_tree,
+                                                               exact=exact)
         final_list = []
         for found_item in search_tree:
             npc = CharacterInfo(query_tree.item_to_dictionary(found_item), self.current_year)
@@ -47,13 +54,3 @@ class NPCTracker:
                 npc_name_list += max_reached
                 break
         return npc_name_list
-
-    # def get_stats(self, category):
-    #     if category in self.allowed_stats:
-    #         statistics = query_tree.get_stats(category)
-    #         result = ""
-    #         for data_point in sorted(statistics, key=statistics.get, reverse=True):
-    #             result += "**{}**: {}\n".format(data_point, statistics[data_point])
-    #         return result
-    #     else:
-    #         return "Sorry, could not collect statistics in the *{}* category.".format(category)

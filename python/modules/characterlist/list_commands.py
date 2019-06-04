@@ -102,18 +102,3 @@ class AddYearCommand(Command):
             return {"response": response}
         else:
             raise CommandError("command_not_allowed", None)
-
-
-# class StatisticsCommand(Command):
-#
-#     def __init__(self):
-#         call = ["npcstats", "stats"]
-#         parameters = "The category you want statistics for."
-#         allowed_params = ", ".join(npc_tracker.allowed_stats)
-#         description = "This command can return NPC statistics for one of the following categories: {}.".format(allowed_params)
-#         super().__init__(call, parameters, description)
-#         self.saved_list = []
-#
-#     def execute(self, param, message, system):
-#         response = npc_tracker.get_stats(param)
-#         return {"response": response}
