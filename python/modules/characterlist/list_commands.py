@@ -11,7 +11,7 @@ class ListAllCommand(Command):
     def __init__(self):
         call = ["list", "listall", "npcs"]
         parameters = "Search parameters (optional)"
-        description = "This command will list all NPCs that match the search parameters.\n" \
+        description = "This command will list all characters that match the search parameters.\n" \
                       "A search parameter has the shape x=\"Y\"." \
                       "A list of all possible parameters:\n" \
                       "\t*name*\n" \
