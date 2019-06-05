@@ -23,15 +23,15 @@ class CharacterInfo:
         if nickname:
             nickname = self.alter_possible_list_to_string(nickname, lambda x: '"{}"'.format(x))
         surname = names.get("surname", None)
-        monnicker = names.get("monnicker", None)
+        moniker = names.get("moniker", None)
         name_list = filter(None, [title, first_name, middle_name, nickname, surname])
         full_name = " ".join(name_list)
-        if full_name and monnicker:
-            return "{}, {}".format(full_name, monnicker)
+        if full_name and moniker:
+            return "{}, {}".format(full_name, moniker)
         elif full_name:
             return full_name
-        elif monnicker:
-            return monnicker
+        elif moniker:
+            return moniker
         return "-"
 
     def alter_possible_list_to_string(self, list_candidate, alter_function):
