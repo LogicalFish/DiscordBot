@@ -64,7 +64,7 @@ class EventModel:
             elif model[key] == "INTEGER" or model[key] == "BIGINT":
                 input_fields[key] = self.clean_integer(input_fields[key])
             elif model[key] == "INTEGER[]":
-                if re.match("^(\\d+,\\s*)+\\d+$", input_fields[key]):
+                if re.match("^(\\d+,\\s*)*\\d+$", input_fields[key]):
                     input_fields[key] = "{{ {} }}".format(input_fields[key])
                 else:
                     raise EventError("invalid_reminder", input_fields[key])
