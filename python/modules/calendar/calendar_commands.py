@@ -145,9 +145,12 @@ class EditEventCommand(Command):
             raise CommandError("number_not_valid", id_str)
         try:
             system.event_manager.model.clean_data(event_dict)
-            event = system.event_manager.update_event(event_id, event_dict, message.author.id)
-            return {"response": "Updated event {}:".format(event_id),
-                    "event_embed": (event_reader.get_event_embed(event), event["author"])}
+            if event_dict:
+                event = system.event_manager.update_event(event_id, event_dict, message.author.id)
+                return {"response": "Updated event {}:".format(event_id),
+                        "event_embed": (event_reader.get_event_embed(event), event["author"])}
+            else:
+                raise CommandError("required_field_missing", "any")
         except EventError as error:
             raise CommandError(error.message, error.parameters)
 
