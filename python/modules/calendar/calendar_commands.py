@@ -90,7 +90,7 @@ class CreateEventCommand(Command):
                      '\t\t*Recur*: Integer designating in how many days event will reoccur after the last. ' \
                      'If not supplied, event does not reoccur.\n'
         description = 'Creates a new event based on the supplied parameters. ' \
-                      '\n\t\tExample: *{}createdate name="Christmas" date="December 25th"*'.format(main_config.SIGN)
+                      '\n\t\tExample: *{}eventadd name="Christmas" date="December 25th"*'.format(main_config.SIGN)
         super().__init__(call, parameters, description)
 
     def in_call(self, command):

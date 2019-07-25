@@ -15,7 +15,7 @@ class ListAllCommand(Command):
                       "A search parameter has the shape x=\"Y\"." \
                       "A list of all possible parameters:\n" \
                       "\t*name*\n" \
-                      "\t*names.title*\n\t*names.firstname*\n\t*middle*\n\t*nickname*\n\t*surname*\n\t*moniker*\n" \
+                      "\t*names.title*\n\t*names.firstname*\n\t*names.middle*\n\t*names.nickname*\n\t*names.surname*\n\t*names.moniker*\n" \
                       "\t*gender*\n\t*race*\n\t*subrace*\n\t*class*\n\t*location*\n\t*birthyear*\n" \
                       "\t*organization.name*\n\t*organization.rank*\n\t*organization.status*\n" \
                       "\t*description*\n"
