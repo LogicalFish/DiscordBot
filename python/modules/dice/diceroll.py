@@ -61,5 +61,5 @@ class StandardDiceRoller(DiceRoller):
                 results.append(x)
         return results
 
-    def get_random_number(self, min, max, sign):
-        return random.randint(min, max)*sign
+    def get_random_number(self, min_value, max_value, sign):
+        return random.randint(min_value, max_value) * sign
