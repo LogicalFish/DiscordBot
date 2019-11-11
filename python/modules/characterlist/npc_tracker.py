@@ -16,7 +16,9 @@ class NPCTracker:
     def get_list_of_npcs(self, search_tuples):
         search_tree = query_tree.root
         for search_tuple in search_tuples:
-            if search_tuple[0].lower() == "name":
+            if search_tuple[0].lower() == "any":
+                search_tree = query_tree.find_npcs_by_any(search_tuple[1], search_tree)
+            elif search_tuple[0].lower() == "name":
                 search_tree = query_tree.find_npcs_by_name(search_tuple[1], search_tree)
             elif search_tuple[0].lower() == "alive":
                 not_alive = (search_tuple[1].lower() == "false")

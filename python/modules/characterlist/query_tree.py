@@ -61,6 +61,17 @@ def find_npcs_by_category(category, search_term, search_list=root, exact=False):
     return found_npcs
 
 
+def find_npcs_by_any(search_term, search_list=root):
+    found_npcs = []
+    for npc in search_list:
+        subcategories = list(npc.iter())
+        for sub in subcategories:
+            if search_term.lower() in sub.text.lower():
+                found_npcs.append(npc)
+                break
+    return found_npcs
+
+
 def filter_living_npcs(year, search_list=root, death=False):
     valid_npcs = []
     for npc in search_list:
