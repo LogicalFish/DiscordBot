@@ -102,9 +102,13 @@ class EventModel:
         parsed = re.findall("(\\w*)\\s*=\\s*\"(.*?)\"", string)
         output_dict = {}
         for r in parsed:
-            output_dict[r[0].lower()] = r[1]
+            category = r[0].lower()
             if r[0].lower() in self.SYNONYMS:
-                output_dict[self.SYNONYMS[r[0].lower()]] = r[1]
+                category = self.SYNONYMS[r[0].lower()]
+            if category in output_dict:
+                output_dict[category] += ", " + r[1]
+            else:
+                output_dict[category] = r[1]
         return output_dict
 
 

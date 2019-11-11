@@ -1,4 +1,7 @@
 import re
+
+from discord import GroupChannel
+
 import config as main_config
 from . import calendar_config as config
 from commands.command_superclass import Command
@@ -106,7 +109,10 @@ class CreateEventCommand(Command):
             system.event_manager.model.clean_data(event_dict)
             event_dict[system.event_manager.model.key_author] = message.author.id
             if "channel" not in event_dict.keys():
-                event_dict["channel"] = message.channel.name
+                if isinstance(message.channel, GroupChannel):
+                    event_dict["channel"] = message.channel.name
+                else:
+                    raise CommandError("required_field_missing", "channel")
             event = system.event_manager.create_event(event_dict)
             return {"response": "Created event {}:".format(event[system.event_manager.model.PRIMARY_KEY]),
                     "event_embed": (event_reader.get_event_embed(event), event["author"])}
