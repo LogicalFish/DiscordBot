@@ -25,4 +25,4 @@ def get_user(message):
 
 def get_random_waiting_period():
     rnd = random.randint(3, 8)
-    return timedelta(seconds=rnd)
+    return timedelta(hours=rnd)
