@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.7
 import discord
 import config
+from modules.reminders import delayed_response
 from system_manager import SystemManager
 from bot_response_unit import Responder
 from bot_tasks import calendar_task, birthday_task, reminder_task
@@ -41,6 +42,7 @@ async def on_message(message):
     elif message.channel.id not in system.id_manager.banned_channels:
         # Switch identities based on received message.
         await bot_responder.respond(message)
+    delayed_response.add_reminder_if_trigger(message, system)
 
 
 @client.event
