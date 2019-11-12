@@ -45,3 +45,4 @@ def get_delta(time, unit):
         return timedelta(hours=time)
     if unit == "d":
         return timedelta(days=time)
+    return timedelta(hours=time)
