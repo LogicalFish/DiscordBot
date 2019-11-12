@@ -8,6 +8,9 @@ class FortunateBoard:
     # UNICODE_AID = ord('🇦') - ord('a')
     FREE_SPACE = "⬜"
     HIDDEN = "⬛"
+    COMMA = "⤵"
+    AMPERSAND = "➕"
+    DASH = "➖"
 
     def __init__(self):
         """
@@ -26,6 +29,12 @@ class FortunateBoard:
                 else:
                     # hidden_word += chr(self.UNICODE_AID + ord(char))
                     hidden_word += ":regional_indicator_{}:".format(char)
+            elif char == ",":
+                hidden_word += self.COMMA
+            elif char == "&" or char == "+":
+                hidden_word += self.AMPERSAND
+            elif char == "-" or char == "_":
+                hidden_word += self.DASH
             elif char.isspace():
                 hidden_word += self.FREE_SPACE
             else:
