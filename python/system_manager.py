@@ -20,6 +20,7 @@ class SystemManager:
         self.last_msg = 0
         self.bot = None
         self.ttt_games = {}
+        self.wheel_games = []
         self.database_manager = DatabaseManager()
         if self.database_manager.db.conn is not None:
             self.event_manager = EventManager(self.database_manager)

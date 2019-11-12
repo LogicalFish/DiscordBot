@@ -23,6 +23,13 @@ ERROR_DICT = {"command_not_found": "Het commando '*{}*' is niet gevonden.",
               # MINESWEEPER
               "board_too_small": "Het opgegeven bord is te klein.",
               "too_many_bombs": "Er kunnen niet meer bommen dan vakjes zijn.",
+              # WHEEL
+              "invalid_character": "{} is geen valide letter.",
+              "vowel": "{} is geen medeklinker.",
+              "not_a_vowel": "{} is geen klinker.",
+              "already_revealed": "De letter {} is al geraden.",
+              "no_cash": "Je hebt niet genoeg geld om dat te doen.",
+              "no_guess": "Je kan niet raden zonder eerst het rad te draaien.",
               }
 
 ERROR_DICT_ENGLISH = {"command_not_found": "There is no command '*{}*'.",
@@ -47,4 +54,11 @@ ERROR_DICT_ENGLISH = {"command_not_found": "There is no command '*{}*'.",
                       # MINESWEEPER
                       "board_too_small": "The board dimensions are too small.",
                       "too_many_bombs": "Can't have more bombs than squares.",
+                      # WHEEL
+                      "invalid_character": "{} is not a valid letter.",
+                      "vowel": "{} is not a consonant.",
+                      "not_a_vowel": "{} is not a vowel.",
+                      "already_revealed": "The letter {} has already been guessed.",
+                      "no_cash": "You need more money to do that.",
+                      "no_guess": "You can not guess if you have not spun the wheel.",
                       }

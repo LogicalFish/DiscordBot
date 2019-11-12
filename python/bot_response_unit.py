@@ -29,6 +29,8 @@ class Responder:
             await message.channel.send(action["response"])
             if "board" in action and action["board"]:
                 await message.channel.send(action["board"])
+            if "scores" in action and action["scores"]:
+                await message.channel.send(action["scores"])
         if "embed" in action:
             embed = action["embed"]
             await message.channel.send(embed=embed)

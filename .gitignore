@@ -4,6 +4,7 @@ settings.py
 config.py
 identity_config.py
 list_config.py
+wheel_config.py
 deprecated/
 *.ini
 .idea/
