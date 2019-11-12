@@ -3,11 +3,12 @@ import discord
 
 class CharacterInfo:
 
-    def __init__(self, npc_dict, current_year):
+    def __init__(self, npc_dict, current_year, color):
         self.profile = npc_dict
         self.year = current_year
         self.sort_key = self.profile['names'].get('surname', "zzz")
         self.secondary_sort_key = self.profile['names'].get('firstname', "zzz")
+        self.color_value = color
 
     def __str__(self):
         return self.get_name()
@@ -87,7 +88,7 @@ class CharacterInfo:
             return "-"
 
     def get_npc_embed(self):
-        embed = discord.Embed(title=self.get_name(), description=self.profile.get("description", ""), color=16744512)
+        embed = discord.Embed(title=self.get_name(), description=self.profile.get("description", ""), color=self.color_value)
 
         embed.add_field(name="Gender", value=self.profile.get("gender", "-"), inline=True)
         embed.add_field(name="Age", value=self.get_age(), inline=True)

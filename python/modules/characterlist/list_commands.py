@@ -1,9 +1,11 @@
 import re
+import operator
 
+import config
 from commands.command_error import CommandError
 from commands.command_superclass import Command
 
-from modules.characterlist import npc_tracker
+from modules.characterlist import npc_tracker, npc_trackers
 
 
 class ListAllCommand(Command):
@@ -26,11 +28,13 @@ class ListAllCommand(Command):
         search_tuples = []
         for r in parsed:
             search_tuples.append((r[0], r[1]))
-
-        npc_list = npc_tracker.get_list_of_npcs(search_tuples)
+        npc_list = []
+        for tracker in npc_trackers:
+            npc_list += tracker.get_list_of_npcs(search_tuples)
+        npc_list.sort(key=operator.attrgetter("sort_key", "secondary_sort_key"))
 
         preamble = "Er zijn {} karakters gevonden:\n".format(len(npc_list))
-        response = npc_tracker.get_npc_name_list(npc_list, preamble)
+        response = format_npc_name_list(npc_list, preamble)
         return {"response": response}
 
 
@@ -50,7 +54,17 @@ class WhoIsCommand(Command):
                 npc = self.saved_list[list_number]
                 action = {"embed": npc.get_npc_embed()}
                 return action
-        npc_list = npc_tracker.get_list_of_npcs([("name", param)])
+        npc_list = []
+        score = 0
+        for tracker in npc_trackers:
+            new_list, new_score = tracker.get_npcs_by_name_only(param)
+            if new_score == score:
+                npc_list += new_list
+            if new_score > score:
+                npc_list = new_list
+                score = new_score
+        npc_list.sort(key=operator.attrgetter("sort_key", "secondary_sort_key"))
+
         if len(npc_list) == 0:
             action = {"response": "Er is geen karakter met die naam gevonden."}
         elif len(npc_list) == 1:
@@ -59,8 +73,10 @@ class WhoIsCommand(Command):
         elif len(npc_list) > 1:
             self.saved_list = npc_list
             preamble = "Er zijn {} karakters gevonden. Specificeer welke je zoekt voor meer informatie:\n".format(len(npc_list))
-            multi_response = npc_tracker.get_npc_name_list(npc_list, preamble)
+            multi_response = format_npc_name_list(npc_list, preamble)
             action = {"response": multi_response}
+        else:
+            action = {"response": "ERROR"}
         return action
 
 
@@ -73,8 +89,12 @@ class GetYearCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        response = "The current year of the Chaos is {}.".format(npc_tracker.current_year)
-
+        response = ""
+        for tracker in npc_trackers:
+            if len(param) == 0 or tracker.name in param:
+                response += "The current year of {} is {}.\n".format(tracker.name, tracker.current_year)
+        if len(response) == 0:
+            raise CommandError("invalid_parameter", param)
         return {"response": response}
 
 
@@ -87,18 +107,32 @@ class AddYearCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        if npc_tracker.owner == message.author.id:
-            old_year = npc_tracker.current_year
-            if param:
-                try:
-                    years = int(param)
-                    npc_tracker.year_up(years)
-                except ValueError:
-                    npc_tracker.year_up()
-            else:
-                npc_tracker.year_up()
-            response = "Time has passed since year {} of Chaos. It is now the year {}.".format(old_year,
-                                                                                         npc_tracker.current_year)
-            return {"response": response}
+        for tracker in npc_trackers:
+            if tracker.owner == message.author.id:
+                old_year = tracker.current_year
+                if param:
+                    try:
+                        years = int(param)
+                        tracker.year_up(years)
+                    except ValueError:
+                        tracker.year_up()
+                else:
+                    tracker.year_up()
+                response = "Time has passed since year {} of {}. It is now the year {}.".format(tracker.name,
+                                                                                                old_year,
+                                                                                                tracker.current_year)
+                return {"response": response}
+        raise CommandError("command_not_allowed", None)
+
+
+def format_npc_name_list(npc_list, preamble):
+    npc_name_list = preamble
+    name_list = ["**{}.** {}".format(count + 1, npc.get_name()) for count, npc in enumerate(npc_list)]
+    max_reached = "- *etc. (character limit reached)*"
+    for name in name_list:
+        if len(npc_name_list) + len(name) + len(max_reached) < config.CHARACTER_MAX:
+            npc_name_list += "{}\n".format(name)
         else:
-            raise CommandError("command_not_allowed", None)
+            npc_name_list += max_reached
+            break
+    return npc_name_list

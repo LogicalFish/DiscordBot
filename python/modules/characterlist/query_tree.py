@@ -1,8 +1,3 @@
-from xml.etree import ElementTree
-from modules.characterlist import list_config
-
-root = ElementTree.parse(list_config.NPC_LIST).getroot()
-
 
 def item_to_dictionary(npc_item):
     npc_list_dict = {}
@@ -21,7 +16,7 @@ def item_to_dictionary(npc_item):
     return npc_list_dict
 
 
-def find_npcs_by_name(name, search_list=root):
+def find_npcs_by_name(name, search_list):
     subnames = name.split()
     high_score = 0
     found_npcs = []
@@ -38,12 +33,12 @@ def find_npcs_by_name(name, search_list=root):
         if score == high_score:
             found_npcs.append(npc)
     if high_score > 0:
-        return found_npcs
+        return found_npcs, high_score
     else:
-        return []
+        return [], 0
 
 
-def find_npcs_by_category(category, search_term, search_list=root, exact=False):
+def find_npcs_by_category(category, search_term, search_list, exact=False):
     subcategories = category.split(".")
     found_npcs = []
     for npc in search_list:
@@ -61,7 +56,7 @@ def find_npcs_by_category(category, search_term, search_list=root, exact=False):
     return found_npcs
 
 
-def find_npcs_by_any(search_term, search_list=root):
+def find_npcs_by_any(search_term, search_list):
     found_npcs = []
     for npc in search_list:
         subcategories = list(npc.iter())
@@ -72,7 +67,7 @@ def find_npcs_by_any(search_term, search_list=root):
     return found_npcs
 
 
-def filter_living_npcs(year, search_list=root, death=False):
+def filter_living_npcs(year, search_list, death=False):
     valid_npcs = []
     for npc in search_list:
         deathyear_node = npc.find('deathyear')

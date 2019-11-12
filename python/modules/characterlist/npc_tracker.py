@@ -1,25 +1,33 @@
-import config
+from xml.etree import ElementTree
+
 from modules.characterlist import query_tree
 from modules.characterlist.character_info import CharacterInfo
-import operator
 
 
 class NPCTracker:
 
-    def __init__(self, owner, year):
+    def __init__(self, name, file, owner, year, color):
+        self.name = name
         self.owner = owner
         self.current_year = year
+        self.root = ElementTree.parse(file).getroot()
+        self.color = color
 
     def year_up(self, number=1):
         self.current_year += number
 
     def get_list_of_npcs(self, search_tuples):
-        search_tree = query_tree.root
+        search_tree = self.root
         for search_tuple in search_tuples:
-            if search_tuple[0].lower() == "any":
+            if search_tuple[0].lower() == "list":
+                if search_tuple[1].lower() != self.name.lower():
+                    print(search_tuple[1])
+                    print(self.name)
+                    return []
+            elif search_tuple[0].lower() == "any":
                 search_tree = query_tree.find_npcs_by_any(search_tuple[1], search_tree)
             elif search_tuple[0].lower() == "name":
-                search_tree = query_tree.find_npcs_by_name(search_tuple[1], search_tree)
+                search_tree, score = query_tree.find_npcs_by_name(search_tuple[1], search_tree)
             elif search_tuple[0].lower() == "alive":
                 not_alive = (search_tuple[1].lower() == "false")
                 search_tree = query_tree.filter_living_npcs(self.current_year, search_list=search_tree, death=not_alive)
@@ -38,21 +46,17 @@ class NPCTracker:
                                                                search_tuple[1],
                                                                search_tree,
                                                                exact=exact)
-        final_list = []
-        for found_item in search_tree:
-            npc = CharacterInfo(query_tree.item_to_dictionary(found_item), self.current_year)
-            final_list.append(npc)
-        final_list.sort(key=operator.attrgetter("sort_key", "secondary_sort_key"))
-        return final_list
+        # final_list.sort(key=operator.attrgetter("sort_key", "secondary_sort_key"))
+        return self.search_tree_to_list(search_tree)
 
-    def get_npc_name_list(self, npc_list, preamble):
-        npc_name_list = preamble
-        name_list = ["**{}.** {}".format(count+1, npc.get_name()) for count, npc in enumerate(npc_list)]
-        max_reached = "- *etc. (character limit reached)*"
-        for name in name_list:
-            if len(npc_name_list) + len(name) + len(max_reached) < config.CHARACTER_MAX:
-                npc_name_list += "{}\n".format(name)
-            else:
-                npc_name_list += max_reached
-                break
-        return npc_name_list
+    def get_npcs_by_name_only(self, param):
+        search_tree, score = query_tree.find_npcs_by_name(param, self.root)
+        final_list = self.search_tree_to_list(search_tree)
+        return final_list, score
+
+    def search_tree_to_list(self, search_tree):
+        result = []
+        for found_item in search_tree:
+            npc = CharacterInfo(query_tree.item_to_dictionary(found_item), self.current_year, self.color)
+            result.append(npc)
+        return result
