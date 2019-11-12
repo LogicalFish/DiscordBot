@@ -51,6 +51,20 @@ async def birthday_task(client, system):
         await asyncio.sleep(THIRD_DAY)
 
 
+async def reminder_task(client, system):
+
+    """
+    A separate thread, keeping track of reminders.
+    """
+    await client.wait_until_ready()
+    while not client.is_closed() and system.reminder_manager is not None:
+        reminder_list = system.reminder_manager.get_all_reminders()
+        for reminder in reminder_list:
+            date, message, owner = reminder
+            await owner.send(content=message)
+        await asyncio.sleep(60)
+
+
 def get_main_channels(client):
     main_channels = []
     for channel_name in main_channel_names:

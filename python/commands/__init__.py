@@ -14,6 +14,7 @@ from modules.games.tictactoe.ttt_commands import ChallengeCommand, PlayGameComma
 from modules.games.wheel.wheel_command import JoinWheelCommand, SpinWheelCommand, GuessConsonantCommand, \
     BuyVowelCommand, SolveCommand, WheelStatusCommand, WheelQuitCommand
 from modules.nicknames.nickname_command import CallmeCommand
+from modules.reminders.reminder_command import RemindCommand
 
 from modules.characterlist.list_commands import ListAllCommand, WhoIsCommand, AddYearCommand, GetYearCommand
 
@@ -23,7 +24,7 @@ commands_list = [CallmeCommand(), EchoCommand(), PollCommand(),
                  StatusCommand(), BanCommand(), UnBanCommand(), ChatToggleCommand(), IntervalCommand(), LeaveCommand(),
                  ChallengeCommand(), PlayGameCommand(), AbandonGameCommand(), MineSweeperCommand(),
                  EventCommand(), ListEventCommand(), CreateEventCommand(), EditEventCommand(), DeleteEventCommand(),
-                 UnShadowCommand(),
+                 UnShadowCommand(), RemindCommand(),
                  ListAllCommand(), WhoIsCommand(), GetYearCommand(), AddYearCommand(),
                  JoinWheelCommand(), SpinWheelCommand(), GuessConsonantCommand(), BuyVowelCommand(), SolveCommand(),
                  WheelStatusCommand(), WheelQuitCommand()]

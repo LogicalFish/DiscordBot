@@ -4,6 +4,7 @@ from modules.calendar.event_manager import EventManager
 from modules.calendar.time_manager import TimeManager
 from modules.nicknames.nickname_manager import NicknameManager
 from modules.birthday.birthday_manager import BirthdayManager
+from modules.reminders.reminder_manager import ReminderManager
 
 
 class SystemManager:
@@ -32,6 +33,7 @@ class SystemManager:
         self.id_manager = IdentityManager(self.database_manager)
         self.nickname_manager = NicknameManager(self.database_manager)
         self.birthday_manager = BirthdayManager(self.database_manager)
+        self.reminder_manager = ReminderManager()
 
     def shutdown(self):
         self.database_manager.db.close_connection()

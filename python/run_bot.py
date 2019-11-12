@@ -3,7 +3,7 @@ import discord
 import config
 from system_manager import SystemManager
 from bot_response_unit import Responder
-from bot_tasks import calendar_task, birthday_task
+from bot_tasks import calendar_task, birthday_task, reminder_task
 from commands import MainCommand
 from modules.reactions import reactor
 
@@ -53,6 +53,7 @@ async def on_reaction_add(reaction, user):
 try:
     calendar_task = client.loop.create_task(calendar_task(client, system))
     birthday_task = client.loop.create_task(birthday_task(client, system))
+    reminder_task = client.loop.create_task(reminder_task(client, system))
     client.run(TOKEN)
 except TypeError:
     print("\nKeyboard interrupt received. Shutting down...")
@@ -60,6 +61,7 @@ except TypeError:
     if not client.loop.is_closed():
         calendar_task.cancel()
         birthday_task.cancel()
+        reminder_task.cancel()
         client.loop.close()
     client.close()
 finally:

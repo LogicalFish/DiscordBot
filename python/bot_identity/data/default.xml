@@ -136,5 +136,9 @@
 			<elem>Er is er een jarig, hoera, hoera, dat kun je wel zien, dat is {}!</elem>
 			<elem>Van harte gefeliciteerd, {}</elem>
 		</birthday>
+		<reminder>
+			<elem>I will help you remember!</elem>
+			<elem>Ik help het je wel herinneren!</elem>
+		</reminder>
 	</default>
 </ID>
