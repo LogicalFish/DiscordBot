@@ -6,8 +6,8 @@ from modules.games.wheel import wheel_config
 
 class FortunateBoard:
     # UNICODE_AID = ord('🇦') - ord('a')
-    FREE_SPACE = "⬜"
-    HIDDEN = "⬛"
+    HIDDEN = "⬜"
+    FREE_SPACE = "⬛"
     COMMA = "⤵"
     AMPERSAND = "➕"
     DASH = "➖"

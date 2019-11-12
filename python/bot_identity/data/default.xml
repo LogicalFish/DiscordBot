@@ -34,14 +34,14 @@
 	</ttt>
 	<wheel>
 		<waiting>
-			<elem>Je hebt je ingeschreven! Het is nu wachten op een spel met {}.</elem>
-			<elem>{} wacht(en) op een spel. Wil jij ook meedoen?</elem>
+			<elem>Je hebt je ingeschreven! {} wachten nu op {} extra spelers.</elem>
+			<elem>{} wacht(en) op een spel. Wil jij ook meedoen? Er zijn nog {} plekken!</elem>
 		</waiting>
 		<twogames>
 			<elem>Wacht even, je kan niet aan twee spelletjes tegelijk meedoen. Probeer eerst eentje te winnen.</elem>
 		</twogames>
 		<wheelstart>
-			<elem>Het is tijd voor het RAD VAN FORTUIJN! Vanavond hebben wij {} als spelers. Zijn jullie klaar om te spelen? {}, jij mag beginnen! Draai het rad!</elem>
+			<elem>Het is tijd voor het RAD VAN FORTUIN! Vanavond hebben wij {} als spelers. Zijn jullie klaar om te spelen? {}, jij mag beginnen! Draai het rad!</elem>
 		</wheelstart>
 		<wheelturn>
 			<elem>Het is de beurt van {}!</elem>
@@ -88,7 +88,8 @@
 			<elem>Je hebt niet genoeg geld daarvoor.</elem>
 		</wheelcash>
 		<wheelwin>
-			<elem>Van harte gefeliciteerd! {} is de winnaar, en heeft daarmee een geldprijs van {} gewonnen! Dat is het einde van de show! Tot de volgende keer!</elem>
+			<elem>CORRECT! Van harte gefeliciteerd! {} is de winnaar, en heeft daarmee een geldprijs van {} gewonnen! Dat is het einde van de show! Tot de volgende keer!</elem>
+			<elem>Correct! {} wint {}!</elem>
 		</wheelwin>
 		<wrongsolve>
 			<elem>Helaas, dat is niet het goede antwoord! De beurt gaat naar {}!</elem>

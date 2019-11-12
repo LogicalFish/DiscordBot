@@ -12,7 +12,7 @@ from modules.dice.godroll_command import GodRollCommand
 from modules.games.minesweeper.minesweeper_command import MineSweeperCommand
 from modules.games.tictactoe.ttt_commands import ChallengeCommand, PlayGameCommand, AbandonGameCommand
 from modules.games.wheel.wheel_command import JoinWheelCommand, SpinWheelCommand, GuessConsonantCommand, \
-    BuyVowelCommand, SolveCommand, WheelStatusCommand, WheelQuitCommand
+    BuyVowelCommand, SolveCommand, WheelStatusCommand, WheelQuitCommand, WheelScoreCommand
 from modules.nicknames.nickname_command import CallmeCommand
 from modules.reminders.reminder_command import RemindCommand
 
@@ -27,6 +27,6 @@ commands_list = [CallmeCommand(), EchoCommand(), PollCommand(),
                  UnShadowCommand(), RemindCommand(),
                  ListAllCommand(), WhoIsCommand(), GetYearCommand(), AddYearCommand(),
                  JoinWheelCommand(), SpinWheelCommand(), GuessConsonantCommand(), BuyVowelCommand(), SolveCommand(),
-                 WheelStatusCommand(), WheelQuitCommand()]
+                 WheelStatusCommand(), WheelQuitCommand(), WheelScoreCommand()]
 
 MainCommand = CommandRunner(commands_list)
