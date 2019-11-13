@@ -3,11 +3,12 @@ import re
 from discord import GroupChannel
 
 import config as main_config
-from . import calendar_config as config
-from commands.command_superclass import Command
-from modules.calendar import shadow_events, event_reader
-from modules.calendar.event_model import EventError
 from commands.command_error import CommandError
+from commands.command_superclass import Command
+from database.models.event_model import Event
+from modules.calendar import event_parser
+from modules.calendar.event_parser import EventError
+from . import calendar_config as config
 
 
 class EventCommand(Command):
@@ -35,12 +36,12 @@ class EventCommand(Command):
             event_id = int(param)
             event = system.event_manager.get_event(event_id)
             if event:
-                embed = event_reader.get_event_embed(event)
+                return {"event_embed": (event.get_event_embed(), event.author)}
             else:
                 raise CommandError("event_not_found", param)
+
         except ValueError:
             raise CommandError("number_not_valid", param)
-        return {"event_embed": (embed, event["author"])}
 
 
 class ListEventCommand(Command):
@@ -66,15 +67,36 @@ class ListEventCommand(Command):
             shadow_size = int(param)
         except ValueError:
             shadow_size = config.DEFAULT_SHADOW
+
         events_list = system.event_manager.get_all_events()
-        shadow_list = shadow_events.get_list_shadow(events_list, shadow_size)
-        list_message = "De volgende evenementen zijn gepland:\n\n"
-        for date, shadow_message in shadow_list:
-            if len(list_message) + len(shadow_message) < 2000:
-                list_message += shadow_message
-        if not events_list:
+        if events_list:
+            shadow_list = self.get_list_shadow(events_list, shadow_size)
+            list_message = "De volgende evenementen zijn gepland:\n\n"
+            for date, shadow_message in shadow_list:
+                if len(list_message) + len(shadow_message) < main_config.CHARACTER_MAX:
+                    list_message += shadow_message
+        else:
             list_message = "Er zijn geen evenementen gevonden."
         return {"response": list_message}
+
+    @staticmethod
+    def get_list_shadow(events, quantity):
+        """
+        Method to get a list of shadow events from multiple events, each sorted by date.
+        :param events: A complete list of events.
+        :param quantity: The amount of shadow events you want, up to a maximum set in settings.
+        :return: A list of both events and shadow events, sorted by date.
+        """
+        list_with_shadow = []
+        for event in events:
+            event_tuple = (event.date, event.describe_short())
+            list_with_shadow.append(event_tuple)
+            shadow_events = event.get_shadow_events(quantity)
+            for shadow_event in shadow_events:
+                event_tuple = (shadow_event.date, shadow_event.describe_shadow())
+                list_with_shadow.append(event_tuple)
+        list_with_shadow = sorted(list_with_shadow)
+        return list_with_shadow
 
 
 class CreateEventCommand(Command):
@@ -105,17 +127,21 @@ class CreateEventCommand(Command):
         if system.event_manager is None:
             raise CommandError("database_error", None)
         try:
-            event_dict = system.event_manager.model.create_event_dict(param)
-            system.event_manager.model.clean_data(event_dict)
-            event_dict[system.event_manager.model.key_author] = message.author.id
-            if "channel" not in event_dict.keys():
-                if isinstance(message.channel, GroupChannel):
-                    event_dict["channel"] = message.channel.name
-                else:
-                    raise CommandError("required_field_missing", "channel")
-            event = system.event_manager.create_event(event_dict)
-            return {"response": "Created event {}:".format(event[system.event_manager.model.PRIMARY_KEY]),
-                    "event_embed": (event_reader.get_event_embed(event), event["author"])}
+            event_dict = event_parser.parse_event_string(param)
+            event_dict["author"] = message.author.id
+            if "channel" not in event_dict.keys() and isinstance(message.channel, GroupChannel):
+                event_dict["channel"] = message.channel.name
+            if "name" not in event_dict:
+                raise event_parser.EventError("required_field_missing", "name")
+            if "date" not in event_dict:
+                raise event_parser.EventError("required_field_missing", "date")
+
+            new_event = Event(**event_dict)
+
+            event = system.event_manager.create_event(new_event)
+
+            return {"response": "Created event {}:".format(event.event_id),
+                    "event_embed": (event.get_event_embed(), message.author.id)}
         except EventError as error:
             raise CommandError(error.message, error.parameters)
 
@@ -140,23 +166,21 @@ class EditEventCommand(Command):
     def execute(self, param, message, system):
         if system.event_manager is None:
             raise CommandError("database_error", None)
-        event_dict = system.event_manager.model.create_event_dict(param)
-        if "id" in event_dict:
-            id_str = event_dict["id"]
-        else:
-            id_str = param.split(' ', 1)[0]
+        event_dict = event_parser.parse_event_string(param)
+        id_str = event_dict.get("id", param.split(' ', 1)[0])
         try:
             event_id = int(id_str)
+            event = system.event_manager.get_event(event_id)
+            if event is None:
+                raise CommandError("event_not_found", event_id)
+            if event.author != message.author.id:
+                raise CommandError("not_authorized", None)
+
+            updated_event = system.event_manager.update_event(event_id, event_dict)
+            return {"response": "Updated event {}:".format(event_id),
+                    "event_embed": (updated_event.get_event_embed(), message.author.id)}
         except ValueError:
             raise CommandError("number_not_valid", id_str)
-        try:
-            system.event_manager.model.clean_data(event_dict)
-            if event_dict:
-                event = system.event_manager.update_event(event_id, event_dict, message.author.id)
-                return {"response": "Updated event {}:".format(event_id),
-                        "event_embed": (event_reader.get_event_embed(event), event["author"])}
-            else:
-                raise CommandError("required_field_missing", "any")
         except EventError as error:
             raise CommandError(error.message, error.parameters)
 
@@ -182,12 +206,19 @@ class DeleteEventCommand(Command):
             raise CommandError("database_error", None)
         try:
             event_id = int(param)
-            event_name = system.event_manager.delete_event(event_id, message.author.id)
+
+            event = system.event_manager.get_event(event_id)
+            if event is None:
+                raise CommandError("event_not_found", event_id)
+            if event.author != message.author.id:
+                raise CommandError("not_authorized", None)
+            event_name = event.name
+
+            system.event_manager.delete_event(event_id)
+
             response = "Event {}: {} deleted.".format(event_id, event_name)
         except ValueError:
             raise CommandError("number_not_valid", param)
-        except EventError as error:
-            raise CommandError(error.message, error.parameters)
         return {"response": response}
 
 
@@ -212,19 +243,25 @@ class UnShadowCommand(Command):
     def execute(self, param, message, system):
         if system.event_manager is None:
             raise CommandError("database_error", None)
-        try:
-            parameter_match = re.search("(\\d+)-(\\d+)", param.replace(" ", ""))
-            if parameter_match is None:
-                raise CommandError("event_not_found", param)
-            event_id = int(parameter_match[1])
-            shadow_id = int(parameter_match[2])
-            if 0 < shadow_id < config.MAX_SHADOW:
-                for i in range(shadow_id+1):
-                    new_event = system.event_manager.pop_event(event_id, message.author.id)
-            else:
-                raise CommandError("invalid_shadow", param)
+        parameter_match = re.search("(\\d+)-(\\d+)", param.replace(" ", ""))
+        if parameter_match is None:
+            raise CommandError("event_not_found", param)
+        event_id = int(parameter_match[1])
+        shadow_id = int(parameter_match[2])
+        if 0 >= shadow_id or shadow_id >= config.MAX_SHADOW:
+            raise CommandError("invalid_shadow", param)
 
-            response = event_reader.get_reveal_message(param, new_event[system.event_manager.model.PRIMARY_KEY])
-        except EventError as error:
-            raise CommandError(error.message, error.parameters)
-        return {"response": response}
+        event = system.event_manager.get_event(event_id)
+        if event is None:
+            raise CommandError("event_not_found", event_id)
+        if event.author != message.author.id:
+            raise CommandError("not_authorized", None)
+        if not event.recur:
+            raise CommandError("invalid_shadow", param)
+
+        new_event_id = event_id
+        for i in range(shadow_id+1):
+            new_event = system.event_manager.pop_event(event_id)
+            new_event_id = new_event.event_id
+
+        return {"response": "Schaduw Evenement {} is nu evenement {}.".format(param, new_event_id)}

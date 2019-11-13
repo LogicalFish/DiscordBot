@@ -1,21 +1,30 @@
-import psycopg2
 from configparser import ConfigParser
+
+from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
+from sqlalchemy.ext.declarative import declarative_base
+
 import config
-from database.database_error import DatabaseError
+
+Base = declarative_base()
 
 
 class DatabaseConnection:
-    """
-    Class that maintains a connection with a database.
-    """
 
-    def __init__(self, filename=config.DB_INI, section='postgresql'):
-        """Initializes the instance."""
+    def __init__(self, filename=config.DB_INI, section='new_post'):
         self.filename = filename
         self.section = section
-        self.conn = self.connect()
+        print('Connecting to the PostgreSQL database...')
+        config_url = self.get_url_from_config_dict(self.get_config_params())
+        # Connect to the database
+        try:
+            self.engine = create_engine(config_url)
+            self.engine.connect()
+        except OperationalError:
+            print('No database found. Database functionality disabled.')
+            self.engine = None
 
-    def config(self):
+    def get_config_params(self,):
         """ Read the .ini file and get configurations."""
         # Create a parser
         parser = ConfigParser()
@@ -33,22 +42,25 @@ class DatabaseConnection:
 
         return database_parameters
 
-    def connect(self):
-        """ Connect to the PostgreSQL database server """
-        try:
-            # Read connection parameters
-            params = self.config()
+    @staticmethod
+    def get_url_from_config_dict(config_dict):
+        config_url = "{0}://{1}:{2}@{3}:{4}/{5}".format(config_dict["drivername"],
+                                                        config_dict["username"],
+                                                        config_dict["password"],
+                                                        config_dict["host"],
+                                                        config_dict["port"],
+                                                        config_dict["database"])
+        return config_url
 
-            # Connect to the database
-            print('Connecting to the PostgreSQL database...')
-            return psycopg2.connect(**params)
 
-        except (DatabaseError, psycopg2.DatabaseError) as error:
-            # raise DatabaseError(error)
-            print(error)
+class DatabaseError(Exception):
+    """
+    Special Error Class, to be thrown when the database can't be initialized correctly.
+    """
 
-    def close_connection(self):
-        """Close the database connection."""
-        if self.conn is not None:
-            self.conn.close()
-            print('Database connection closed.')
+    def __init__(self, error_type):
+        super().__init__(error_type)
+        self.type = error_type
+
+    def __str__(self):
+        return self.type

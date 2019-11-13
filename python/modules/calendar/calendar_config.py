@@ -8,3 +8,8 @@ TIME_FORMAT = "%H:%M"
 # SHADOW EVENT SETTINGS
 MAX_SHADOW = 9
 DEFAULT_SHADOW = 3
+
+SYNONYMS = {"mention": "tag",
+            "title": "name",
+            "time": "date",
+            "reminders": "reminder"}

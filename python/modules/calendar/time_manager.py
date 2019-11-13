@@ -16,11 +16,11 @@ class TimeManager:
         # Get all events. Automatically sorted by date.
         events = self.event_manager.get_all_events()
         for event in events:
-            if event["date"] < datetime.now():
-                if event["recur"]:
-                    self.event_manager.event_recur(event[self.event_manager.model.PRIMARY_KEY])
+            if event.date < datetime.now():
+                if event.recur:
+                    event.recur_self()
                 else:
-                    self.event_manager.delete_event(event[self.event_manager.model.PRIMARY_KEY])
+                    self.event_manager.delete_event(event.event_id)
             else:
                 break
 

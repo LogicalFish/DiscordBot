@@ -1,102 +1,76 @@
-from database import sql_helper
+from sqlalchemy.orm import sessionmaker
+
 from database.database_connection import DatabaseConnection
-from database.decorators import CursorDecorator
 
 
 class DatabaseManager:
     """Manager for the database."""
 
     db = DatabaseConnection()
+    Session = sessionmaker(bind=db.engine)
 
-    @CursorDecorator(db.conn)
-    def insert(self, var_dict, table, value_request=None, cur=None):
+    def insert(self, item):
         """
         Insert a new entry into a database.
-        :param var_dict: A dictionary containing the values that should be added.
-        :param table: The table in which the dictionary should be inserted.
-        :param value_request: Whether the method should return a value.
-        :param cur: Cursor. Used by the CursorDecorator.
-        :return: The value requested by the method, if any.
         """
-        statement, values = sql_helper.generate_insert_sql(var_dict, table, value_request)
-        cur.execute(statement, values)
-        self.db.conn.commit()
-        if value_request is not None:
-            return_value = cur.fetchone()[0]
-            return return_value
+        session = self.Session()
+        session.add(item)
+        session.flush()
+        session.expunge(item)
+        session.commit()
+        session.close()
+        return item
 
-    @CursorDecorator(db.conn)
-    def update(self, var_dict, pk_value, primary_key, table, cur=None):
+    def update(self, table, pk_value, var_dict):
         """
         Update an entry in the database.
-        :param var_dict: A dictionary containing the updated values.
-        :param pk_value: The Primary Key value of the entry to be updated.
-        :param primary_key: The primary key of the chosen table.
-        :param table: The table which should be updated.
-        :param cur: Cursor. Used by the CursorDecorator.
         """
-        statement, values = sql_helper.generate_update_sql(var_dict, pk_value, primary_key, table)
-        cur.execute(statement, values)
-        self.db.conn.commit()
+        session = self.Session()
+        item_to_update = session.query(table).filter(list(table.__table__.primary_key)[0] == pk_value).first()
+        if item_to_update:
+            if callable(getattr(item_to_update, "update", None)):
+                item_to_update.update(**var_dict)
+            else:
+                for key, value in var_dict.items():
+                    setattr(item_to_update, key, value)
+            session.flush()
+            session.expunge(item_to_update)
+            session.commit()
+        session.close()
+        return item_to_update
 
-    @CursorDecorator(db.conn)
-    def delete(self, pk_value, primary_key, table, cur=None):
+    def delete(self, table, pk_value):
         """
         Delete an entry in the database.
-        :param pk_value: The primary key value of the entry to be deleted.
-        :param primary_key: The primary key of the chosen table.
-        :param table: The table to be updated.
-        :param cur: Cursor. Used by the CursorDecorator.
         """
-        statement = sql_helper.generate_delete_sql(pk_value, primary_key, table)
-        cur.execute(statement)
-        self.db.conn.commit()
-
-    @CursorDecorator(db.conn)
-    def select_one_row(self, pk_value, primary_key, table, cur=None):
-        """
-        Read an entry in the database.
-        :param pk_value: The Primary Key value of the entry to be selected.
-        :param primary_key: The primary key of the chosen table.
-        :param table: The table to read from.
-        :param cur: Cursor. Used by the CursorDecorator.
-        :return: The entire entry.
-        """
-        statement = sql_helper.generate_get_row_sql(pk_value, primary_key, table)
-        cur.execute(statement)
-        row = cur.fetchone()
-        return row
-
-    @CursorDecorator(db.conn)
-    def select_all(self, statement, cur=None):
-        """
-        Reads an entire table, based on the given statement.
-        :param statement: The statement
-        :param cur: Cursor. Used by the CursorDecorator.
-        :return: The result of the statement.
-        """
-        cur.execute(statement)
-        rows = cur.fetchall()
-        return rows
-
-    def get_columns(self, table):
-        """
-        Get all column names of a specific table.
-        :param table: The table to get the column names of.
-        :return: A list of all column names.
-        """
-        statement = sql_helper.generate_column_sql(table)
-        result = []
-        for t in self.select_all(statement):
-            result.append(t[0])
+        session = self.Session()
+        entry = session.query(table).filter(list(table.__table__.primary_key)[0] == pk_value).first()
+        if entry:
+            session.delete(entry)
+            session.commit()
+            result = True
+        else:
+            result = False
+        session.close()
         return result
 
-    def get_rows(self, table, sort=None):
+    def fetch_one(self, table, pk_value):
         """
-        Get all rows/entries of a specific table.
-        :param table: The table to get the entries of.
-        :param sort: The columns that the table should be sorted by.
-        :return: A list of all entries of a table.
+        Read an entry in the database.
         """
-        statement = sql_helper.generate_all_rows_sql(table, sort=sort)
-        return self.select_all(statement)
+        session = self.Session()
+        result = session.query(table).filter(list(table.__table__.primary_key)[0] == pk_value).first()
+        if result:
+            session.expunge(result)
+        session.close()
+        return result
+
+    def select_all(self, table):
+        """
+        Reads an entire table.
+        """
+        session = self.Session()
+        results = session.query(table).all()
+        session.expunge_all()
+        session.close()
+        return results

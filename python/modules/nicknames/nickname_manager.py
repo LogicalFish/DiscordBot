@@ -1,8 +1,4 @@
-
-
-NAME_TABLE = "nicknames"
-PRIMARY_KEY = "user_id"
-SECONDARY = "nickname"
+from database.models.nicknames_model import Nickname
 
 
 class NicknameManager:
@@ -32,9 +28,12 @@ class NicknameManager:
         """
         Initializes the data within the class, reading it from a database.
         """
-        rows = self.database.get_rows(NAME_TABLE)
-        for row in rows:
-            self.nicknames[row[0]] = row[1]
+        session = self.database.Session()
+        nickname_db = session.query(Nickname).all()
+        for nickname in nickname_db:
+            self.nicknames[nickname.user_id] = nickname.nickname
+        session.commit()
+        session.close()
 
     def add_nickname(self, user_id, nickname):
         """
@@ -44,10 +43,14 @@ class NicknameManager:
         :return:
         """
         if self.database is not None:
-            if user_id in self.nicknames.keys():
-                self.database.update({SECONDARY: nickname}, "'{}'".format(user_id), PRIMARY_KEY, NAME_TABLE)
+            session = self.database.Session()
+            current_nick = session.query(Nickname).filter(Nickname.user_id == user_id).first()
+            if current_nick:
+                current_nick.nickname = nickname
             else:
-                self.database.insert({PRIMARY_KEY: user_id, SECONDARY: nickname}, NAME_TABLE)
+                session.add(Nickname(user_id, nickname))
+            session.commit()
+            session.close()
         self.nicknames[user_id] = nickname
 
     def get_name_from_id(self, user_id, client, guild=None):

@@ -1,10 +1,9 @@
 import random
+
+from database.models.banned_channels_model import BannedChannel
 from . import identity_config as config
 
 from bot_identity.identity import Identity, IdentityError
-
-BAN_TABLE = "banned_channels"
-PRIMARY_KEY = "channel_id"
 
 
 class IdentityManager:
@@ -49,15 +48,18 @@ class IdentityManager:
         Initializes the list of banned channels, taking from the database.
         DATABASE REQUIRED
         """
-        rows = self.database.get_rows(BAN_TABLE, sort=PRIMARY_KEY)
-        self.banned_channels = [row[0] for row in rows]
+        session = self.database.Session()
+        channel_db = session.query(BannedChannel).all()
+        self.banned_channels = [channel.channel_id for channel in channel_db]
+        session.commit()
+        session.close()
 
     def ban(self, channel_id):
         """Adds a channel to the banned list and logs the change."""
         if channel_id not in self.banned_channels:
             print("Banning the following channel: {}".format(channel_id))
             if self.database is not None:
-                self.database.insert({PRIMARY_KEY: channel_id}, BAN_TABLE)
+                self.database.insert(BannedChannel(channel_id))
             self.banned_channels.append(channel_id)
         else:
             raise ValueError("Can't ban a channel that is already banned.")
@@ -67,7 +69,7 @@ class IdentityManager:
         if channel_id in self.banned_channels:
             print("Unbanning the following channel: {}".format(channel_id))
             if self.database is not None:
-                self.database.delete("'{}'".format(channel_id), PRIMARY_KEY, BAN_TABLE)
+                self.database.delete(BannedChannel, channel_id)
             self.banned_channels.remove(channel_id)
         else:
             raise ValueError("Can't unban a channel that is not banned.")

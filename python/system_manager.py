@@ -1,5 +1,5 @@
-from database.database_manager import DatabaseManager
 from bot_identity.identity_manager import IdentityManager
+from database.database_manager import DatabaseManager
 from modules.calendar.event_manager import EventManager
 from modules.calendar.time_manager import TimeManager
 from modules.games.wheel.wheel_manager import WheelManager
@@ -24,7 +24,7 @@ class SystemManager:
         self.ttt_games = {}
         self.wheel_manager = WheelManager()
         self.database_manager = DatabaseManager()
-        if self.database_manager.db.conn is not None:
+        if self.database_manager.db.engine is not None:
             self.event_manager = EventManager(self.database_manager)
             self.time_manager = TimeManager(self.event_manager)
         else:
@@ -35,6 +35,3 @@ class SystemManager:
         self.nickname_manager = NicknameManager(self.database_manager)
         self.birthday_manager = BirthdayManager(self.database_manager)
         self.reminder_manager = ReminderManager()
-
-    def shutdown(self):
-        self.database_manager.db.close_connection()

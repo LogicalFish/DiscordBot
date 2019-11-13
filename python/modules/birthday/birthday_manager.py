@@ -1,8 +1,6 @@
 import datetime
 
-NAME_TABLE = "birthdays"
-PRIMARY_KEY = "user_id"
-SECONDARY = "birthday"
+from database.models.birthday_model import Birthday
 
 
 class BirthdayManager:
@@ -21,9 +19,12 @@ class BirthdayManager:
         """
         Initializes the data within the class, reading it from a database.
         """
-        rows = self.database.get_rows(NAME_TABLE)
-        for row in rows:
-            self.birthdays.append((row[1], row[0]))
+        session = self.database.Session()
+        birthdays = session.query(Birthday).all()
+        for birthday in birthdays:
+            self.birthdays.append((birthday.birthday, birthday.user_id))
+        session.commit()
+        session.close()
 
     def get_today_birthdays(self):
         """
