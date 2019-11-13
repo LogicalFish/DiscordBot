@@ -1,51 +1,44 @@
 from bot_identity import parser
 from commands.command_superclass import Command
-from modules.games.wheel import wheel_config
-from modules.games.wheel.wheel_game_state import WheelGame
 
 
 class JoinWheelCommand(Command):
     """
     Command class for challenging someone to a game of Wheel
     """
-    DEFAULT_PLAYER_COUNT = 3
 
     def __init__(self):
-        self.player_count = self.DEFAULT_PLAYER_COUNT
         call = ["wheelme", "joinwheel", "wheelplay"]
-        parameters = "None."
-        description = "Adds you to a pool of players seeking to play Fortunate Wheel. " \
-                      "A game will start when {} members have joined.".format(self.player_count)
+        parameters = "*(optional)* The size of the waiting lobby. Will kick everyone out if lobby becomes too small."
+        description = "Adds you to a lobby of players seeking to play Fortunate Wheel. " \
+                      "A game will start when the lobby is full."
 
-        self.players = []
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        player = message.author
-        if param == "leave" or param == "-1" and player in self.players:
-            self.players.remove(player)
-            return {}
-        if self.player_in_game(player, system):
-            return {"response": parser.direct_call(system.id_manager.current_id, "twogames")}
+        changed = False
         if param:
             try:
                 if int(param) > 1:
-                    self.players = []
-                    self.player_count = int(param)
+                    system.wheel_manager.change_player_count(int(param))
+                    changed = True
             except ValueError:
                 pass
-        self.players.append(player)
-        contestants = self.player_list(system)
-        if len(self.players) == self.player_count:
-            new_game = WheelGame(self.players)
-            system.wheel_manager.games.append(new_game)
-            first_turn = system.nickname_manager.get_name(new_game.get_current_player())
-            self.players = []
-            return {"response": parser.direct_call(system.id_manager.current_id, "wheelstart").format(contestants,
-                                                                                                      first_turn),
-                    "board": str(new_game),
-                    "scores": new_game.get_scores_with_nicknames(system)}
-        wait = self.player_count - len(self.players)
+        player = message.author
+        in_game = system.wheel_manager.player_in_game(player)
+        if not in_game:
+            new_game = system.wheel_manager.add_to_queue(player)
+            if new_game:
+                contestants = self.get_nicknames_list(new_game.players, system)
+                first_turn = system.nickname_manager.get_name(new_game.get_current_player())
+                return {"response": parser.direct_call(system.id_manager.current_id, "wheelstart").format(contestants,
+                                                                                                          first_turn),
+                        "board": str(new_game),
+                        "scores": new_game.get_scores_with_nicknames(system)}
+        elif not changed:
+            return {"response": parser.direct_call(system.id_manager.current_id, "twogames")}
+        wait = system.wheel_manager.get_queue_length()
+        contestants = self.get_nicknames_list(system.wheel_manager.queue, system)
         return {"response": parser.direct_call(system.id_manager.current_id, "waiting").format(contestants, wait)}
 
     def in_call(self, command):
@@ -55,24 +48,16 @@ class JoinWheelCommand(Command):
             return True
         return False
 
-    def player_in_game(self, player, system):
-        for wheelgame in system.wheel_manager.games:
-            if wheelgame.contains_player(player):
-                return True
-        return player in self.players
-        # return False
-
-    def player_list(self, system):
-        result = ""
-        i = len(self.players) - 1
-        while i >= 0:
-            result = system.nickname_manager.get_name(self.players[i]) + result
-            if i == len(self.players) - 1 and i > 0:
-                result = " & " + result
-            elif i > 0:
-                result = ", " + result
-            i -= 1
-        return result
+    @staticmethod
+    def get_nicknames_list(players, system):
+        nicknames = [system.nickname_manager.get_name(p) for p in players]
+        if len(nicknames) > 1:
+            contestants = " & ".join([", ".join(nicknames[:-1]), nicknames[-1]])
+        elif len(nicknames) == 1:
+            contestants = nicknames[0]
+        else:
+            contestants = "ERROR"
+        return contestants
 
 
 class SpinWheelCommand(Command):
@@ -276,15 +261,12 @@ class WheelQuitCommand(Command):
 
     def execute(self, param, message, system):
         player = message.author
-        wheelgame = system.wheel_manager.get_game(player)
+        game_left = system.wheel_manager.leave_game(player)
 
-        if wheelgame is None:
-            return {"response": parser.direct_call(system.id_manager.current_id, "nogame")}
-        wheelgame.remove_player(player)
-        if len(wheelgame.players) == 0:
-            system.wheel_manager.games.remove(wheelgame)
-        return {"response": parser.direct_call(system.id_manager.current_id, "wheelgone").format(
-            system.nickname_manager.get_name(wheelgame.get_current_player()))}
+        if game_left:
+            return {"response": parser.direct_call(system.id_manager.current_id, "wheelgone").format(
+                system.nickname_manager.get_name(player))}
+        return {"response": parser.direct_call(system.id_manager.current_id, "nogame")}
 
 
 class WheelScoreCommand(Command):
@@ -297,6 +279,7 @@ class WheelScoreCommand(Command):
 
     def execute(self, param, message, system):
         player = None
+        score = 0
         if "total" in param:
             player, score = system.wheel_manager.get_highest_score()
         if player is None:
