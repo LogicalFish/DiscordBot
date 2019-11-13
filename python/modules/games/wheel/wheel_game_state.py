@@ -24,7 +24,7 @@ class WheelGame:
         self.score = {}
         for player in self.players:
             self.score[player] = 0
-        self.turn = 0
+        self.turn = random.randrange(0, len(self.players))
         self.spin_value = 0
         self.freespin = False
 

@@ -59,8 +59,8 @@ class JoinWheelCommand(Command):
         for wheelgame in system.wheel_manager.games:
             if wheelgame.contains_player(player):
                 return True
-        # return player in self.players
-        return False
+        return player in self.players
+        # return False
 
     def player_list(self, system):
         result = ""
