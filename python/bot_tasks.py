@@ -43,8 +43,9 @@ async def birthday_task(client, system):
         for birthday_id in birthday_ids:
             channels = get_main_channels(client)
             for channel in channels:
-                birthday_name = system.nickname_manager.get_name_by_id(birthday_id, client, channel.guild)
-                message = parser.direct_call(system.id_manager.current_id, "birthday").format(birthday_name)
+                birthday_user = system.get_user_by_id(birthday_id, client=client, guild=channel.guild)
+                user_name = system.nickname_manager.get_name(birthday_user)
+                message = parser.direct_call(system.id_manager.current_id, "birthday").format(user_name)
                 await channel.send(message)
         if birthday_ids:
             await asyncio.sleep(THIRD_DAY*2)

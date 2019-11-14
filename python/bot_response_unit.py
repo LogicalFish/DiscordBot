@@ -26,11 +26,12 @@ class Responder:
             self.identities.current_id = action["switch"]
             await self.change_visual_id()
         if "add_id" in action:
-            user_from_id = self.system.nickname_manager.get_name_by_id(action["add_id"], self.client, message.guild)
+            user_from_id = self.system.get_user_by_id(action["add_id"], client=self.client, guild=message.guild)
+            user_name = self.system.nickname_manager.get_name(user_from_id)
             if "response" in action:
-                action["response"].format(user_from_id)
+                action["response"].format(user_name)
             if "embed" in action:
-                new_footer = action["embed"].footer.text + user_from_id
+                new_footer = action["embed"].footer.text + user_name
                 action["embed"].set_footer(text=new_footer)
         if "response" in action:
             await message.channel.send(action["response"])

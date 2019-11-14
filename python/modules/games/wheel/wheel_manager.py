@@ -1,7 +1,7 @@
 import math
 from sqlalchemy import func
 
-from database.models.high_score_model import Highscore
+from database.models.high_score_model import Score
 from modules.games.wheel.wheel_game_state import WheelGame
 
 
@@ -59,42 +59,45 @@ class WheelManager:
 
     def get_highscore(self, player):
         if self.database is not None:
-            score = self.database.fetch_one(Highscore, player.id)
+            score = self.database.fetch_one(Score, player.id)
             if score:
-                return get_monetary_value(score.score)
-        return get_monetary_value(0)
+                return self.get_monetary_value(score.score)
+        return self.get_monetary_value(0)
 
-    def get_highest_score(self):
+    def get_highscore_table(self):
         if self.database is not None:
             session = self.database.Session()
-            result = session.query(Highscore).order_by(Highscore.score.asc()).one()
-            if result:
-                return result.user_id, get_monetary_value(result.score)
+            scores = session.query(Score).order_by(Score.score.desc()).all()
+            session.expunge_all()
             session.close()
-        return None, get_monetary_value(0)
+            return scores
+        return []
 
     def add_score(self, player, score):
         if self.database is not None:
             session = self.database.Session()
-            current_score = session.query(Highscore).filter(Highscore.user_id == player.id).first()
+            current_score = session.query(Score).filter(Score.user_id == player.id).first()
             if current_score:
                 current_score.score += score
             else:
-                session.add(Highscore(player.id, score))
+                session.add(Score(player.id, score))
             session.commit()
             session.close()
 
-
-def get_monetary_value(number):
-    result = []
-    if number > 100:
-        result.append("{} platinumstukken".format(math.floor(number / 100)))
-        number = number % 100
-    if number > 10:
-        result.append("{} goudstukken".format(math.floor(number / 10)))
-        number = number % 10
-    if number > 0:
-        result.append("{} zilverstukken".format(math.floor(number)))
-    if len(result) == 0:
-        return "0 koperstukken"
-    return ", ".join(result)
+    @staticmethod
+    def get_monetary_value(number):
+        result = []
+        if number > 100:
+            count = math.floor(number / 100)
+            result.append("{c} platinumstuk{plural}".format(c=count, plural="ken" if count > 1 else ""))
+            number = number % 100
+        if number > 10:
+            count = math.floor(number / 10)
+            result.append("{c} goudstuk{plural}".format(c=count, plural="ken" if count > 1 else ""))
+            number = number % 10
+        if number > 0:
+            count = math.floor(number)
+            result.append("{c} zilverstuk{plural}".format(c=count, plural="ken" if count > 1 else ""))
+        if len(result) == 0:
+            return "0 koperstukken"
+        return ", ".join(result)

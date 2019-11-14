@@ -1,7 +1,5 @@
 import re
 
-from discord import GroupChannel
-
 import config as main_config
 from commands.command_error import CommandError
 from commands.command_superclass import Command
@@ -130,7 +128,7 @@ class CreateEventCommand(Command):
         try:
             event_dict = event_parser.parse_event_string(param)
             event_dict["author"] = message.author.id
-            if "channel" not in event_dict.keys() and isinstance(message.channel, GroupChannel):
+            if "channel" not in event_dict.keys() and message.guild:
                 event_dict["channel"] = message.channel.name
             if "name" not in event_dict:
                 raise event_parser.EventError("required_field_missing", "name")

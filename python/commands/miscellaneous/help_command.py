@@ -32,7 +32,6 @@ class HelpCommand(Command):
             if i % 3 == 2:
                 result += "\n"
             else:
-                for i in range(15-len(command.call[0])):
-                    result += " "
+                result += " "*(15-len(command.call[0]))
         result = "```{}```".format(result)
         return result

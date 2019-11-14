@@ -25,7 +25,8 @@ class Event(Base):
         self.author = author
         self.update(name, date, description, channel, tag, reminder, recur)
 
-    def update(self, name=None, date=None, description=None, channel=None, tag=None, reminder=None, recur=None, **kwargs):
+    def update(self, name=None, date=None, description=None, channel=None, tag=None, reminder=None, recur=None,
+               **kwargs):
         if name:
             self.name = event_parser.parse_string(name, calendar_config.MAX_EVENT_NAME, "name")
         if date:
@@ -69,7 +70,7 @@ class Event(Base):
             shadow_time = timedelta(days=self.recur)
             for i in range(min(quantity, calendar_config.MAX_SHADOW)):
                 new_event.date = new_event.date + shadow_time
-                new_event.event_id = "{}-{}".format(self.event_id, (i+1))
+                new_event.event_id = "{}-{}".format(self.event_id, (i + 1))
                 shadow_events.append(new_event)
                 new_event = copy.deepcopy(new_event)
         return shadow_events
@@ -110,11 +111,10 @@ class Event(Base):
         return datetime.strftime("{}, {}".format(calendar_config.DATE_FORMAT, calendar_config.TIME_FORMAT))
 
     def describe_reminder(self, hours):
-        hours_s = "s"
-        if hours == 1:
-            hours_s = ""
         descr = lambda s: s or ""
-        reminder_description = "{} starts in {} hour{}!\n\n*{}*".format(self.name, hours, hours_s, descr(self.description))
+        reminder_description = "{event} starts in {h} hour{s}!\n\n" \
+                               "*{description}*".format(event=self.name, h=hours, s="s" if hours > 1 else "",
+                                                        description=descr(self.description))
         reminder_embed = discord.Embed(title=self.name, description=reminder_description, color=13138175)
         reminder_embed.set_footer(text="ID: {}".format(self.event_id))
 

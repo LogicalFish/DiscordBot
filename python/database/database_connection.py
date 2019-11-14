@@ -10,7 +10,7 @@ from database.models import models
 
 class DatabaseConnection:
 
-    def __init__(self, filename=config.DB_INI, section='new_post'):
+    def __init__(self, filename=config.DB_INI, section='postgresql'):
         self.filename = filename
         self.section = section
         print('Connecting to the PostgreSQL database...')

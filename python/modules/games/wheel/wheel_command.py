@@ -1,5 +1,6 @@
 from bot_identity import parser
 from commands.command_superclass import Command
+from modules.nicknames import nickname_config
 
 
 class JoinWheelCommand(Command):
@@ -279,9 +280,26 @@ class WheelScoreCommand(Command):
 
     def execute(self, param, message, system):
         player = message.author
-        score = system.wheel_manager.get_highscore(player)
-        player_name = system.nickname_manager.get_name(player)
-        return {"response": "{}: {}".format(player_name, score)}
+
+        if message.guild:
+            scores = system.wheel_manager.get_highscore_table()
+            score_line = []
+            for score in scores:
+                player = system.get_user_by_id(score.user_id, guild=message.guild)
+                if player:
+                    player_name = system.nickname_manager.get_name(player)
+                    player_score = system.wheel_manager.get_monetary_value(score.score)
+                    spacing = " " * (nickname_config.MAX_NICK_NAME - len(player_name))
+                    line = "{i}: {name}{s}-\t{score}".format(i=len(score_line)+1, s=spacing, name=player_name, score=player_score)
+                    score_line.append(line)
+            if len(score_line):
+                return {"response": "```{}```".format("\n".join(score_line))}
+            return {"response": "No Highscores Found. Ensure a valid Database is running."}
+        else:
+            player_name = system.nickname_manager.get_name(player)
+            score = system.wheel_manager.get_highscore(player)
+            spacing = " " * (nickname_config.MAX_NICK_NAME - len(player_name))
+            return {"response": "```{i}: {name}{s}-\t{score}```".format(i=1, s=spacing, name=player_name, score=score)}
 
     def in_call(self, command):
         if "score" in command:

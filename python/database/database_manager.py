@@ -74,3 +74,18 @@ class DatabaseManager:
         session.expunge_all()
         session.close()
         return results
+
+    def insert_bot(self, bot):
+        from database.models import Birthday
+        from database.models import Nickname
+        from datetime import datetime
+
+        session = self.Session()
+        if not session.query(Birthday).filter(Birthday.user_id == bot.id).first():
+            bot_birthday = datetime(2019, 2, 12, 12, 0, 0)
+            session.add(Birthday(bot.id, bot_birthday))
+        if not session.query(Nickname).filter(Nickname.user_id == bot.id).first():
+            bot_nickname = "Project Dungeon Master"
+            session.add(Nickname(bot.id, bot_nickname))
+        session.commit()
+        session.close()

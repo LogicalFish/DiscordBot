@@ -2,7 +2,8 @@ from sqlalchemy import Column, BigInteger, Integer
 
 from database import Base
 
-class Highscore(Base):
+
+class Score(Base):
     __tablename__ = 'high_scores'
 
     user_id = Column('user_id', BigInteger, primary_key=True)

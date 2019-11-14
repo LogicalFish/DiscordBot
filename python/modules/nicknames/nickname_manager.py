@@ -49,17 +49,3 @@ class NicknameManager:
             session.commit()
             session.close()
         self.nicknames[user_id] = nickname
-
-    def get_name_by_id(self, user_id, client, guild=None):
-        """
-        Method for obtaining a name when all you have is an ID.
-        :param user_id: The user ID
-        :param client: The discord client. Required to fetch user objects based on ID.
-        :param guild: The Guild the user is part of, if any.
-        :return:
-        """
-        if user_id in self.nicknames:
-            return self.nicknames[user_id]
-        if guild:
-            return guild.get_member(user_id).display_name
-        return client.get_user(user_id).display_name
