@@ -72,7 +72,8 @@ class WhoIsCommand(Command):
             action = {"embed": npc.get_npc_embed()}
         elif len(npc_list) > 1:
             self.saved_list = npc_list
-            preamble = "Er zijn {} karakters gevonden. Specificeer welke je zoekt voor meer informatie:\n".format(len(npc_list))
+            preamble = "Er zijn {} karakters gevonden. Specificeer welke je zoekt voor meer informatie:\n".format(
+                len(npc_list))
             multi_response = format_npc_name_list(npc_list, preamble)
             action = {"response": multi_response}
         else:
@@ -118,9 +119,8 @@ class AddYearCommand(Command):
                         tracker.year_up()
                 else:
                     tracker.year_up()
-                response = "Time has passed since year {} of {}. It is now the year {}.".format(tracker.name,
-                                                                                                old_year,
-                                                                                                tracker.current_year)
+                response = "Time has passed since year {1} of {0}. " \
+                           "It is now the year {2}.".format(tracker.name, old_year, tracker.current_year)
                 return {"response": response}
         raise CommandError("command_not_allowed", None)
 

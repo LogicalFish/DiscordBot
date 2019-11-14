@@ -36,7 +36,8 @@ class EventCommand(Command):
             event_id = int(param)
             event = system.event_manager.get_event(event_id)
             if event:
-                return {"event_embed": (event.get_event_embed(), event.author)}
+                return {"embed": event.get_event_embed(),
+                        "add_id": event.author}
             else:
                 raise CommandError("event_not_found", param)
 
@@ -141,7 +142,8 @@ class CreateEventCommand(Command):
             event = system.event_manager.create_event(new_event)
 
             return {"response": "Created event {}:".format(event.event_id),
-                    "event_embed": (event.get_event_embed(), message.author.id)}
+                    "embed": event.get_event_embed(),
+                    "add_id": message.author.id}
         except EventError as error:
             raise CommandError(error.message, error.parameters)
 
@@ -178,7 +180,8 @@ class EditEventCommand(Command):
 
             updated_event = system.event_manager.update_event(event_id, event_dict)
             return {"response": "Updated event {}:".format(event_id),
-                    "event_embed": (updated_event.get_event_embed(), message.author.id)}
+                    "embed": updated_event.get_event_embed(),
+                    "add_id": message.author.id}
         except ValueError:
             raise CommandError("number_not_valid", id_str)
         except EventError as error:

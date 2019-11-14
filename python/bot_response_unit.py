@@ -25,6 +25,13 @@ class Responder:
         if "switch" in action:
             self.identities.current_id = action["switch"]
             await self.change_visual_id()
+        if "add_id" in action:
+            user_from_id = self.system.nickname_manager.get_name_by_id(action["add_id"], self.client, message.guild)
+            if "response" in action:
+                action["response"].format(user_from_id)
+            if "embed" in action:
+                new_footer = action["embed"].footer.text + user_from_id
+                action["embed"].set_footer(text=new_footer)
         if "response" in action:
             await message.channel.send(action["response"])
             if "board" in action and action["board"]:
@@ -33,14 +40,6 @@ class Responder:
                 await message.channel.send(action["scores"])
         if "embed" in action:
             embed = action["embed"]
-            await message.channel.send(embed=embed)
-        if "event_embed" in action:
-            embed = action["event_embed"][0]
-            event_author = self.system.nickname_manager.get_name_from_id(action["event_embed"][1],
-                                                                         self.client,
-                                                                         message.guild)
-            new_footer = embed.footer.text + event_author
-            embed.set_footer(text=new_footer)
             await message.channel.send(embed=embed)
         if "react" in action:
             for emoji in action["react"]:

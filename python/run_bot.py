@@ -59,7 +59,6 @@ try:
     client.run(TOKEN)
 except TypeError:
     print("\nKeyboard interrupt received. Shutting down...")
-    system.shutdown()
     if not client.loop.is_closed():
         calendar_task.cancel()
         birthday_task.cancel()

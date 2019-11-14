@@ -28,12 +28,9 @@ class NicknameManager:
         """
         Initializes the data within the class, reading it from a database.
         """
-        session = self.database.Session()
-        nickname_db = session.query(Nickname).all()
+        nickname_db = self.database.select_all(Nickname)
         for nickname in nickname_db:
             self.nicknames[nickname.user_id] = nickname.nickname
-        session.commit()
-        session.close()
 
     def add_nickname(self, user_id, nickname):
         """
@@ -53,7 +50,7 @@ class NicknameManager:
             session.close()
         self.nicknames[user_id] = nickname
 
-    def get_name_from_id(self, user_id, client, guild=None):
+    def get_name_by_id(self, user_id, client, guild=None):
         """
         Method for obtaining a name when all you have is an ID.
         :param user_id: The user ID
@@ -61,8 +58,8 @@ class NicknameManager:
         :param guild: The Guild the user is part of, if any.
         :return:
         """
+        if user_id in self.nicknames:
+            return self.nicknames[user_id]
         if guild:
-            user_object = guild.get_member(user_id)
-        else:
-            user_object = client.get_user(user_id)
-        return self.get_name(user_object)
+            return guild.get_member(user_id).display_name
+        return client.get_user(user_id).display_name
