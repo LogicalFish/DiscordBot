@@ -1,4 +1,5 @@
 from bot_identity import parser
+from commands.command_error import CommandError
 from commands.command_superclass import Command
 from modules.nicknames import nickname_config
 
@@ -294,7 +295,7 @@ class WheelScoreCommand(Command):
                     score_line.append(line)
             if len(score_line):
                 return {"response": "```{}```".format("\n".join(score_line))}
-            return {"response": "No Highscores Found. Ensure a valid Database is running."}
+            raise CommandError("database_error", None)
         else:
             player_name = system.nickname_manager.get_name(player)
             score = system.wheel_manager.get_highscore(player)
