@@ -278,13 +278,8 @@ class WheelScoreCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        player = None
-        score = 0
-        if "total" in param:
-            player, score = system.wheel_manager.get_highest_score()
-        if player is None:
-            player = message.author
-            score = system.wheel_manager.get_highscore(player)
+        player = message.author
+        score = system.wheel_manager.get_highscore(player)
         player_name = system.nickname_manager.get_name(player)
         return {"response": "{}: {}".format(player_name, score)}
 

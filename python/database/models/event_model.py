@@ -3,7 +3,7 @@ import copy
 import discord
 from datetime import timedelta
 from sqlalchemy import Column, Integer, String, DateTime, BigInteger, ARRAY
-from database.database_connection import Base
+from database import Base
 from modules.calendar import event_parser, calendar_config
 
 
@@ -113,7 +113,8 @@ class Event(Base):
         hours_s = "s"
         if hours == 1:
             hours_s = ""
-        reminder_description = "{} starts in {} hour{}!\n\n*{}*".format(self.name, hours, hours_s, self.description)
+        descr = lambda s: s or ""
+        reminder_description = "{} starts in {} hour{}!\n\n*{}*".format(self.name, hours, hours_s, descr(self.description))
         reminder_embed = discord.Embed(title=self.name, description=reminder_description, color=13138175)
         reminder_embed.set_footer(text="ID: {}".format(self.event_id))
 

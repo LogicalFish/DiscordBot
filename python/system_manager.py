@@ -22,7 +22,6 @@ class SystemManager:
         self.last_msg = 0
         self.bot = None
         self.ttt_games = {}
-        self.wheel_manager = WheelManager()
         self.database_manager = DatabaseManager()
         if self.database_manager.db.engine is not None:
             self.event_manager = EventManager(self.database_manager)
@@ -34,4 +33,5 @@ class SystemManager:
         self.id_manager = IdentityManager(self.database_manager)
         self.nickname_manager = NicknameManager(self.database_manager)
         self.birthday_manager = BirthdayManager(self.database_manager)
+        self.wheel_manager = WheelManager(self.database_manager)
         self.reminder_manager = ReminderManager()

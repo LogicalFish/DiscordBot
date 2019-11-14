@@ -1,6 +1,6 @@
 from sqlalchemy import Column, BigInteger
 
-from database.database_connection import Base
+from database import Base
 
 
 class BannedChannel(Base):

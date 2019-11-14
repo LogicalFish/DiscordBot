@@ -1,16 +1,19 @@
 import math
+from sqlalchemy import func
 
+from database.models.high_score_model import Highscore
 from modules.games.wheel.wheel_game_state import WheelGame
 
 
 class WheelManager:
     DEFAULT_PLAYER_COUNT = 3
 
-    def __init__(self):
+    def __init__(self, database_manager):
         self.player_count = self.DEFAULT_PLAYER_COUNT
         self.queue = []
         self.games = []
         self.high_scores = {}
+        self.database = database_manager
 
     def change_player_count(self, new_count):
         if new_count < len(self.queue):
@@ -40,7 +43,7 @@ class WheelManager:
             if game.contains_player(player):
                 return True
         return player in self.queue
-        # return False
+        # return False #TODO
 
     def leave_game(self, player):
         if player in self.queue:
@@ -55,24 +58,31 @@ class WheelManager:
         return False
 
     def get_highscore(self, player):
-        if player in self.high_scores:
-            return get_monetary_value(self.high_scores[player])
+        if self.database is not None:
+            score = self.database.fetch_one(Highscore, player.id)
+            if score:
+                return get_monetary_value(score.score)
         return get_monetary_value(0)
 
     def get_highest_score(self):
-        high_score = 0
-        high_player = None
-        for player in self.high_scores:
-            if self.high_scores[player] > high_score:
-                high_score = self.high_scores[player]
-                high_player = player
-        return high_player, get_monetary_value(high_score)
+        if self.database is not None:
+            session = self.database.Session()
+            result = session.query(Highscore).order_by(Highscore.score.asc()).one()
+            if result:
+                return result.user_id, get_monetary_value(result.score)
+            session.close()
+        return None, get_monetary_value(0)
 
     def add_score(self, player, score):
-        if player in self.high_scores:
-            self.high_scores[player] += score
-        else:
-            self.high_scores[player] = score
+        if self.database is not None:
+            session = self.database.Session()
+            current_score = session.query(Highscore).filter(Highscore.user_id == player.id).first()
+            if current_score:
+                current_score.score += score
+            else:
+                session.add(Highscore(player.id, score))
+            session.commit()
+            session.close()
 
 
 def get_monetary_value(number):

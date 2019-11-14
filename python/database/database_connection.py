@@ -2,11 +2,10 @@ from configparser import ConfigParser
 
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
-from sqlalchemy.ext.declarative import declarative_base
 
 import config
-
-Base = declarative_base()
+from database import Base
+from database.models import models
 
 
 class DatabaseConnection:
@@ -20,6 +19,7 @@ class DatabaseConnection:
         try:
             self.engine = create_engine(config_url)
             self.engine.connect()
+            Base.metadata.create_all(self.engine, checkfirst=True)
         except OperationalError:
             print('No database found. Database functionality disabled.')
             self.engine = None

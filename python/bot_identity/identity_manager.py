@@ -48,11 +48,8 @@ class IdentityManager:
         Initializes the list of banned channels, taking from the database.
         DATABASE REQUIRED
         """
-        session = self.database.Session()
-        channel_db = session.query(BannedChannel).all()
+        channel_db = self.database.select_all(BannedChannel)
         self.banned_channels = [channel.channel_id for channel in channel_db]
-        session.commit()
-        session.close()
 
     def ban(self, channel_id):
         """Adds a channel to the banned list and logs the change."""

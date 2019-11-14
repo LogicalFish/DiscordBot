@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, BigInteger
 
-from database.database_connection import Base
+from database import Base
 from modules.nicknames import nickname_config
 
 

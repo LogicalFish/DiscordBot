@@ -19,12 +19,9 @@ class BirthdayManager:
         """
         Initializes the data within the class, reading it from a database.
         """
-        session = self.database.Session()
-        birthdays = session.query(Birthday).all()
+        birthdays = self.database.select_all(Birthday)
         for birthday in birthdays:
             self.birthdays.append((birthday.birthday, birthday.user_id))
-        session.commit()
-        session.close()
 
     def get_today_birthdays(self):
         """
