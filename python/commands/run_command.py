@@ -1,8 +1,6 @@
-import config
+from bot_identity import parser
 from commands import error_handler
 from commands.command_error import CommandError
-from bot_identity import parser
-
 from .miscellaneous.help_command import HelpCommand
 
 
@@ -13,7 +11,7 @@ class CommandRunner:
         help = HelpCommand(self)
         self.commands.append(help)
 
-    def run_command(self, message, system):
+    def run_command(self, params, message, system):
         """
         Method to run a specified command.
         :param message: The message object containing the command.
@@ -26,7 +24,7 @@ class CommandRunner:
             action["leave"] : Identity: The identity the bot should change to.
             action["board"] : String: Contains a Tic-Tac-Toe board, to be displayed if a game is played.
         """
-        user_call, user_param = self.split_message(message)
+        user_call, user_param = self.split_message(params)
         print("Attempting to execute the {} command from {}".format(user_call, message.author.name))
         try:
             command = self.get_command(user_call)
@@ -47,7 +45,7 @@ class CommandRunner:
                 return c
         raise CommandError("command_not_found", call)
 
-    def split_message(self, message):
+    def split_message(self, full_command):
         """
         Splits a message's contents in two halves.
         :param message: A message.
@@ -56,9 +54,6 @@ class CommandRunner:
         """
         # Split the message contents in two halves.
         # One containing the command (first word in the string), the other the command parameters.
-        splittext = message.clean_content.split(' ', 1)
-        command = splittext[0][len(config.SIGN):]
-        user_param = ""
-        if len(splittext) > 1:
-            user_param = splittext[1]
-        return command, user_param
+        splittext = full_command.split(' ', 1)
+        user_param = splittext[1] if len(splittext) > 1 else ""
+        return splittext[0], user_param

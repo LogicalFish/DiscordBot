@@ -11,8 +11,9 @@ from modules.dice.diceroll_command import RollCommand
 from modules.dice.godroll_command import GodRollCommand
 from modules.games.minesweeper.minesweeper_command import MineSweeperCommand
 from modules.games.tictactoe.ttt_commands import ChallengeCommand, PlayGameCommand, AbandonGameCommand
-from modules.games.wheel.wheel_command import JoinWheelCommand, SpinWheelCommand, GuessConsonantCommand, \
-    BuyVowelCommand, SolveCommand, WheelStatusCommand, WheelQuitCommand, WheelScoreCommand
+from modules.games.wheel.wheel_main_command import MainWheelCommand
+# from modules.games.wheel.wheel_command import JoinWheelCommand, SpinWheelCommand, GuessConsonantCommand, \
+#     BuyVowelCommand, SolveCommand, WheelStatusCommand, WheelQuitCommand, WheelScoreCommand
 from modules.nicknames.nickname_command import CallmeCommand
 from modules.reminders.reminder_command import RemindCommand
 
@@ -26,7 +27,8 @@ commands_list = [CallmeCommand(), EchoCommand(), PollCommand(),
                  EventCommand(), ListEventCommand(), CreateEventCommand(), EditEventCommand(), DeleteEventCommand(),
                  UnShadowCommand(), RemindCommand(),
                  ListAllCommand(), WhoIsCommand(), GetYearCommand(), AddYearCommand(),
-                 JoinWheelCommand(), SpinWheelCommand(), GuessConsonantCommand(), BuyVowelCommand(), SolveCommand(),
-                 WheelStatusCommand(), WheelQuitCommand(), WheelScoreCommand()]
+                 # JoinWheelCommand(), SpinWheelCommand(), GuessConsonantCommand(), BuyVowelCommand(), SolveCommand(),
+                 # WheelStatusCommand(), WheelQuitCommand(), WheelScoreCommand(),
+                 MainWheelCommand()]
 
 MainCommand = CommandRunner(commands_list)

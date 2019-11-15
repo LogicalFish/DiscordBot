@@ -40,7 +40,8 @@ async def on_message(message):
         # The bot should not respond to its own messages.
         return
     elif message.content.startswith(config.SIGN):
-        action = MainCommand.run_command(message, system)
+        params = message.clean_content[len(config.SIGN):]
+        action = MainCommand.run_command(params, message, system)
         await bot_responder.act(action, message)
     elif message.channel.id not in system.id_manager.banned_channels:
         # Switch identities based on received message.
