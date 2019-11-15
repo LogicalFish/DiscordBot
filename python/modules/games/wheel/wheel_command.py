@@ -38,7 +38,7 @@ class JoinWheelCommand(Command):
                                                                                                       first_turn),
                     "board": str(new_game),
                     "scores": new_game.get_scores_with_nicknames(system)}
-        elif not changed:
+        if in_game and not changed:
             return {"response": parser.direct_call(system.id_manager.current_id, "twogames")}
         wait = system.wheel_manager.get_queue_length()
         contestants = self.get_nicknames_list(system.wheel_manager.queue, system)
