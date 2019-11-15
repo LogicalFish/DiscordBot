@@ -19,10 +19,11 @@ class JoinWheelCommand(Command):
 
     def execute(self, param, message, system):
         changed = False
+        new_game = None
         if param:
             try:
                 if int(param) > 1:
-                    system.wheel_manager.change_player_count(int(param))
+                    new_game = system.wheel_manager.change_player_count(int(param))
                     changed = True
             except ValueError:
                 pass
@@ -30,13 +31,13 @@ class JoinWheelCommand(Command):
         in_game = system.wheel_manager.player_in_game(player)
         if not in_game:
             new_game = system.wheel_manager.add_to_queue(player)
-            if new_game:
-                contestants = self.get_nicknames_list(new_game.players, system)
-                first_turn = system.nickname_manager.get_name(new_game.get_current_player())
-                return {"response": parser.direct_call(system.id_manager.current_id, "wheelstart").format(contestants,
-                                                                                                          first_turn),
-                        "board": str(new_game),
-                        "scores": new_game.get_scores_with_nicknames(system)}
+        if new_game:
+            contestants = self.get_nicknames_list(new_game.players, system)
+            first_turn = system.nickname_manager.get_name(new_game.get_current_player())
+            return {"response": parser.direct_call(system.id_manager.current_id, "wheelstart").format(contestants,
+                                                                                                      first_turn),
+                    "board": str(new_game),
+                    "scores": new_game.get_scores_with_nicknames(system)}
         elif not changed:
             return {"response": parser.direct_call(system.id_manager.current_id, "twogames")}
         wait = system.wheel_manager.get_queue_length()
@@ -219,6 +220,7 @@ class SolveCommand(Command):
                     "board": str(wheelgame),
                     "scores": wheelgame.get_scores_with_nicknames(system)}
         else:
+            player_name = system.nickname_manager.get_name(wheelgame.get_current_player())
             return {"response": parser.direct_call(system.id_manager.current_id, "wrongsolve").format(player_name)}
 
     def in_call(self, command):

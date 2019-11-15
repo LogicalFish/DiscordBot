@@ -19,9 +19,13 @@ class WheelManager:
         if new_count < len(self.queue):
             self.queue = []
         self.player_count = new_count
+        return self.new_game()
 
     def add_to_queue(self, player):
         self.queue.append(player)
+        return self.new_game()
+
+    def new_game(self):
         if len(self.queue) == self.player_count:
             new_game = WheelGame(self.queue)
             self.games.append(new_game)

@@ -9,8 +9,7 @@ class FortunateBoard:
     HIDDEN = "⬜"
     FREE_SPACE = "⬛"
     COMMA = "⤵"
-    AMPERSAND = "➕"
-    DASH = "➖"
+    DASH = "⛔"
 
     def __init__(self):
         """
@@ -31,8 +30,6 @@ class FortunateBoard:
                     hidden_word += ":regional_indicator_{}:".format(char)
             elif char == ",":
                 hidden_word += self.COMMA
-            elif char == "&" or char == "+":
-                hidden_word += self.AMPERSAND
             elif char == "-" or char == "_":
                 hidden_word += self.DASH
             elif char.isspace():
