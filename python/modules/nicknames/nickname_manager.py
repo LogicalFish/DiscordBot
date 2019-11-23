@@ -1,8 +1,4 @@
-
-
-NAME_TABLE = "nicknames"
-PRIMARY_KEY = "user_id"
-SECONDARY = "nickname"
+from database.models.nicknames_model import Nickname
 
 
 class NicknameManager:
@@ -32,9 +28,9 @@ class NicknameManager:
         """
         Initializes the data within the class, reading it from a database.
         """
-        rows = self.database.get_rows(NAME_TABLE)
-        for row in rows:
-            self.nicknames[row[0]] = row[1]
+        nickname_db = self.database.select_all(Nickname)
+        for nickname in nickname_db:
+            self.nicknames[nickname.user_id] = nickname.nickname
 
     def add_nickname(self, user_id, nickname):
         """
@@ -44,22 +40,12 @@ class NicknameManager:
         :return:
         """
         if self.database is not None:
-            if user_id in self.nicknames.keys():
-                self.database.update({SECONDARY: nickname}, "'{}'".format(user_id), PRIMARY_KEY, NAME_TABLE)
+            session = self.database.Session()
+            current_nick = session.query(Nickname).filter(Nickname.user_id == user_id).first()
+            if current_nick:
+                current_nick.nickname = nickname
             else:
-                self.database.insert({PRIMARY_KEY: user_id, SECONDARY: nickname}, NAME_TABLE)
+                session.add(Nickname(user_id, nickname))
+            session.commit()
+            session.close()
         self.nicknames[user_id] = nickname
-
-    def get_name_from_id(self, user_id, client, guild=None):
-        """
-        Method for obtaining a name when all you have is an ID.
-        :param user_id: The user ID
-        :param client: The discord client. Required to fetch user objects based on ID.
-        :param guild: The Guild the user is part of, if any.
-        :return:
-        """
-        if guild:
-            user_object = guild.get_member(user_id)
-        else:
-            user_object = client.get_user(user_id)
-        return self.get_name(user_object)

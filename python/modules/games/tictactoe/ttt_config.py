@@ -6,4 +6,4 @@ CANTON = "⬛"
 
 DISPLAY_ROWS = ["1⃣", "2⃣", "3⃣"]
 
-DISPLAY_COLUMNS = ["🇦", "🇧", "🇨"]
+DISPLAY_COLUMNS = ["🅰️", "🅱️", "🇨"]

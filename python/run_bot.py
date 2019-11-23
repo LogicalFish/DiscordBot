@@ -23,6 +23,9 @@ async def on_ready():
     """
     print("The bot is ready.")
     system.bot = client.user
+    # Add Bot Birthday & Nickname into any database.
+    if system.database_manager:
+        system.database_manager.insert_bot(system.bot)
     await bot_responder.change_visual_id()
 
 
@@ -59,7 +62,6 @@ try:
     client.run(TOKEN)
 except TypeError:
     print("\nKeyboard interrupt received. Shutting down...")
-    system.shutdown()
     if not client.loop.is_closed():
         calendar_task.cancel()
         birthday_task.cancel()

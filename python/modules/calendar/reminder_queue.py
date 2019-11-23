@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from modules.calendar import event_reader
 
 
 class ReminderQueue:
@@ -23,13 +22,9 @@ class ReminderQueue:
         :param events: A list of events of which to generate reminders.
         """
         for event in events:
-            if event["reminder"]:
-                reminder_list = sorted(event["reminder"], reverse=True)
-                for reminder in reminder_list:
-                    embed = event_reader.describe_reminder(event, reminder)
-                    reminder_time = event["date"] - timedelta(hours=reminder)
-                    if reminder_time > datetime.now():
-                        self.queue.append((reminder_time, embed, event["channel"], event["tag"]))
+            for time, embed in event.get_reminders():
+                if time > datetime.now():
+                    self.queue.append((time, embed, event.channel, event.tag))
         self.queue.sort(key=lambda tup: tup[0])
 
     def clear(self):

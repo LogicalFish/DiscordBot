@@ -1,5 +1,7 @@
 from bot_identity import parser
+from commands.command_error import CommandError
 from commands.command_superclass import Command
+from modules.nicknames import nickname_config
 
 
 class JoinWheelCommand(Command):
@@ -17,10 +19,11 @@ class JoinWheelCommand(Command):
 
     def execute(self, param, message, system):
         changed = False
+        new_game = None
         if param:
             try:
                 if int(param) > 1:
-                    system.wheel_manager.change_player_count(int(param))
+                    new_game = system.wheel_manager.change_player_count(int(param))
                     changed = True
             except ValueError:
                 pass
@@ -28,14 +31,14 @@ class JoinWheelCommand(Command):
         in_game = system.wheel_manager.player_in_game(player)
         if not in_game:
             new_game = system.wheel_manager.add_to_queue(player)
-            if new_game:
-                contestants = self.get_nicknames_list(new_game.players, system)
-                first_turn = system.nickname_manager.get_name(new_game.get_current_player())
-                return {"response": parser.direct_call(system.id_manager.current_id, "wheelstart").format(contestants,
-                                                                                                          first_turn),
-                        "board": str(new_game),
-                        "scores": new_game.get_scores_with_nicknames(system)}
-        elif not changed:
+        if new_game:
+            contestants = self.get_nicknames_list(new_game.players, system)
+            first_turn = system.nickname_manager.get_name(new_game.get_current_player())
+            return {"response": parser.direct_call(system.id_manager.current_id, "wheelstart").format(contestants,
+                                                                                                      first_turn),
+                    "board": str(new_game),
+                    "scores": new_game.get_scores_with_nicknames(system)}
+        if in_game and not changed:
             return {"response": parser.direct_call(system.id_manager.current_id, "twogames")}
         wait = system.wheel_manager.get_queue_length()
         contestants = self.get_nicknames_list(system.wheel_manager.queue, system)
@@ -217,6 +220,7 @@ class SolveCommand(Command):
                     "board": str(wheelgame),
                     "scores": wheelgame.get_scores_with_nicknames(system)}
         else:
+            player_name = system.nickname_manager.get_name(wheelgame.get_current_player())
             return {"response": parser.direct_call(system.id_manager.current_id, "wrongsolve").format(player_name)}
 
     def in_call(self, command):
@@ -278,15 +282,27 @@ class WheelScoreCommand(Command):
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
-        player = None
-        score = 0
-        if "total" in param:
-            player, score = system.wheel_manager.get_highest_score()
-        if player is None:
-            player = message.author
+        player = message.author
+
+        if message.guild:
+            scores = system.wheel_manager.get_highscore_table()
+            score_line = []
+            for score in scores:
+                player = system.get_user_by_id(score.user_id, guild=message.guild)
+                if player:
+                    player_name = system.nickname_manager.get_name(player)
+                    player_score = system.wheel_manager.get_monetary_value(score.score)
+                    spacing = " " * (nickname_config.MAX_NICK_NAME - len(player_name))
+                    line = "{i}: {name}{s}-\t{score}".format(i=len(score_line)+1, s=spacing, name=player_name, score=player_score)
+                    score_line.append(line)
+            if len(score_line):
+                return {"response": "```{}```".format("\n".join(score_line))}
+            raise CommandError("database_error", None)
+        else:
+            player_name = system.nickname_manager.get_name(player)
             score = system.wheel_manager.get_highscore(player)
-        player_name = system.nickname_manager.get_name(player)
-        return {"response": "{}: {}".format(player_name, score)}
+            spacing = " " * (nickname_config.MAX_NICK_NAME - len(player_name))
+            return {"response": "```{i}: {name}{s}-\t{score}```".format(i=1, s=spacing, name=player_name, score=score)}
 
     def in_call(self, command):
         if "score" in command:

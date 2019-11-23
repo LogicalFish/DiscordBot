@@ -1,5 +1,5 @@
-from database.database_manager import DatabaseManager
 from bot_identity.identity_manager import IdentityManager
+from database.database_manager import DatabaseManager
 from modules.calendar.event_manager import EventManager
 from modules.calendar.time_manager import TimeManager
 from modules.games.wheel.wheel_manager import WheelManager
@@ -22,9 +22,8 @@ class SystemManager:
         self.last_msg = 0
         self.bot = None
         self.ttt_games = {}
-        self.wheel_manager = WheelManager()
         self.database_manager = DatabaseManager()
-        if self.database_manager.db.conn is not None:
+        if self.database_manager.db.engine is not None:
             self.event_manager = EventManager(self.database_manager)
             self.time_manager = TimeManager(self.event_manager)
         else:
@@ -34,7 +33,21 @@ class SystemManager:
         self.id_manager = IdentityManager(self.database_manager)
         self.nickname_manager = NicknameManager(self.database_manager)
         self.birthday_manager = BirthdayManager(self.database_manager)
+        self.wheel_manager = WheelManager(self.database_manager)
         self.reminder_manager = ReminderManager()
 
-    def shutdown(self):
-        self.database_manager.db.close_connection()
+    @staticmethod
+    def get_user_by_id(user_id, client=None, guild=None):
+        """
+        Method for obtaining a name when all you have is an ID.
+        :param user_id: The user ID
+        :param client: The discord client. Required to fetch user objects based on ID.
+        :param guild: The Guild the user is part of, if any.
+        :return:
+        """
+        user = None
+        if client:
+            user = client.get_user(user_id)
+        elif guild:
+            user = guild.get_member(user_id)
+        return user
