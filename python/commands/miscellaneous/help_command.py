@@ -22,8 +22,8 @@ class HelpCommand(Command):
         else:
             return {"response": "**List of Commands:** {}"
                                 "*Type ``{}{} <command>`` for more information.*".format(self.get_list_of_commands(),
-                                                                                           config.configuration['sign'],
-                                                                                           self.call[0])}
+                                                                                         config.configuration['sign'],
+                                                                                         self.call[0])}
 
     def get_list_of_commands(self):
         result = ""

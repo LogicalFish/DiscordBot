@@ -1,5 +1,4 @@
 from bot_identity import parser
-from commands import error_handler
 import yaml
 
 import config
@@ -62,9 +61,3 @@ class CommandRunner:
         splittext = full_command.split(' ', 1)
         user_param = splittext[1] if len(splittext) > 1 else ""
         return splittext[0], user_param
-#         splittext = message.clean_content.split(' ', 1)
-#         command = splittext[0][len(config.configuration['sign']):]
-#         user_param = ""
-#         if len(splittext) > 1:
-#             user_param = splittext[1]
-#         return command, user_param
