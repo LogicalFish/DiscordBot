@@ -1,7 +1,16 @@
-from modules.characterlist import list_config
+import os
+
+from config import configuration
 from modules.characterlist.npc_tracker import NPCTracker
 
+data_dir = os.path.sep.join(configuration['char_list']['list_dir'])
 npc_trackers = []
-for args in list_config.NPC_LISTS:
-    npc_trackers.append(NPCTracker(args[0], args[1], args[2], args[3], args[4]))
+
+for char_list in configuration['char_list']['lists']:
+    details = configuration['char_list'][char_list]
+    npc_trackers.append(NPCTracker(name=str(char_list).title(),
+                                   file=os.path.sep.join([data_dir, details['file']]),
+                                   owner=details['owner'],
+                                   year=details['default_year'],
+                                   color=int(details['color'], 16)))
 

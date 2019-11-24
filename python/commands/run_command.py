@@ -1,5 +1,6 @@
+import yaml
+
 import config
-from commands import error_handler
 from commands.command_error import CommandError
 from bot_identity import parser
 
@@ -8,10 +9,12 @@ from .miscellaneous.help_command import HelpCommand
 
 class CommandRunner:
 
+    errors = yaml.safe_load(open(config.ERRORS))
+
     def __init__(self, commands_list):
         self.commands = commands_list
-        help = HelpCommand(self)
-        self.commands.append(help)
+        self.help = HelpCommand(self)
+        self.commands.append(self.help)
 
     def run_command(self, message, system):
         """
@@ -33,7 +36,7 @@ class CommandRunner:
             return command.execute(user_param, message, system)
         except CommandError as error:
             response = "{} {}".format(parser.direct_call(system.id_manager.current_id, "error"),
-                                      error_handler.ERROR_DICT[error.type].format(error.key))
+                                      self.errors[error.type].format(error.key))
             return {"response": response}
 
     def get_command(self, call):
@@ -57,7 +60,7 @@ class CommandRunner:
         # Split the message contents in two halves.
         # One containing the command (first word in the string), the other the command parameters.
         splittext = message.clean_content.split(' ', 1)
-        command = splittext[0][len(config.SIGN):]
+        command = splittext[0][len(config.configuration['sign']):]
         user_param = ""
         if len(splittext) > 1:
             user_param = splittext[1]

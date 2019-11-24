@@ -37,7 +37,7 @@ class Command:
         for item in self.call:
             if result:
                 result += ", "
-            result += config.SIGN + item
+            result += config.configuration['sign'] + item
         return result
 
     def in_call(self, command):

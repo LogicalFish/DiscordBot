@@ -1,8 +1,7 @@
 import re
 import operator
 
-from . import dice_config as config
-
+from config import configuration
 
 
 def string_to_dice_pairs(msg):
@@ -20,7 +19,7 @@ def string_to_dice_pairs(msg):
         x, y = sr
         x, y = [i.replace(" ", "") for i in [x, y]]
         x, y = ['1' if i == '' else i for i in [x, y]]
-        if x != '0' and y != '0' and int(y) < config.MAXDIETYPE:
+        if x != '0' and y != '0' and int(y) < configuration['dice']['dice_max_sides']:
             result.append((int(x), int(y)))
     return result
 
@@ -77,13 +76,13 @@ def prune_dice(dice_pairs):
         x, y = pruned_dice[i]
         if y > 1:
             count += abs(x)
-        if count > config.DHARDCAP:
+        if count > configuration['dice']['dice_hardcap']:
             if i > 0:
                 if y != 1:
                     pruned_dice.pop(i)
                     i -= 1
             else:
-                pruned_dice[i] = (config.DHARDCAP, y)
+                pruned_dice[i] = (configuration['dice']['dice_hardcap'], y)
         i += 1
     if len(pruned_dice) == 1 and pruned_dice[0][1] == 1:
         pruned_dice.pop(0)

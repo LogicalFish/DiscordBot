@@ -22,13 +22,13 @@ class HelpCommand(Command):
         else:
             return {"response": "**List of Commands:** {}"
                                 "*Type ``{}{} <command>`` for more information.*".format(self.get_list_of_commands(),
-                                                                                           config.SIGN,
+                                                                                           config.configuration['sign'],
                                                                                            self.call[0])}
 
     def get_list_of_commands(self):
         result = ""
         for i, command in enumerate(self.command_runner.commands):
-            result += "\t{}{}".format(config.SIGN, command.call[0])
+            result += "\t{}{}".format(config.configuration['sign'], command.call[0])
             if i % 3 == 2:
                 result += "\n"
             else:

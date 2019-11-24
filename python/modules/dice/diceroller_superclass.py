@@ -1,5 +1,5 @@
 import modules.dice.dicehelper as helper
-from . import dice_config as config
+from config import configuration
 
 
 class DiceRoller:
@@ -20,7 +20,7 @@ class DiceRoller:
         dice_pairs = helper.prune_dice(dice_pairs)
         if len(dice_pairs) > 0:
             results = self.roll_the_dice(dice_pairs)
-            too_many_dice = dice_amount > config.DHARDCAP
+            too_many_dice = dice_amount > configuration['dice']['dice_hardcap']
             message = self.format_response(dice_pairs, results, too_many_dice)
             return message
         else:

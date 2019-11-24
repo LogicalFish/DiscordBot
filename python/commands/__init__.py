@@ -6,9 +6,7 @@ from .miscellaneous.miscellaneous_commands import EchoCommand
 from .miscellaneous.poll_command import PollCommand
 from modules.calendar.calendar_commands import EventCommand, ListEventCommand, CreateEventCommand, EditEventCommand, \
     DeleteEventCommand, UnShadowCommand
-from modules.dice.cheat_dice_command import CheatRollCommand
-from modules.dice.diceroll_command import RollCommand
-from modules.dice.godroll_command import GodRollCommand
+from modules.dice.diceroll_commands import RollCommand, CheatRollCommand, GodRollCommand
 from modules.games.minesweeper.minesweeper_command import MineSweeperCommand
 from modules.games.tictactoe.ttt_commands import ChallengeCommand, PlayGameCommand, AbandonGameCommand
 from modules.games.wheel.wheel_command import JoinWheelCommand, SpinWheelCommand, GuessConsonantCommand, \

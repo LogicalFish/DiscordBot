@@ -1,5 +1,5 @@
 import random
-from .diceroll import StandardDiceRoller
+from .standard_diceroller import StandardDiceRoller
 
 
 class CheatDice(StandardDiceRoller):

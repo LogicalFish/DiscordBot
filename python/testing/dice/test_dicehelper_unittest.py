@@ -1,7 +1,7 @@
 import unittest
 
+from config import configuration
 from modules.dice import dicehelper
-from modules.dice import dice_config as config
 
 
 class TestDiceRoll(unittest.TestCase):
@@ -39,7 +39,7 @@ class TestDiceRoll(unittest.TestCase):
         self.assertEqual(outcome, expected_outcome, "{} should output {}".format(test_input, expected_outcome))
 
     def test_string_to_dice_pairs_max_dietype(self):
-        test_input = "2d{}+1d20".format(config.MAXDIETYPE+1)
+        test_input = "2d{}+1d20".format(configuration['dice']['dice_max_sides']+1)
         outcome = dicehelper.string_to_dice_pairs(test_input)
         expected_outcome = [(1, 20)]
         self.assertEqual(outcome, expected_outcome, "{} should output {}".format(test_input, expected_outcome))
@@ -122,24 +122,24 @@ class TestDiceRoll(unittest.TestCase):
         self.assertEqual(test_input, outcome, "List should not be pruned.")
 
     def test_prune_dice_above_cap_single(self):
-        above_cap_input = config.DHARDCAP+5
+        above_cap_input = configuration['dice']['dice_hardcap']+5
         test_input = [(above_cap_input, 20)]
         outcome_one = dicehelper.prune_dice(test_input)
-        expected_outcome_one = [(config.DHARDCAP, 20)]
+        expected_outcome_one = [(configuration['dice']['dice_hardcap'], 20)]
         self.assertEqual(expected_outcome_one, outcome_one, "List should be pruned.")
 
     def test_prune_dice_above_cap_multiple(self):
-        below_cap_input = config.DHARDCAP-5
+        below_cap_input = configuration['dice']['dice_hardcap']-5
         test_input = [(1, 20), (below_cap_input, 12), (1, 10), (5, 8), (3, 2), (5, 4)]
         expected_output = [(1, 20), (below_cap_input, 12), (1, 10)]
         output = dicehelper.prune_dice(test_input)
         self.assertEqual(expected_output, output, "List should be pruned.")
 
     def test_prune_dice_above_cap_lone_integer(self):
-        above_cap_input = config.DHARDCAP+5
+        above_cap_input = configuration['dice']['dice_hardcap']+5
         test_input = [(above_cap_input, 20), (1, 6), (6, 1)]
         possibly_pruned_list = dicehelper.prune_dice(test_input)
-        expected_list = [(config.DHARDCAP, 20), (6, 1)]
+        expected_list = [(configuration['dice']['dice_hardcap'], 20), (6, 1)]
         self.assertEqual(expected_list, possibly_pruned_list, "List should be pruned.")
 
     def test_prune_dice_value_only(self):

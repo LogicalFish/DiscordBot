@@ -1,12 +1,11 @@
 import re
 
-import config as main_config
+from config import configuration
 from commands.command_error import CommandError
 from commands.command_superclass import Command
 from database.models.event_model import Event
 from modules.calendar import event_parser
 from modules.calendar.event_parser import EventError
-from . import calendar_config as config
 
 
 class EventCommand(Command):
@@ -47,6 +46,7 @@ class ListEventCommand(Command):
     """
     Command class for listing all events, including future recurring events.
     """
+    calendar_config = configuration['calendar']
 
     def __init__(self):
         call = ["events", "listevents"]
@@ -65,14 +65,14 @@ class ListEventCommand(Command):
         try:
             shadow_size = int(param)
         except ValueError:
-            shadow_size = config.DEFAULT_SHADOW
+            shadow_size = self.calendar_config['default_shadow']
 
         events_list = system.event_manager.get_all_events()
         if events_list:
             shadow_list = self.get_list_shadow(events_list, shadow_size)
             list_message = "De volgende evenementen zijn gepland:\n\n"
             for date, shadow_message in shadow_list:
-                if len(list_message) + len(shadow_message) < main_config.CHARACTER_MAX:
+                if len(list_message) + len(shadow_message) < configuration['max_msg_length']:
                     list_message += shadow_message
         else:
             list_message = "Er zijn geen evenementen gevonden."
@@ -114,7 +114,7 @@ class CreateEventCommand(Command):
                      '\t\t*Recur*: Integer designating in how many days event will reoccur after the last. ' \
                      'If not supplied, event does not reoccur.\n'
         description = 'Creates a new event based on the supplied parameters. ' \
-                      '\n\t\tExample: *{}eventadd name="Christmas" date="December 25th"*'.format(main_config.SIGN)
+                      '\n\t\tExample: *{}eventadd name="Christmas" date="December 25th"*'.format(configuration['sign'])
         super().__init__(call, parameters, description)
 
     def in_call(self, command):
@@ -154,7 +154,7 @@ class EditEventCommand(Command):
     def __init__(self):
         call = ["eventedit", "eventupdate"]
         parameters = "\n\t*id*: The ID of the event you wish to edit. *(required)*\n" \
-                     "\tSee {}eventadd for other parameters.".format(main_config.SIGN)
+                     "\tSee {}eventadd for other parameters.".format(configuration['sign'])
         description = "Edits the parameters of a given event."
         super().__init__(call, parameters, description)
 
@@ -228,6 +228,8 @@ class UnShadowCommand(Command):
     Command class for allowing an event's shadow to be edited.
     """
 
+    calendar_config = configuration['calendar']
+
     def __init__(self):
         call = ["unshadow", "revealevent", "deshadow"]
         parameters = "The Event ID of the shadow event you wish to access. Example: 1-2."
@@ -249,7 +251,7 @@ class UnShadowCommand(Command):
             raise CommandError("event_not_found", param)
         event_id = int(parameter_match[1])
         shadow_id = int(parameter_match[2])
-        if 0 >= shadow_id or shadow_id >= config.MAX_SHADOW:
+        if 0 >= shadow_id or shadow_id >= self.calendar_config['max_shadows']:
             raise CommandError("invalid_shadow", param)
 
         event = system.event_manager.get_event(event_id)
