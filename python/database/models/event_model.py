@@ -3,19 +3,23 @@ import copy
 import discord
 from datetime import timedelta
 from sqlalchemy import Column, Integer, String, DateTime, BigInteger, ARRAY
+
+from config import configuration
 from database import Base
-from modules.calendar import event_parser, calendar_config
+from modules.calendar import event_parser
+
+calendar_config = configuration['calendar']
 
 
 class Event(Base):
     __tablename__ = 'events'
 
     event_id = Column('event_id', Integer, primary_key=True)
-    name = Column('name', String(calendar_config.MAX_EVENT_NAME))
+    name = Column('name', String(calendar_config['max_event_name']))
     date = Column('date', DateTime)
     author = Column('author', BigInteger)
 
-    description = Column('description', String(calendar_config.MAX_EVENT_DESCRIPTION), nullable=True)
+    description = Column('description', String(calendar_config['max_event_description']), nullable=True)
     channel = Column('channel', String(255), nullable=True)
     tag = Column('tag', String(255), nullable=True)
     reminder = Column('reminder', ARRAY(Integer), nullable=True)
@@ -28,11 +32,11 @@ class Event(Base):
     def update(self, name=None, date=None, description=None, channel=None, tag=None, reminder=None, recur=None,
                **kwargs):
         if name:
-            self.name = event_parser.parse_string(name, calendar_config.MAX_EVENT_NAME, "name")
+            self.name = event_parser.parse_string(name, calendar_config['max_event_name'], "name")
         if date:
             self.date = event_parser.parse_date(date)
         if description:
-            self.description = event_parser.parse_string(description, calendar_config.MAX_EVENT_DESCRIPTION,
+            self.description = event_parser.parse_string(description, calendar_config['max_event_description'],
                                                          "description")
         if channel:
             self.channel = event_parser.parse_string(channel, 255, "channel")
@@ -68,7 +72,7 @@ class Event(Base):
         if self.recur is not None:
             new_event = copy.deepcopy(self)
             shadow_time = timedelta(days=self.recur)
-            for i in range(min(quantity, calendar_config.MAX_SHADOW)):
+            for i in range(min(quantity, calendar_config['max_shadows'])):
                 new_event.date = new_event.date + shadow_time
                 new_event.event_id = "{}-{}".format(self.event_id, (i + 1))
                 shadow_events.append(new_event)
@@ -77,8 +81,8 @@ class Event(Base):
 
     def get_event_embed(self):
         embed = discord.Embed(title=self.name, description=self.description, color=13138175)
-        embed.add_field(name="Date", value=self.date.strftime(calendar_config.DATE_FORMAT), inline=True)
-        embed.add_field(name="Time", value=self.date.strftime(calendar_config.TIME_FORMAT), inline=True)
+        embed.add_field(name="Date", value=self.date.strftime(calendar_config['date_format']), inline=True)
+        embed.add_field(name="Time", value=self.date.strftime(calendar_config['time_format']), inline=True)
         reminders = self.embed_reminder_in_event()
         if len(reminders):
             embed.add_field(name="Reminders", value=reminders, inline=False)
@@ -108,7 +112,7 @@ class Event(Base):
 
     @staticmethod
     def display_date(datetime):
-        return datetime.strftime("{}, {}".format(calendar_config.DATE_FORMAT, calendar_config.TIME_FORMAT))
+        return datetime.strftime("{}, {}".format(calendar_config['date_format'], calendar_config['time_format']))
 
     def describe_reminder(self, hours):
         descr = lambda s: s or ""

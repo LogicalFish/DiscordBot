@@ -2,8 +2,9 @@ import copy
 import random
 
 from .board import Board
-from . import ttt_config as config
 
+from config import configuration
+ttt_config = configuration['tic-tac-toe']
 
 # GAME class. Keeps track of a tic-tac-toe game, including players, turns, and NPC moves
 class Game:
@@ -11,7 +12,7 @@ class Game:
     Attributes:
         turn: The Token of the player whose turn it is.
     """
-    turn = config.TTT_PIECES[0]
+    turn = ttt_config['pieces'][0]
 
     def __init__(self, input_players):
         """
@@ -23,7 +24,7 @@ class Game:
         if len(input_players) == 2:
             random.shuffle(input_players)
             for i in range(2):
-                self.players[config.TTT_PIECES[i]] = input_players[i]
+                self.players[ttt_config['pieces'][i]] = input_players[i]
         else:
             raise ValueError("invalid_amount_of_players")
 
@@ -39,7 +40,7 @@ class Game:
         """
         :return: Returns the token representing the player other than the one whose turn it is.
         """
-        for p in config.TTT_PIECES:
+        for p in ttt_config['pieces']:
             if p != self.turn:
                 return p
 
@@ -80,7 +81,7 @@ class Game:
         Integers higher than 5 will be treated as 5. Integers of 0 and lower will be treated as 2.
         :return: A valid move.
         """
-        moves = self.game_board.get_set(config.FREE_SPACE)
+        moves = self.game_board.get_set(ttt_config['empty'])
         # DIFFICULTY 3 (Normal Mode) Strategy
         if difficulty > 2:
             order = [self.turn, self.get_other_player()]

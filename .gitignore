@@ -1,10 +1,6 @@
 *.xml
 !default.xml
-settings.py
-config.py
-identity_config.py
-list_config.py
-wheel_config.py
+settings.yml
 deprecated/
 *.ini
 .idea/

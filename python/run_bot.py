@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.7
 import discord
-import config
+import yaml
 from modules.reminders import delayed_response
 from system_manager import SystemManager
 from bot_response_unit import Responder
@@ -8,11 +8,13 @@ from bot_tasks import calendar_task, birthday_task, reminder_task
 from commands import MainCommand
 from modules.reactions import reactor
 
+configuration = yaml.safe_load(open("settings.yml"))
+
 # Secret Token
-TOKEN = config.TOKEN
+TOKEN = configuration['secret_token']
 
 client = discord.Client()
-system = SystemManager()
+system = SystemManager(configuration)
 bot_responder = Responder(client, system)
 
 
@@ -39,7 +41,7 @@ async def on_message(message):
     if message.author == client.user:
         # The bot should not respond to its own messages.
         return
-    elif message.content.startswith(config.SIGN):
+    elif message.content.startswith(configuration['sign']):
         action = MainCommand.run_command(message, system)
         await bot_responder.act(action, message)
     elif message.channel.id not in system.id_manager.banned_channels:

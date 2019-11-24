@@ -5,7 +5,7 @@ import config
 from commands.command_error import CommandError
 from commands.command_superclass import Command
 
-from modules.characterlist import npc_tracker, npc_trackers
+from modules.characterlist import npc_trackers
 
 
 class ListAllCommand(Command):
@@ -130,7 +130,7 @@ def format_npc_name_list(npc_list, preamble):
     name_list = ["**{}.** {}".format(count + 1, npc.get_name()) for count, npc in enumerate(npc_list)]
     max_reached = "- *etc. (character limit reached)*"
     for name in name_list:
-        if len(npc_name_list) + len(name) + len(max_reached) < config.CHARACTER_MAX:
+        if len(npc_name_list) + len(name) + len(max_reached) < config.configuration['max_msg_length']:
             npc_name_list += "{}\n".format(name)
         else:
             npc_name_list += max_reached
