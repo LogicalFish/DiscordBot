@@ -115,10 +115,10 @@ class Event(Base):
         return datetime.strftime("{}, {}".format(calendar_config['date_format'], calendar_config['time_format']))
 
     def describe_reminder(self, hours):
-        descr = lambda s: s or ""
+        descr = "*{}*".format(self.description) if self.description else ""
         reminder_description = "{event} starts in {h} hour{s}!\n\n" \
-                               "*{description}*".format(event=self.name, h=hours, s="s" if hours > 1 else "",
-                                                        description=descr(self.description))
+                               "{description}".format(event=self.name, h=hours, s="s" if hours > 1 else "",
+                                                      description=descr)
         reminder_embed = discord.Embed(title=self.name, description=reminder_description, color=13138175)
         reminder_embed.set_footer(text="ID: {}".format(self.event_id))
 
