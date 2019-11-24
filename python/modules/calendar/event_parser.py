@@ -2,7 +2,7 @@ import re
 from datetime import datetime
 from dateutil import parser
 
-from modules.calendar import calendar_config
+from config import configuration
 
 
 def parse_string(string_input, max_length, key):
@@ -44,8 +44,8 @@ def parse_event_string(string):
     output_dict = {}
     for r in parsed:
         category = r[0].lower()
-        if r[0].lower() in calendar_config.SYNONYMS:
-            category = calendar_config.SYNONYMS[r[0].lower()]
+        if r[0].lower() in configuration['calendar']['synonyms']:
+            category = configuration['calendar']['synonyms'][r[0].lower()]
         if category in output_dict:
             output_dict[category] += ", " + r[1]
         else:

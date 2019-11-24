@@ -1,7 +1,7 @@
 import random
 from .diceroller_superclass import DiceRoller
 from . import dicehelper as helper
-from . import dice_config as config
+from config import configuration
 
 
 class StandardDiceRoller(DiceRoller):
@@ -21,7 +21,7 @@ class StandardDiceRoller(DiceRoller):
         error_response = ""
         if too_many_dice:
             error_response = "[ERROR]: You rolled too many dice. The list of dice was pruned. " \
-                             "The maximum is {}.\n".format(config.DHARDCAP)
+                             "The maximum is {}.\n".format(configuration['dice']['dice_hardcap'])
 
         result_response = self.dice_result_to_string(dice_results)
 
@@ -34,7 +34,7 @@ class StandardDiceRoller(DiceRoller):
         :return: A list adding up all items.
         """
         result_response = ""
-        if len(dice_results) < config.DSOFTCAP:
+        if len(dice_results) < configuration['dice']['dice_softcap']:
             for result in dice_results:
                 if result_response:
                     result_response += "+"
@@ -53,8 +53,8 @@ class StandardDiceRoller(DiceRoller):
         for pair in dice_pairs:
             x, y = pair
             signbit = -1 if x < 0 else 1
-            if 1 < y <= config.MAXDIETYPE and len(results) <= config.DHARDCAP:
-                r = min(abs(x), config.DHARDCAP - len(results))
+            if 1 < y <= configuration['dice']['dice_max_sides'] and len(results) <= configuration['dice']['dice_hardcap']:
+                r = min(abs(x), configuration['dice']['dice_hardcap'] - len(results))
                 for i in range(r):
                     results.append(self.get_random_number(1, y, signbit))
             elif y == 1:

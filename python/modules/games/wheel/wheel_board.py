@@ -1,7 +1,8 @@
+import os
 import random
 from xml.etree import ElementTree
 
-from modules.games.wheel import wheel_config
+from config import configuration
 
 
 class FortunateBoard:
@@ -79,7 +80,8 @@ class FortunateBoard:
 
     @staticmethod
     def get_random_word():
-        word_doc = ElementTree.parse(wheel_config.WORD_LIST).getroot()
+        word_file = os.path.sep.join(configuration['wheel']['words_file'])
+        word_doc = ElementTree.parse(word_file).getroot()
 
         word_list = word_doc.findall("category/entry")
         chosen_entry = random.choice(word_list)

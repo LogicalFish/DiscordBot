@@ -1,7 +1,11 @@
+import os
 from xml.etree import ElementTree
-from . import identity_config as config
 
-root = ElementTree.parse(config.FACT_FILE).getroot()
+from config import configuration
+
+
+fact_file = os.path.sep.join(configuration['identity']['identity_dir'] + [configuration['identity']['facts_file']])
+root = ElementTree.parse(fact_file).getroot()
 
 
 def get_fact_list(tag):

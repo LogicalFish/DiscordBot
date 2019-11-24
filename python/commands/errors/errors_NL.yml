@@ -1,0 +1,29 @@
+#default
+command_not_found: "Het commando '*{}*' is niet gevonden."
+string_too_long: "Het veld '*{}*' is te lang."
+number_not_valid: "'*{}*' is geen valide getal."
+required_field_missing: "Het verplichte veld '*{}*' mist."
+database_error: "Er is geen valide database gevonden."
+already_banned: "Ik ben al verbannen in dit kanaal."
+not_banned: "Ik ben niet verbannen in dit kanaal."
+command_not_allowed: "Jij mag dit commando niet uitvoeren."
+invalid_parameter: "De parameter {} levert geen resultaten op."
+#calendar
+event_not_found: "Er is geen event met het ID '*{}*' gevonden."
+not_authorized: "Jij bent niet de eigenaar van dit evenement."
+invalid_reminder: "'*{}*' is geen valide input voor reminders."
+invalid_date: "'*{}*' is geen valide tijd/datum combinatie."
+invalid_future_date: "'*{}*' is in het verleden."
+invalid_shadow: "{} is geen valide schaduw-event."
+#dice
+invalid_dice: "Er zijn geen valide dobbelstenen gevonden. (Dobbelstenen hoger dan een d{} worden genegeerd.)"
+#minesweeper
+board_too_small: "Het opgegeven bord is te klein."
+too_many_bombs: "Er kunnen niet meer bommen dan vakjes zijn."
+#wheel
+invalid_character: "{} is geen valide letter."
+vowel: "{} is geen medeklinker."
+not_a_vowel: "{} is geen klinker."
+already_revealed: "De letter {} is al geraden."
+no_cash: "Je hebt niet genoeg geld om dat te doen."
+no_guess: "Je kan niet raden zonder eerst het rad te draaien."

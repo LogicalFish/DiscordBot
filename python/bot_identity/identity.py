@@ -1,23 +1,14 @@
+import os
 from xml.etree import ElementTree
 
+from config import configuration
+id_config = configuration['identity']
+
 # Special tags used in XML documents.
-TAG = {
-    "NAME": "name",
-    "GAME": "game",
-    "ITEM": "elem",
-    "SPEC": "special",
-    "REGEX": "regex",
-    "AI": "AI",
-}
+TAG = id_config['xml_tags']
 
 # Difficulty Translation Table
-DIF = {
-    "simple": 1,
-    "easy": 2,
-    "normal": 3,
-    "hard": 4,
-    "expert": 5,
-}
+DIF = id_config['difficulty']
 
 
 class Identity:
@@ -27,8 +18,9 @@ class Identity:
     Each element contains possible dialogue for any bot that is using this identity.
     """
 
-    def __init__(self, location, default=False):
-        self.root = ElementTree.parse(location).getroot()
+    def __init__(self, file_name, default=False):
+        file_location = os.path.sep.join(id_config['identity_dir'] + [file_name])
+        self.root = ElementTree.parse(file_location).getroot()
         if not default:
             try:
                 # Check if the identity has a name and regex field. Throw an error if it doesn't.

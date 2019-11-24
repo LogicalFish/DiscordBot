@@ -1,9 +1,8 @@
 import random
 
-from database.models.banned_channels_model import BannedChannel
-from . import identity_config as config
-
 from bot_identity.identity import Identity, IdentityError
+from config import configuration
+from database.models.banned_channels_model import BannedChannel
 
 
 class IdentityManager:
@@ -33,9 +32,9 @@ class IdentityManager:
         """
         A method for initialize all identities based on the settings.
         """
-        for file in config.IDENTITY_FILES:
+        for file in configuration['identity']['identity_files']:
             try:
-                self.identities.append(Identity(config.DATA_DIR + file))
+                self.identities.append(Identity(file))
             except IdentityError as ie:
                 print("IdentityError: {} Skipping identity {}.".format(ie, file))
                 continue

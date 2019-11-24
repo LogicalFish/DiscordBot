@@ -1,8 +1,12 @@
 import re
 import random
-from bot_identity.identity import IdentityError
+
+from config import configuration
+from bot_identity.identity import IdentityError, Identity
 from bot_identity import facts
-from . import identity_config as config
+
+id_config = configuration['identity']
+default_identity = Identity(id_config['default_identity'], default=True)
 
 
 def find_new_id(message, id_list):
@@ -31,8 +35,11 @@ def get_default_dict(identity):
     :return: A dictionary containing all default regular expressions
     """
     result = {}
-    for value in config.GLOBAL_REGEX:
-        result[value.format(identity.get_regex())] = config.GLOBAL_REGEX[value]
+    default_regexes = {id_config['morning_regex']: "morning",
+                       id_config['night_regex']: "night",
+                       id_config['thanks_regex']: "thanks"}
+    for value in default_regexes:
+        result[value.format(identity.get_regex())] = default_regexes[value]
     return result
 
 
@@ -59,7 +66,7 @@ def get_response(message, identity):
                 response_list = identity.phrase_list(full_dict[regex])
             if len(response_list) == 0:
                 if regex in default_dict:
-                    response_list = config.DEFAULT_ID.phrase_list(default_dict[regex])
+                    response_list = default_identity.phrase_list(default_dict[regex])
                 else:
                     return ""
             return random.choice(response_list)
@@ -76,5 +83,5 @@ def direct_call(identity, tag):
     """
     response_list = identity.phrase_list(tag)
     if len(response_list) == 0:
-        response_list = config.DEFAULT_ID.phrase_list(tag)
+        response_list = default_identity.phrase_list(tag)
     return random.choice(response_list)

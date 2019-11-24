@@ -1,7 +1,7 @@
 from bot_identity import parser
 from commands.command_error import CommandError
 from commands.command_superclass import Command
-from modules.nicknames import nickname_config
+from config import configuration
 
 
 class JoinWheelCommand(Command):
@@ -271,7 +271,7 @@ class WheelScoreCommand(Command):
                 if player:
                     player_name = system.nickname_manager.get_name(player)
                     player_score = system.wheel_manager.get_monetary_value(score.score)
-                    spacing = " " * (nickname_config.MAX_NICK_NAME - len(player_name))
+                    spacing = " " * (configuration['nicknames']['max_length'] - len(player_name))
                     line = "{i}: {name}{s}-\t{score}".format(i=len(score_line)+1, s=spacing, name=player_name, score=player_score)
                     score_line.append(line)
             if len(score_line):
@@ -280,7 +280,7 @@ class WheelScoreCommand(Command):
         else:
             player_name = system.nickname_manager.get_name(player)
             score = system.wheel_manager.get_highscore(player)
-            spacing = " " * (nickname_config.MAX_NICK_NAME - len(player_name))
+            spacing = " " * (configuration['nicknames']['max_length'] - len(player_name))
             return {"response": "```{i}: {name}{s}-\t{score}```".format(i=1, s=spacing, name=player_name, score=score)}
 
     def in_call(self, command):
