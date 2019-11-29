@@ -19,14 +19,14 @@ class MainWheelCommand(Command):
         parameters = "The action you wish to take in the game of wheel. (Try /w help for a list of those actions)"
         description = "The game of Wheel of Fortune! " \
                       "The rules are simple: A word is displayed, but all the letters are hidden. " \
-                      "The goal is to eventually guess the word.\n" \
+                      "The goal is to eventually guess the word.\n\t\t" \
                       "Players take turns to try to uncover the word. " \
-                      "Each turn a player can choose to buy, spin, or solve.\n" \
-                      "If you choose to spin, you spin the wheel and guess a consonant. " \
-                      "For each of that consonant on the board, you earn the money you've spun!\n" \
-                      "If you choose to buy, you can buy a vowel with the money you've earned that round, " \
-                      "and it will be uncovered.\nFinally, you can try and solve the word and win the round! " \
-                      "\nKeep in mind, if you buy, spin, guess or solve poorly, your turn ends..."
+                      "Each turn a player can choose to *buy*, *spin*, or *solve*.\n\t\t" \
+                      "If you choose to *spin*, you spin the wheel and *guess* a consonant. " \
+                      "For each of that consonant on the board, you earn the money you've spun!\n\t\t" \
+                      "If you choose to *buy*, you can buy a vowel with the money you've earned that round, " \
+                      "and it will be uncovered.\n\t\tFinally, you can try and *solve* the word and win the round! " \
+                      "\n\t\tKeep in mind, if you buy, spin, guess or solve poorly, your turn ends..."
 
         super().__init__(call, parameters, description)
 
