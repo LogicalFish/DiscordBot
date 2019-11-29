@@ -85,3 +85,13 @@ class EventManager:
         session.commit()
         session.close()
         return new_event
+
+    def recur_event(self, id_no):
+        session = self.database.Session()
+        event = session.query(Event).filter(Event.event_id == id_no).first()
+        if not event:
+            session.close()
+            return None
+        event.recur_self()
+        session.commit()
+        session.close()

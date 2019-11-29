@@ -20,7 +20,7 @@ class TimeManager:
         for event in events:
             if event.date < datetime.now():
                 if event.recur:
-                    event.recur_self()
+                    self.event_manager.recur_event(event.event_id)
                 else:
                     self.event_manager.delete_event(event.event_id)
             else:
