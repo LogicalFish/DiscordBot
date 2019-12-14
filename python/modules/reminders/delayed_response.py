@@ -3,8 +3,6 @@ import random
 
 from datetime import timedelta
 
-from discord import GroupChannel
-
 delayed_messages = [("mechani.*(toetsenbord|keyboard)", "Mechanische toetsenborden zijn cool!")]
 
 
@@ -17,7 +15,7 @@ def add_reminder_if_trigger(message, system):
 
 
 def get_user(message):
-    if isinstance(message.channel, GroupChannel):
+    if message.guild:
         return message.channel
     else:
         return message.author

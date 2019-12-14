@@ -92,7 +92,7 @@ minesweeper:
     2: 5
     3: 14
     4: 25
-    5: 40
+    5: 38
 tic-tac-toe:
   pieces:
     - ":x:"
