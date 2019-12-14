@@ -29,6 +29,7 @@ class CommandRunner:
             action["board"] : String: Contains a Tic-Tac-Toe board, to be displayed if a game is played.
         """
         user_call, user_param = self.split_message(params)
+        user_call = user_call.lower()
         print("Attempting to execute the {} command from {}".format(user_call, message.author.name))
         try:
             command = self.get_command(user_call)

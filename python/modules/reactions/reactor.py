@@ -21,5 +21,8 @@ def get_reaction_to_message(message):
     :return: An Action array. (See Bot Response Unit)
     """
     reaction = heartful.get_heart_in_message(message.content)
-    custom_reaction = watbeer.check_for_raccoon(message.content)
+    custom_reaction = []
+    if watbeer.contains_racoons(message.content):
+        reaction.append(watbeer.RACCOON_EMOJI)
+        custom_reaction.append(watbeer.RACCOON_EMOJI_NAME)
     return reaction, custom_reaction
