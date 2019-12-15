@@ -2,13 +2,12 @@ secret_token: "[SECRET TOKEN GOES HERE]"
 sign: '!'
 max_msg_length: 2000
 dir:
+  localization:
+    - localizations
+    - commands_NL.yaml
   database_file:
     - database
     - database.ini
-  errors:
-    - commands
-    - errors
-    - errors_NL.yml
 identity:
   identity_dir:
     - bot_identity

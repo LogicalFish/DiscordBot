@@ -2,6 +2,7 @@ import discord
 from discord.utils import get
 import asyncio
 
+import config
 from bot_identity import parser
 
 THIRD_DAY = 8*60*60
@@ -26,10 +27,10 @@ async def calendar_task(client, system):
                     if isinstance(channel, discord.TextChannel):
                         tag = get(channel.guild.roles, name=tag_name)
                         if tag:
-                            message = "Reminder for {}!:".format(tag.mention)
+                            message = config.localization['event_model']['reminder_tag'].format(tag.mention)
                             await channel.send(content=message, embed=reminder_embed)
                         else:
-                            await channel.send(content=None, embed=reminder_embed)
+                            await channel.send(embed=reminder_embed)
         await asyncio.sleep(30)
 
 

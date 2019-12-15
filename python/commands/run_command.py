@@ -1,14 +1,12 @@
-from bot_identity import parser
-import yaml
-
 import config
+from bot_identity import parser
 from commands.command_error import CommandError
 from .miscellaneous.help_command import HelpCommand
 
 
 class CommandRunner:
 
-    errors = yaml.safe_load(open(config.ERRORS))
+    errors = config.localization['errors']
 
     def __init__(self, commands_list):
         self.commands = commands_list

@@ -1,3 +1,4 @@
+import config
 from .game_state import Game
 from bot_identity import parser
 
@@ -147,6 +148,6 @@ def get_addressable(system, player):
     :return: The name.
     """
     if player == system.bot:
-        return "mij"
+        return config.localization['self_address']
     else:
         return system.nickname_manager.get_name(player)

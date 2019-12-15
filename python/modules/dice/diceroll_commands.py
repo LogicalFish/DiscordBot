@@ -1,3 +1,4 @@
+import config
 from commands.command_error import CommandError
 from commands.command_superclass import Command
 from config import configuration
@@ -13,15 +14,11 @@ class RollCommand(Command):
     """
 
     def __init__(self):
-        call = ["roll"]
-        parameters = "[X]d[Y], repeated one or more times, with X being a(n optional) number between 2 and {}, " \
-                     "and Y being a number between 2 and {}.".format(configuration['dice']['dice_hardcap'],
-                                                                     configuration['dice']['dice_max_sides'])
-        description = "This command will return a random output corresponding to the suggested dice. For example, " \
-                      "{}{} 2d6+5 results in a number between 7 (1+1+5) and 17 (6+6+5).".format(configuration['sign'],
-                                                                                                call[0])
         self.dice_roller = StandardDiceRoller()
-        super().__init__(call, parameters, description)
+        super().__init__('dice_roller')
+        self.parameters = self.parameters.format(configuration['dice']['dice_hardcap'],
+                                                 configuration['dice']['dice_max_sides'])
+        self.description = self.description.format(configuration['sign'], self.call[0])
 
     def execute(self, param, message, system):
         author = system.nickname_manager.get_name(message.author)
@@ -40,11 +37,10 @@ class GodRollCommand(RollCommand):
 
     def __init__(self):
         super().__init__()
-        self.call = ["godroll", "groll"]
-        self.description = "This command will return a random output corresponding to the suggested dice, " \
-                           "using the Godbound damage table. " \
-                           "For example, {}{} 3d8 results in a number between 0 (0+0+0) " \
-                           "and 6 (2+2+2).".format(configuration['sign'], self.call[0])
+        self.name = 'god_roller'
+        self.call = config.localization[self.name]['commands']
+        self.description = config.localization[self.name]['description'].format(configuration['sign'],
+                                                                                self.call[0])
         self.dice_roller = GodRoller()
 
 
@@ -52,6 +48,7 @@ class CheatRollCommand(RollCommand):
 
     def __init__(self):
         super().__init__()
-        self.call = ["cheatroll", "sneakyroll", "upupdowndownleftrightleftrightAB"]
-        self.description = "This command will return a random, unfair output corresponding to the suggested dice."
+        self.name = 'cheat_roller'
+        self.call = config.localization[self.name]['commands']
+        self.description = config.localization[self.name]['description']
         self.dice_roller = CheatDice()

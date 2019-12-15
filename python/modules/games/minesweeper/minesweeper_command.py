@@ -1,12 +1,12 @@
 import re
+import config
 
 from commands.command_superclass import Command
-from . import minesweeper
-
 from commands.command_error import CommandError
 
-from config import configuration
-mine_config = configuration['minesweeper']
+from . import minesweeper
+
+mine_config = config.configuration['minesweeper']
 
 
 class MineSweeperCommand(Command):
@@ -15,10 +15,7 @@ class MineSweeperCommand(Command):
     """
 
     def __init__(self):
-        call = ["minesweeper", "mine"]
-        parameters = "*(optional)*  A set of dimensions, as well as the bomb count. *(Example: (10, 10), 15)*."
-        description = "This command will give a random minesweeper board."
-        super().__init__(call, parameters, description)
+        super().__init__('minesweeper')
 
     def execute(self, param, message, system):
         match = re.search("\\((\\d+)[,x.\\-](\\d+)\\),?(\\d+)?", param.replace(" ", ""))
@@ -35,6 +32,6 @@ class MineSweeperCommand(Command):
         try:
             minefield = minesweeper.create_minefield(dimensions, bomb_count)
             minefield_string = minesweeper.minefield_to_string(minefield)
-            return {"response": "**MIJNENVEGER**\n{}".format(minefield_string)}
+            return {"response": config.localization[self.name]['title'].format(minefield_string)}
         except ValueError as error:
             raise CommandError(str(error), param)

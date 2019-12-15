@@ -1,0 +1,320 @@
+command_skeleton: "**Command(s):** *{0}*.\n**Description:** {1}\n**Parameter(s):** {2}"
+no_params: "None."
+
+help:
+  commands:
+    - "help"
+    - "commands"
+    - "hulp"
+    - "halp"
+  parameters: "*(optional)* Name of a command."
+  description: "This command will display a description and necessary parameters of a command. Without parameters, it will display a list of possible commands."
+  list: "**List of Commands:** {0}*Type ``{1}{2} <command>`` for more information.*"
+echo:
+  commands:
+    - "echo"
+    - "parrot"
+    - "repeat"
+  parameters: "A regular message."
+  description: "This command will have the bot repeat your message."
+poll:
+  commands:
+    - "poll"
+  parameters: "A regular message, containing emojis marking options."
+  description: "This command will react on the message using the emojis provided within it. This way, users can 'vote' by selecting the appropriate reaction."
+nicknames:
+  commands:
+    - "callme"
+  parameters: "The new nickname, up to {0} letters long."
+  description: "This command will change the name the bot uses to refer to you. It will not change server nicknames or settings."
+  response: "I will now call you {0}."
+bot_status:
+  commands:
+   - "status"
+  description: "Inquire about the current chat-status of the bot."
+  banned: "banned in "
+  not_banned: "Not banned anywhere"
+  chatty: "talkative"
+  not_chatty: "quiet"
+ban:
+  commands:
+    - "ban"
+  description: "This command will ban the bot from chatting in the current channel."
+unban:
+  commands:
+    - "unban"
+  description: "This command will allow the bot to chat in the current channel."
+chattoggle:
+  commands:
+    - "chat"
+    - "chatty"
+  parameters: "*(optional)* T(rue) or Y(es) to allow all chat. F(alse) or N(o) to suppress all chat."
+  description: "This command will suppress or allow all bot chat functions."
+interval:
+  commands:
+    - "interval"
+  parameters: "An integer representing the seconds between response."
+  description: "This command will set the interval between chat messages sent by the bot."
+dismiss:
+  commands:
+    - "dismiss"
+    - "leave"
+  description: "This command swaps the current identity out for a new, random one."
+
+show_event:
+  commands:
+    - "event"
+  parameters: "The Event ID of the event you wish to show."
+  description: "This command will show details of the event."
+list_events:
+  commands:
+    - "events"
+    - "listevents"
+  parameters: "*(optional)* The amount of 'shadow' events that you wish to be shown. The default is {0}"
+  description: "This command will return a list of all events."
+  list_prefix: "The following events have been scheduled:\n"
+  no_list: "No events have been found."
+create_event:
+  commands:
+    - "eventadd"
+    - "eventcreate"
+  parameters: "\n\t\t*Name*: The name of the event. Maximum length: {0}. *(required.)*
+  \n\t\t*Date*: The date and time this event takes place. *(required.)*
+  \n\t\t*Description*: A description of the event. Maximum length: {1}.
+  \n\t\t*Reminder*: The times in hours, separated by commas, when you want to show reminders.
+  \n\t\t*Tag*: The role you wish to tag during reminders.
+  \n\t\t*Channel*: The channel you wish to show reminders in. Current channel is the default.
+  \n\t\t*Recur*: Integer designating in how many days event will reoccur after the last. If not supplied, event does not reoccur."
+  description: "This will create a new event based on the supplied parameters. \n\t\tExample: *{}eventadd name=\"Christmas\" date=\"December 25th\"*"
+  prefix: "Event {0} has been created:"
+edit_event:
+  commands:
+   - "eventedit"
+   - "eventupdate"
+  parameters: "\n\t*id*: The ID of the event you wish to edit. *(required)*\n\tSee {0}eventadd for other parameters."
+  description: "Edits the parameters of a given event."
+  prefix: "Event {0} has been updated:"
+delete_event:
+  commands:
+    - "eventdelete"
+  parameters: "The Event ID of the event you wish to delete."
+  description: "This command will delete the given event."
+  response: "Event {0}: {1} has been deleted."
+unshadow_event:
+  commands:
+    - "unshadow"
+    - "revealevent"
+    - "deshadow"
+  parameters: "The Event ID of the shadow event you wish to access. Example: 1-2."
+  description: "This command will make the 'shadow' of an event accessible. Use this if you want to edit a recurring event that is in the future."
+  response: "Event {0} has been changed to event {1}."
+event_model:
+  event: "Event"
+  date: "Date"
+  time: "Time"
+  reminders: "Reminders"
+  footer: "ID: {id} ● Author: "
+  hours: "h"
+  advance: "in advance"
+  mention: "Mention"
+  channel: "Channel"
+  reminder_message: "{event} starts in {h} hour{s}!\n\n{description}"
+  plural: "s"
+  reminder_tag: "Reminder for {}!:"
+
+reminder:
+  commands:
+    - "remindme"
+    - "reminder"
+  parameters: "Two variables: The first how far into the future you would like to be reminded. (Example: 30m(inutes) , 2 hour , up to days). The second is the message to remind you of."
+  description: "A helpful tool to remind you in the future of a thing you thought of just now!"
+
+list_npcs:
+  commands:
+    - "list"
+    - "listall"
+    - "npcs"
+  parameters: "*(optional)* Search parameters."
+  description: "This command will list all characters that match the search parameters.\nA search parameter has the shape x=\"Y\".
+  A list of all possible parameters:\n\t*name*\n\t*names.title*\n\t*names.firstname*\n\t*names.middle*\n\t*names.nickname*\n\t*names.surname*\n\t*names.moniker*
+  \n\t*gender*\n\t*race*\n\t*subrace*\n\t*class*\n\t*location*\n\t*birthyear*\n\t*organization.name*\n\t*organization.rank*\n\t*organization.status*\n\t*description*\n"
+  prefix: "{0} characters have been found:\n"
+who_is_npc:
+  commands:
+    - "whois"
+    - "findnpc"
+  parameters: "The name of the character you wish to find."
+  description: "This command will find a character matching the name, or a list of characters if multiple match."
+  no_npcs: "No character by that name could be found."
+  multiple_npcs: "{0} characters have been found. Specify by number which one you are looking for.\n"
+npc_character_limit: "- *etc. (character limit reached)*"
+get_year:
+  commands:
+    - "year"
+    - "getyear"
+    - "whatyear"
+  parameters: "*(optional)* The name of the setting whose year you wish to know."
+  description: "This command will show you the current year of specific settings."
+  response: "The current year of {0} is {1}.\n"
+add_year:
+  commands:
+    - "addyear"
+    - "yearup"
+  parameters: "*(optional)* The amount of years to add. Negative numbers are valid and will decrease the current year. The default is 1."
+  description: "This command can be used by the game master / owner of the list to alter the current year."
+  response: "Time has passed since year {1} of {0}. It is now the year {2}."
+npc_model:
+  gender: "Gender"
+  age: "Age"
+  location: "Location"
+  race: "Race"
+  class: "Class"
+  organization: "Organizations"
+
+dice_roller:
+  commands:
+    - "roll"
+  parameters: "[X]d[Y], repeated one or more times, with X being a(n optional) number between 2 and {0}, and Y being a number between 2 and {1}."
+  description: "This command will return a random output corresponding to the suggested dice. For example, {}{} 2d6+5 results in a number between 7 (1+1+5) and 17 (6+6+5)."
+god_roller:
+  commands:
+    - "godroll"
+    - "groll"
+  description: "This command will return a random output corresponding to the suggested dice, using the Godbound damage table.
+  For example, {}{} 3d8 results in a number between 0 (0+0+0) and 6 (2+2+2)."
+cheat_roller:
+  commands:
+    - "cheatroll"
+    - "sneakyroll"
+    - "upupdowndownleftrightleftrightAB"
+  description: "This command will return a random, unfair output corresponding to the suggested dice."
+dice:
+  confirmation: "You have asked to roll the following dice: {0}.\n"
+  prune: "**You rolled too many dice.** *The list of dice was pruned. The maximum is {0}.*\n"
+  result: "\tResult: {0}**{1}**.\n"
+
+minesweeper:
+  commands:
+    - "minesweeper"
+    - "mine"
+  parameters: "*(optional)*  A set of dimensions, as well as the mine count. *(Example: (10, 10), 15)*."
+  description: "This command will output a random minesweeper board. The difficulty without parameters is dependent on the identity of the bot."
+  title: "**MINESWEEPER**\n{0}"
+
+tic_tac_toe_challenge:
+  commands:
+    - "tttchallenge"
+    - "challenge"
+    - "ttc"
+  parameters: "*(optional)* Mention the user you wish to challenge. The default opponent is the bot."
+  description: "You may challenge another user to a Tic-Tac-Toe game. This fails if either user is already involved in a game."
+tic_tac_toe_move:
+  commands:
+    - "ttt"
+    - "tic-tac-toe"
+  parameters: "*(optional)* Coordinates of the move you wish to make on the board."
+  description: "This command will make a move in your current tic-tac-toe game, or show the current status if the parameter is missing. If you are not participating in a game, it starts a new one against the bot."
+tic_tac_toe_abandon:
+  commands:
+    - "tttabandon"
+    - "abandon"
+    - "tta"
+  description: "This command will end all tic-tac-toe games involving you."
+self_address: "me"
+
+wheel:
+  category: "Category"
+  free_spin: "*FREE SPIN*"
+  lose_turn: "**LOSE A TURN**"
+  bankrupt: "**BANKRUPT**"
+  cp: "copper piece"
+  sp: "silver piece"
+  sp_a: "sp"
+  gp: "gold piece"
+  pp: "platinum piece"
+  plural: "s"
+wheel_main:
+  commands:
+    - "wheel"
+    - "w"
+  parameters: "The action you wish to take in the game of wheel. (Try /w help for a list of those actions)"
+  description : "The game of Wheel of Fortune! The rules are simple: A word is displayed, but all the letters are hidden. The goal is to eventually guess the word.
+  \n\t\tPlayers take turns to try to uncover the word. Each turn a player can choose to *buy*, *spin*, or *solve*.
+  \n\t\tIf you choose to *spin*, you spin the wheel and *guess* a consonant. For each of that consonant on the board, you earn the money you've spun!
+  \n\t\tIf you choose to *buy*, you can buy a vowel with the money you've earned that round, and it will be uncovered.
+  \n\t\tFinally, you can try and *solve* the word and win the round!
+  \n\t\tKeep in mind, if you buy, spin, guess or solve poorly, your turn ends..."
+wheel_join:
+  commands:
+    - "join"
+    - "me"
+    - "play"
+  parameters : "*(optional)* The new size of the waiting lobby."
+  description : "Adds you to a lobby of players seeking to play Fortunate Wheel. The size of the lobby can be changed at will, and a game will start when the lobby is full. If the size becomes too small, everyone is kicked out of the lobby."
+wheel_spin:
+  commands:
+    - "spin"
+    - "roll"
+  description: "Attempt to spin the wheel in a game to earn money! Watch out for Lose A Turn or Bankrupt!"
+wheel_guess:
+  commands:
+    - "guess"
+    - "consonant"
+  parameters: "The consonant you wish to guess."
+  description: "Guess a consonant after you've spun the wheel! Keep in mind that if you guess wrong, you lose your turn!"
+wheel_buy:
+  commands:
+    - "buy"
+    - "vowel"
+  parameters: "The vowel you wish to buy."
+  description: "Buy a vowel for 25 silver pieces! Keep in mind that if the vowel is not on the board, you lose your turn!"
+wheel_solve:
+  commands:
+    - "solve"
+  parameters: "The (potential) solution of the puzzle."
+  description: "Try and solve the puzzle! If you get it right, all the money you won will be added to your score. If you get it wrong, you lose your turn!"
+wheel_status:
+  commands:
+    - "status"
+    - "board"
+    - "wheel"
+  description: "Shows the current game you are in."
+wheel_quit:
+  commands:
+    - "quit"
+    - "abandon"
+  description: "Leave the game you are currently a part of."
+wheel_score:
+  commands:
+    - "score"
+  description: "Check everyone's total winnings from the Game of Wheel."
+errors:
+  #Default Errors
+  command_not_found: "There is no command '*{}*'."
+  string_too_long: "Field '{}' is too long."
+  number_not_valid: "'{}' is not a valid number."
+  required_field_missing: "The required field '*{}*' is missing."
+  database_error: "No operational database has been found."
+  already_banned: "Can't ban a channel that is already banned."
+  not_banned: "Can't unban a channel that is not banned."
+  command_not_allowed: "You are not allowed to access this command."
+  invalid_parameter: "The parameter {} does not appear to be valid."
+  #calendar
+  event_not_found: "No event with ID '{}' gevonden."
+  not_authorized: "You do not own this event."
+  invalid_date: "'{}' is not a valid time/date combination."
+  invalid_future_date: "'{}' is in the past."
+  invalid_reminder: "'{}' is not a valid input for reminders."
+  invalid_shadow: "Shadow is invalid."
+  #dice
+  invalid_dice: "Did not read valid dice. (Any dice higher than a d{} are ignored.)"
+  #minesweeper
+  board_too_small: "The board dimensions are too small."
+  too_many_bombs: "Can't have more bombs than squares."
+  #wheel
+  invalid_character: "{} is not a valid letter."
+  vowel: "{} is not a consonant."
+  not_a_vowel: "{} is not a vowel."
+  already_revealed: "The letter {} has already been guessed."
+  no_cash: "You need more money to do that."
+  no_guess: "You can not guess if you have not spun the wheel."

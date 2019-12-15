@@ -8,10 +8,7 @@ class StatusCommand(Command):
     Command for responding with the bot's (identity manager) status, including banned channels and chat intervals.
     """
     def __init__(self):
-        call = ["status"]
-        parameters = "None."
-        description = "Inquire about the current chat-status of the bot."
-        super().__init__(call, parameters, description)
+        super().__init__('bot_status')
 
     def execute(self, param, message, system):
         return {"response": self.get_status(system.id_manager)}
@@ -29,10 +26,7 @@ class BanCommand(Command):
     Command for banning the bot's response module from responding from the current channel.
     """
     def __init__(self):
-        call = ["ban"]
-        parameters = "None."
-        description = "This command will ban the bot from chatting in the current channel."
-        super().__init__(call, parameters, description)
+        super().__init__('ban')
 
     def execute(self, param, message, system):
         try:
@@ -47,10 +41,7 @@ class UnBanCommand(Command):
     Command for unbanning the bot's response module from the current channel.
     """
     def __init__(self):
-        call = ["unban"]
-        parameters = "None."
-        description = "This command will allow the bot to chat in the current channel."
-        super().__init__(call, parameters, description)
+        super().__init__('unban')
 
     def execute(self, param, message, system):
         try:
@@ -65,10 +56,7 @@ class ChatToggleCommand(Command):
     Command for toggling the bot's response module.
     """
     def __init__(self):
-        call = ["chat", "chatty"]
-        parameters = "*(optional)* T(rue) or Y(es) to allow all chat. F(alse) or N(o) to suppress all chat."
-        description = "This function will suppress or allow all bot chat functions."
-        super().__init__(call, parameters, description)
+        super().__init__('chattoggle')
 
     def in_call(self, command):
         return command.startswith(self.call[0])
@@ -103,10 +91,7 @@ class IntervalCommand(Command):
     Command for changing the interval at which the bot is allowed to send messages.
     """
     def __init__(self):
-        call = ["interval"]
-        parameters = "An integer representing the seconds between response."
-        description = "This function will set the interval between chat messages sent by the bot."
-        super().__init__(call, parameters, description)
+        super().__init__('interval')
 
     def execute(self, param, message, system):
         """
@@ -132,16 +117,12 @@ class IntervalCommand(Command):
             raise CommandError("number_not_valid", param)
 
 
-class LeaveCommand(Command):
+class DismissCommand(Command):
     """
     Command for randomly selecting another bot persona.
     """
     def __init__(self):
-        call = ["leave", "dismiss"]
-        parameters = "None."
-        description = "This function swaps the current identity out for a new, random one."
-        super().__init__(call, parameters, description)
+        super().__init__('dismiss')
 
     def execute(self, param, message, system):
         return {"leave": system.id_manager.get_random_other_id()}
-

@@ -1,5 +1,6 @@
 import random
 
+import config
 from modules.games.wheel.wheel_board import FortunateBoard
 
 
@@ -36,9 +37,11 @@ class WheelGame:
         return result
 
     def get_scores_with_nicknames(self, system):
-        result = "``\tCategory: {}\t".format(self.board.category)
+        result = "``\t{0}: {1}\t".format(config.localization['wheel']['category'], self.board.category)
         for player in self.players:
-            result += "{}: {}\t".format(system.nickname_manager.get_name(player), "{} sp".format(self.score[player]))
+            result += "{player}: {n} {sp}\t".format(player=system.nickname_manager.get_name(player),
+                                                    n=self.score[player],
+                                                    sp=config.localization['wheel']['sp_a'])
         result += "``"
         return result
 
@@ -65,13 +68,13 @@ class WheelGame:
         if spin == self.BANKRUPT_SIGN:
             self.score[self.get_current_player()] = 0
             self.next_turn()
-            return spin, "BANKRUPT"
+            return spin, config.localization['wheel']['bankrupt']
         if spin == self.LOSETURN_SIGN:
             self.next_turn()
-            return spin, "LOSE A TURN"
+            return spin, config.localization['wheel']['lose_turn']
         if spin == self.FREESPIN_SIGN:
             self.freespin = True
-            return spin, "FREE SPIN"
+            return spin, config.localization['wheel']['free_spin']
         return spin, "ERROR"
 
     def random_spin(self):
@@ -121,6 +124,8 @@ class WheelGame:
     @staticmethod
     def get_monetary_value(number):
         if number % 10 == 0:
-            return "{} goudstukken".format(int(number / 10))
+            return "{n} {gp}{plural}".format(n=int(number / 10), gp=config.localization['wheel']['gp'],
+                                             plural=config.localization['wheel']['plural'])
         else:
-            return "{} zilverstukken".format(number)
+            return "{n} {sp}{plural}".format(n=number, sp=config.localization['wheel']['sp'],
+                                             plural=config.localization['wheel']['plural'])

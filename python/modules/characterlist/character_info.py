@@ -1,5 +1,8 @@
 import discord
 
+import config
+
+localization = config.localization['npc_model']
 
 class CharacterInfo:
 
@@ -90,12 +93,12 @@ class CharacterInfo:
     def get_npc_embed(self):
         embed = discord.Embed(title=self.get_name(), description=self.profile.get("description", ""), color=self.color_value)
 
-        embed.add_field(name="Gender", value=self.profile.get("gender", "-"), inline=True)
-        embed.add_field(name="Age", value=self.get_age(), inline=True)
-        embed.add_field(name="Location", value=self.profile.get("location", "-"), inline=True)
+        embed.add_field(name=localization['gender'], value=self.profile.get("gender", "-"), inline=True)
+        embed.add_field(name=localization['age'], value=self.get_age(), inline=True)
+        embed.add_field(name=localization['location'], value=self.profile.get("location", "-"), inline=True)
 
-        embed.add_field(name="Race", value=self.get_race(), inline=True)
-        embed.add_field(name="Class", value=self.get_profession(), inline=True)
+        embed.add_field(name=localization['race'], value=self.get_race(), inline=True)
+        embed.add_field(name=localization['class'], value=self.get_profession(), inline=True)
 
         organizations = self.get_organizations()
         new_orgs = ["● {}".format(x) for x in organizations]
@@ -103,6 +106,6 @@ class CharacterInfo:
         if not organization_string:
             organization_string = "-"
 
-        embed.add_field(name="Organizations", value=organization_string, inline=False)
+        embed.add_field(name=localization['organization'], value=organization_string, inline=False)
 
         return embed

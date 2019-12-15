@@ -1,5 +1,5 @@
 import math
-from sqlalchemy import func
+import config
 
 from database.models.high_score_model import Score
 from modules.games.wheel.wheel_game_state import WheelGame
@@ -47,7 +47,6 @@ class WheelManager:
             if game.contains_player(player):
                 return True
         return player in self.queue
-        # return False #TODO
 
     def leave_game(self, player):
         if player in self.queue:
@@ -91,17 +90,21 @@ class WheelManager:
     @staticmethod
     def get_monetary_value(number):
         result = []
+        plural = config.localization['wheel']['plural']
         if number > 100:
             count = math.floor(number / 100)
-            result.append("{c} platinumstuk{plural}".format(c=count, plural="ken" if count > 1 else ""))
+            result.append("{c} {pp}{plural}".format(c=count, pp=config.localization['wheel']['pp'],
+                                                    plural=plural if count > 1 else ""))
             number = number % 100
         if number > 10:
             count = math.floor(number / 10)
-            result.append("{c} goudstuk{plural}".format(c=count, plural="ken" if count > 1 else ""))
+            result.append("{c} {gp}{plural}".format(c=count, gp=config.localization['wheel']['gp'],
+                                                    plural=plural if count > 1 else ""))
             number = number % 10
         if number > 0:
             count = math.floor(number)
-            result.append("{c} zilverstuk{plural}".format(c=count, plural="ken" if count > 1 else ""))
+            result.append("{c} {sp}{plural}".format(c=count, sp=config.localization['wheel']['sp'],
+                                                    plural=plural if count > 1 else ""))
         if len(result) == 0:
-            return "0 koperstukken"
+            return "0 {cp}{plural}".format(cp=config.localization['wheel']['cp'], plural=plural)
         return ", ".join(result)

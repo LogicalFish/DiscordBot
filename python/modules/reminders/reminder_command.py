@@ -10,11 +10,7 @@ from commands.command_superclass import Command
 class RemindCommand(Command):
 
     def __init__(self):
-        call = ["remindme", "reminder"]
-        parameters = "Two variables: The first how far into the future you would like to be reminded. " \
-                     "(Example: 30m(inutes) , 2 uur , up to days). The second is the message to remind you of."
-        description = "A helpful tool to remind you in the future of a thing you thought of just now!"
-        super().__init__(call, parameters, description)
+        super().__init__('reminder')
 
     def execute(self, param, message, system):
         dissection = re.findall("(\\d+)\\s?([a-zA-Z])\\w*\\s+(.*)", param)

@@ -10,13 +10,7 @@ class JoinWheelCommand(Command):
     """
 
     def __init__(self):
-        call = ["join", "me", "play"]
-        parameters = "*(optional)* The new size of the waiting lobby."
-        description = "Adds you to a lobby of players seeking to play Fortunate Wheel. " \
-                      "The size of the lobby can be changed at will, and a game will start when the lobby is full." \
-                      "If the size becomes too small, everyone is kicked out of the lobby."
-
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_join')
 
     def execute(self, param, message, system):
         changed = False
@@ -63,10 +57,7 @@ class SpinWheelCommand(Command):
     """
 
     def __init__(self):
-        call = ["spin", "draai", "roll"]
-        parameters = "None."
-        description = "Attempt to spin the wheel in a game to earn money! Watch out for Lose A Turn or Bankrupt!"
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_spin')
 
     def execute(self, param, message, system):
         player = message.author
@@ -96,11 +87,7 @@ class GuessConsonantCommand(Command):
     """
 
     def __init__(self):
-        call = ["guess", "consonant", "raad"]
-        parameters = "The consonant you wish to guess."
-        description = "Guess a consonant after you've spun the wheel! " \
-                      "Keep in mind that if you guess wrong, you lose your turn."
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_guess')
 
     def execute(self, param, message, system):
         player = message.author
@@ -134,12 +121,8 @@ class BuyVowelCommand(Command):
     """
 
     def __init__(self):
-        call = ["buy", "vowel", "koop", "klinker"]
-        parameters = "The vowel you wish to buy."
-        description = "Buy a vowel for 25 silver pieces! " \
-                      "Keep in mind that if the vowel is not on the board, you lose your turn!"
+        super().__init__('wheel_buy')
         # TODO: Fetch 25 from config.
-        super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
         player = message.author
@@ -175,12 +158,7 @@ class SolveCommand(Command):
     """
 
     def __init__(self):
-        call = ["solve", "oplossen"]
-        parameters = "The solution of the puzzle."
-        description = "Try and solve the puzzle! " \
-                      "If you get it right, all the money you won will be added to your score. " \
-                      "If you get it wrong, you lose your turn!"
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_solve')
 
     def execute(self, param, message, system):
         player = message.author
@@ -214,10 +192,7 @@ class WheelStatusCommand(Command):
     """
 
     def __init__(self):
-        call = ["status", "board", "wheel"]
-        parameters = "None."
-        description = "Shows the current game you are in."
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_status')
 
     def execute(self, param, message, system):
         player = message.author
@@ -237,10 +212,7 @@ class WheelQuitCommand(Command):
     """
 
     def __init__(self):
-        call = ["quit", "abandon"]
-        parameters = "None."
-        description = "Leave the game you are currently a part of."
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_quit')
 
     def execute(self, param, message, system):
         player = message.author
@@ -255,10 +227,7 @@ class WheelQuitCommand(Command):
 class WheelScoreCommand(Command):
 
     def __init__(self):
-        call = ["score"]
-        parameters = "None."
-        description = "Check your total winnings from the Game of Wheel."
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_score')
 
     def execute(self, param, message, system):
         player = message.author
@@ -272,7 +241,8 @@ class WheelScoreCommand(Command):
                     player_name = system.nickname_manager.get_name(player)
                     player_score = system.wheel_manager.get_monetary_value(score.score)
                     spacing = " " * (configuration['nicknames']['max_length'] - len(player_name))
-                    line = "{i}: {name}{s}-\t{score}".format(i=len(score_line)+1, s=spacing, name=player_name, score=player_score)
+                    line = "{i}: {name}{s}-\t{score}".format(i=len(score_line)+1, s=spacing,
+                                                             name=player_name, score=player_score)
                     score_line.append(line)
             if len(score_line):
                 return {"response": "```{}```".format("\n".join(score_line))}

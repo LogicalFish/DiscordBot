@@ -1,5 +1,6 @@
 import random
 
+import config
 from bot_identity.identity import Identity, IdentityError
 from config import configuration
 from database.models.banned_channels_model import BannedChannel
@@ -73,10 +74,8 @@ class IdentityManager:
     def get_bans_string(self):
         """Returns a list of banned channels (if any)"""
         if len(self.banned_channels) == 0:
-            # "banned nowhere"
-            return "Nergens verbannen"
-        # "banned in"
-        result = "Verbannen in "
+            return config.localization['bot_status']['not_banned']
+        result = config.localization['bot_status']['banned']
         for channel_id in self.banned_channels:
             result += "<#{}>,".format(channel_id)
         return result[:-1]
@@ -84,11 +83,9 @@ class IdentityManager:
     def get_chatty_string(self):
         """Returns a string based on whether the bot is chatty or not."""
         if self.chatty:
-            # "chatty"
-            return "spraakzaam"
+            return config.localization['bot_status']['chatty']
         else:
-            # "silent"
-            return "stil"
+            return config.localization['bot_status']['not_chatty']
 
     def get_random_other_id(self):
         """Returns a random id (which is not the current id.)"""

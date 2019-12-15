@@ -1,0 +1,327 @@
+command_skeleton: "**Commando(s):** *{0}*.\n**Omschrijving:** {1}\n**Parameter(s):** {2}"
+no_params: "Geen."
+help:
+  commands:
+    - "help"
+    - "commands"
+    - "hulp"
+    - "halp"
+  parameters: "*(optioneel)* De naam van een commando."
+  description: "Dit commando zal een omschrijving en de benodigde parameters van een commando tonen. Zonder parameters zal het een lijst van mogelijke commandos tonen."
+  list: "**Lijst van Commandos:** {0}*Typ ``{1}{2} <commando>`` voor meer informatie.*"
+echo:
+  commands:
+    - "echo"
+    - "parrot"
+    - "repeat"
+  parameters: "Een normaal bericht."
+  description: "Dit commando zorgt ervoor dat de bot je bericht herhaald."
+poll:
+  commands:
+    - "poll"
+  parameters: "Een normaal bericht waarin emojis staan."
+  description: "Dit commando zal reageren op je bericht met de emojis die er in staan. Op deze manier kunnen gebruikers 'stemmen' door een reactie te kiezen."
+nicknames:
+  commands:
+    - "callme"
+  parameters: "Een nieuwe bijnaam, maximaal {0} karakters lang."
+  description: "Dit commando verandert de naam waarmee de bot je aanspreekt. Het zal geen *server nicknames* of andere instellingen veranderen."
+  response: "Vanaf dit moment noem ik je {0}"
+bot_status:
+  commands:
+   - "status"
+  description: "Vraag de huidige status van de bot op."
+  banned: "Verbannen in "
+  not_banned: "Nergens verbannen"
+  chatty: "spraakzaam"
+  not_chatty: "stil"
+ban:
+  commands:
+    - "ban"
+  description: "Dit commando verbant de bot van het huidige chatkanaal. De bot zal enkel nog op commandos reageren."
+unban:
+  commands:
+    - "unban"
+  description: "Dit commando zorgt ervoor dat de bot weer in het huidige kanaal kan praten."
+chattoggle:
+  commands:
+    - "chat"
+    - "chatty"
+  parameters: "*(optioneel)* T(rue) of Y(es) om alle chat functies in te schakelen. F(alse) of N(ee) om alle chat functies uit te schakelen."
+  description: "Dit commando zal alle chat functies in of uit schakelen, afhankelijk van parameters en de huidige stand."
+interval:
+  commands:
+    - "interval"
+  parameters: "Het aantal secondes dat je tussen reacties wilt zien."
+  description: "Dit commando verandert de minimum tijd tussen de chatberichten die de bot stuurt."
+dismiss:
+  commands:
+    - "dismiss"
+    - "leave"
+  description: "Dit commando verwisselt de huidige identiteit van de bot met een nieuwe, willekeurige identiteit."
+
+show_event:
+  commands:
+    - "event"
+  parameters: "De ID-code van het evenement dat je wil bekijken."
+  description: "Dit commando toont de details van een evenement."
+list_events:
+  commands:
+    - "events"
+    - "listevents"
+  parameters: "*(optioneel)* Het aantal 'schaduw' evenementen dat je per evenement wilt zien. Standaard is {0}"
+  description: "Dit commando toont een lijst van alle evenementen."
+  list_prefix: "De volgende evenementen zijn gepland:\n"
+  no_list: "Er zijn geen evenementen gevonden."
+create_event:
+  commands:
+    - "eventadd"
+    - "eventcreate"
+  parameters: "\n\t\t*Name*: De naam van het evenement. Maximum lengte is {0}. *(verplicht.)*
+  \n\t\t*Date*: De datum en tijd wanneer het evenement plaatsvindt. *(verplicht.)*
+  \n\t\t*Description*: Een omschrijving van het evenement. Maximum lengte is {1}.
+  \n\t\t*Reminder*: Hoe ver van te voren je herinneringen wilt sturen. Tijd is in uren, gescheiden door kommas.
+  \n\t\t*Tag*: De rol die je wilt noemen tijdens herinneringen.
+  \n\t\t*Channel*: Het kanaal waarin je herinneringen wilt sturen. Standaard kanaal is het huidige.
+  \n\t\t*Recur*: Een getal dat aangeeft na hoeveel dagen het evenement zich zal herhalen. Als deze parameter mist, zal het evenement niet herhaald worden."
+  description: "Dit commando creëert een nieuw evenement, gebaseerd op de gegeven parameters. \n\t\tVoorbeeld: *{}eventadd name=\"Kerstmis\" date=\"25 December\"*"
+  prefix: "Evenement {0} is gecreëerd:"
+edit_event:
+  commands:
+   - "eventedit"
+   - "eventupdate"
+  parameters: "\n\t*id*: Het ID van het evenement dat je wil bewerken. *(verplicht)*\n\tZie {0}eventadd voor andere parameters."
+  description: "Dit commando zal het opgegeven evenement bijwerken met de nieuwe parameters."
+  prefix: "Evenement {0} is bijgewerkt:"
+delete_event:
+  commands:
+    - "eventdelete"
+  parameters: "Het ID van het evenement dat je wil verwijderen."
+  description: "Dit commando zal het opgegeven evenement verwijderen."
+  response: "Evenement {0}: {1} is verwijderd."
+unshadow_event:
+  commands:
+    - "unshadow"
+    - "revealevent"
+    - "deshadow"
+  parameters: "Het ID van het schaduw evenement waar je toegang tot wilt hebben. Voorbeeld: 1-2."
+  description: "Dit commando maakt de 'schaduw' van een evenement toegankelijk. Gebruik dit commando als je een herhalend evenement wilt aanpassen."
+  response: "Schaduw Evenement {0} is nu evenement {1}."
+reminder:
+  commands:
+    - "remindme"
+    - "reminder"
+  parameters: "Twee parameters: Het eerste is over hoeveel tijd je herinnert wilt worden. (Voorbeeld: 30m(inuten) , 2u(ur) , tot en met dagen). De tweede parameter is het bericht waar je aan herinnert wilt worden."
+  description: "Een hulpzame functie om je in de toekomst ergens aan te helpen herinneren!"
+event_model:
+  event: "Evenement"
+  date: "Datum"
+  time: "Tijd"
+  reminders: "Herinneringen"
+  footer: "ID: {id} ● Autheur: "
+  hours: "u"
+  advance: "van te voren"
+  mention: "Vermelding"
+  channel: "Kanaal"
+  reminder_message: "{event} begint over {h} uur!\n\n{description}"
+  plural: "en"
+  reminder_tag: "Herinnering voor {}!:"
+
+list_npcs:
+  commands:
+    - "list"
+    - "listall"
+    - "npcs"
+  parameters: "*(optioneel)* Zoektermen."
+  description: "Dit commando toont een lijst van alle karakters die door het zoekfilter worden aangewezen.\nEen zoekterm heeft de vorm x=\"Y\".
+  Het volgt is een lijst van mogelijke zoektermen:\n\t*name*\n\t*names.title*\n\t*names.firstname*\n\t*names.middle*\n\t*names.nickname*\n\t*names.surname*\n\t*names.moniker*
+  \n\t*gender*\n\t*race*\n\t*subrace*\n\t*class*\n\t*location*\n\t*birthyear*\n\t*organization.name*\n\t*organization.rank*\n\t*organization.status*\n\t*description*\n"
+  prefix: "Er zijn {} karakters gevonden:\n"
+who_is_npc:
+  commands:
+    - "whois"
+    - "findnpc"
+  parameters: "De naam van het karakter dat je wilt vinden."
+  description: "Dit commando toont het karakter met de naam die je opgeeft, of een lijst van karakters als meerdere dezelfde naam hebben."
+  no_npcs: "Er is geen karakter met die naam gevonden."
+  multiple_npcs: "Er zijn {0} karakters gevonden. Specificeer welke je zoekt voor meer informatie:\n"
+npc_character_limit: "- *etc. (karakterlimiet is bereikt)*"
+get_year:
+  commands:
+    - "year"
+    - "getyear"
+    - "whatyear"
+  parameters: "*(optioneel)* De naam van de wereld wiens jaar je wilt weten."
+  description: "Dit commando toont het huidige jaar van specifieke werelden."
+  response: "Het huidige jaar van {0} is {1}.\n"
+add_year:
+  commands:
+    - "addyear"
+    - "yearup"
+  parameters: "*(optioneel)* Het aantal jaren om toe te voegen. Negatieve getallen zijn mogelijk en zullen het huidige jaar verminderen. De standaard is 1."
+  description: "Dit commando kan door de eigenaar van een karakterlijst gebruikt worden om het huidige jaar aan te passen."
+  response: "De jaren zijn voorbij gevlogen. Het was jaar {1} van {0}. Het is nu jaar {2}."
+npc_model:
+  gender: "Geslacht"
+  age: "Leeftijd"
+  location: "Locatie"
+  race: "Soort"
+  class: "Klasse"
+  organization: "Organisaties"
+
+dice_roller:
+  commands:
+    - "roll"
+  parameters: "[X]d[Y], mogelijk herhaald, waar X een (optioneel) nummer tussen 2 en {0} is, en Y een nummer tussen 2 en {1} is."
+  description: "Dit commando resulteert in een willekeurige output, overeenkomstig met de dobbelstenen in de parameters. Bijvoorbeeld, {}{} 2d6+5 zal resulteren in een nummer tussen 7 (1+1+5) en 17 (6+6+5) in."
+god_roller:
+  commands:
+    - "godroll"
+    - "groll"
+  description: "Dit commando resulteert in een willekeurige output, overeenkomstig met de dobbelstenen in de parameters. Het resultaat volgt de Godbound schade tabel.
+   Bijvoorbeeld, {}{} 3d8 zal resulteren in een nummer tussen 0 (0+0+0) en 6 (2+2+2) in."
+cheat_roller:
+  commands:
+    - "cheatroll"
+    - "sneakyroll"
+    - "upupdowndownleftrightleftrightAB"
+  description: "Dit commando resulteert in een willekeurige, oneerlijke output, overeenkomstig met de dobbelstenen in de parameters."
+dice:
+  confirmation: "Je rolt de volgende dobbelstenen: {0}.\n"
+  prune: "**Dat zijn teveel dobbelstenen.** *De lijst van dobbelstenen is afgekapt. Het maximum is {0}.*\n"
+  result: "\tResultaat: {0}**{1}**.\n"
+
+minesweeper:
+  commands:
+    - "minesweeper"
+    - "mine"
+  parameters: "*(optioneel)*  Een reeks dimensies, gevolgt door het aantal mijnen. *(Voorbeeld: (10, 10), 15)*."
+  description: "Dit commando zal een willekeurig mijnenveger bord tonen. Moeilijkheidsgraad zonder parameters wordt bepaald door de identiteit van de bot."
+  title: "**MIJNENVEGER**\n{0}"
+
+tic_tac_toe_challenge:
+  commands:
+    - "tttchallenge"
+    - "challenge"
+    - "ttc"
+  parameters: "*(optioneel)* @ de gebruiker welke je wil uitdagen. De standaard tegenstander is de bot zelf."
+  description: "Je kan een andere gebruiker uitdagen tot een spel boter, kaas en eieren. Dit kan niet als een van de menselijke gebruikers al een spel aan het spelen is."
+tic_tac_toe_move:
+  commands:
+    - "ttt"
+    - "tic-tac-toe"
+  parameters: "*(optioneel)* De coordinaten van de zet die je wil maken."
+  description: "Dit commando zal een zet maken in je huidige boter, kaas en eieren spel, of de status van dit spel tonen als de zet mist.
+  Als je niet meedoet aan een spel, start je een nieuw spel tegen de bot."
+tic_tac_toe_abandon:
+  commands:
+    - "tttabandon"
+    - "abandon"
+    - "tta"
+  description: "Dit commando beeindigt al je boter, kaas en eieren spellen."
+self_address: "mij"
+
+wheel:
+  category: "Categorie"
+  free_spin: "*GRATIS DRAAI*"
+  lose_turn: "**VERLIES BEURT**"
+  bankrupt: "**BANKROET**"
+  cp: "koperstuk"
+  sp: "zilverstuk"
+  sp_a: "zilver"
+  gp: "goudstuk"
+  pp: "platinumstuk"
+  plural: "ken"
+wheel_main:
+  commands:
+    - "wheel"
+    - "w"
+    - "rad"
+  parameters: "De actie welke je wilt nemen in het spel van Rad! (Probeer /rad help voor een lijst aan mogelijke acties)"
+  description : "Het beruchte spel Rad der Fortuin! De regels zijn simpel: Er staat een woord op het bord, maar de letters zijn verborgen. Het doel van het spel is om uiteindelijk het woord te kunnen raden.
+  \n\t\tSpelers nemen beurten om te proberen het woord te onthullen. Elke beurt kiest een speler om te *draaien*, *kopen* of *oplossen*.
+  \n\t\tAls je kiest om te *draaien*, draai je het rad en *raad* je een medeklinker. Voor elk van die medeklinkers op het bord, verdien je het geld dat op het rad staat!
+  \n\t\tAls je kiest om te *kopen*, kan je een klinker kopen met het geld dat je hebt verdient, en die klinker wordt onthuld.
+  \n\t\tEn als laatste kan je proberen het woord *op( te )lossen*! Als je het woord oplost, win je het spel!
+  \n\t\tHoud er rekening mee dat, als je verkeerd draait, koopt, of oplost, je beurt eindigt..."
+wheel_join:
+  commands:
+    - "join"
+    - "me"
+    - "play"
+  parameters : "*(optioneel)* De nieuwe grootte van de wachtrij."
+  description : "Dit commando voegt je toe aan een wachtrij van spelers die Rad van Fortuin willen spelen. De grootte van de wachtrij kan op ieder moment veranderd worden.
+  Het spel start als de wachtrij vol is. Als de wachtrij te klein wordt, wordt iedereen eruit gegooid."
+wheel_spin:
+  commands:
+    - "spin"
+    - "draai"
+    - "roll"
+  description: "Probeer het rad te draaien om geld te verdienen! Pas op het verliezen van een beurt, of bankrupt te gaan!"
+wheel_guess:
+  commands:
+    - "guess"
+    - "consonant"
+    - "raad"
+  parameters: "De medeklinker die je wilt raden."
+  description: "Raad een medeklinker nadat je het rad gedraaid hebt! Houd er rekening mee dat als je verkeerd raad, je je beurt verliest!"
+wheel_buy:
+  commands:
+    - "buy"
+    - "vowel"
+    - "koop"
+    - "klinker"
+  parameters: "De klinker die je wilt kopen."
+  description: "Koop een klinker voor 25 zilverstukken! Houd er rekening mee dat als de klinker niet op het bord staat, je je beurt verliest!"
+wheel_solve:
+  commands:
+    - "solve"
+    - "oplossen"
+  parameters: "De (mogelijke) oplossing van de puzzel."
+  description: "Probeer de puzzel op te lossen! Als je het correcte antwoord hebt, verdien je al het geld dat je gewonnen hebt. Als je het fout hebt, verlies je je beurt!"
+wheel_status:
+  commands:
+    - "status"
+    - "board"
+    - "wheel"
+  description: "Toont het huidige spel waar je in zit."
+wheel_quit:
+  commands:
+    - "quit"
+    - "abandon"
+  description: "Verlaat het spel waar je momenteel inzit."
+wheel_score:
+  commands:
+    - "score"
+  description: "Toont het virtuele geld dat iedereen heeft verdient."
+
+errors:
+  #default
+  command_not_found: "Het commando '*{}*' is niet gevonden."
+  string_too_long: "Het veld '*{}*' is te lang."
+  number_not_valid: "'*{}*' is geen valide getal."
+  required_field_missing: "Het verplichte veld '*{}*' mist."
+  database_error: "Er is geen valide database gevonden."
+  already_banned: "Ik ben al verbannen in dit kanaal."
+  not_banned: "Ik ben niet verbannen in dit kanaal."
+  command_not_allowed: "Jij mag dit commando niet uitvoeren."
+  invalid_parameter: "De parameter {} levert geen resultaten op."
+  #calendar
+  event_not_found: "Er is geen event met het ID '*{}*' gevonden."
+  not_authorized: "Jij bent niet de eigenaar van dit evenement."
+  invalid_reminder: "'*{}*' is geen valide input voor reminders."
+  invalid_date: "'*{}*' is geen valide tijd/datum combinatie."
+  invalid_future_date: "'*{}*' is in het verleden."
+  invalid_shadow: "{} is geen valide schaduw-event."
+  #dice
+  invalid_dice: "Er zijn geen valide dobbelstenen gevonden. (Dobbelstenen hoger dan een d{} worden genegeerd.)"
+  #minesweeper
+  board_too_small: "Het opgegeven bord is te klein."
+  too_many_bombs: "Er kunnen niet meer bommen dan vakjes zijn."
+  #wheel
+  invalid_character: "{} is geen valide letter."
+  vowel: "{} is geen medeklinker."
+  not_a_vowel: "{} is geen klinker."
+  already_revealed: "De letter {} is al geraden."
+  no_cash: "Je hebt niet genoeg geld om dat te doen."
+  no_guess: "Je kan niet raden zonder eerst het rad te draaien."
