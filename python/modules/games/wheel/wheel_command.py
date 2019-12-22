@@ -1,4 +1,3 @@
-from bot_identity import parser
 from commands.command_error import CommandError
 from commands.command_superclass import Command
 from config import configuration
@@ -29,15 +28,15 @@ class JoinWheelCommand(Command):
         if new_game:
             contestants = self.get_nicknames_list(new_game.players, system)
             first_turn = system.nickname_manager.get_name(new_game.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "wheelstart").format(contestants,
-                                                                                                      first_turn),
+            return {"response": system.id_manager.id_statement("wheel", "wheelstart").format(contestants,
+                                                                                             first_turn),
                     "board": str(new_game),
                     "scores": new_game.get_scores_with_nicknames(system)}
         if in_game and not changed:
-            return {"response": parser.direct_call(system.id_manager.current_id, "twogames")}
+            return {"response": system.id_manager.id_statement("wheel", "twogames")}
         wait = system.wheel_manager.get_queue_length()
         contestants = self.get_nicknames_list(system.wheel_manager.queue, system)
-        return {"response": parser.direct_call(system.id_manager.current_id, "waiting").format(contestants, wait)}
+        return {"response": system.id_manager.id_statement("wheel", "waiting").format(contestants, wait)}
 
     @staticmethod
     def get_nicknames_list(players, system):
@@ -63,22 +62,18 @@ class SpinWheelCommand(Command):
         player = message.author
         wheelgame = system.wheel_manager.get_game(player)
         if wheelgame is None:
-            return {"response": parser.direct_call(system.id_manager.current_id,
-                                                   "nogame")}
+            return {"response": system.id_manager.id_statement("wheel", "nogame")}
         if wheelgame.get_current_player() is not player:
             current_player = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "noturn").format(current_player)}
+            return {"response": system.id_manager.id_statement("wheel", "noturn").format(current_player)}
         spin_value, spin_text = wheelgame.spin_wheel()
         if spin_value > 0:
-            return {"response": parser.direct_call(system.id_manager.current_id,
-                                                   "goodspin").format(spin_text)}
+            return {"response": system.id_manager.id_statement("wheel", "goodspin").format(spin_text)}
         elif spin_value == 0:
-            return {"response": parser.direct_call(system.id_manager.current_id,
-                                                   "freespin")}
+            return {"response": system.id_manager.id_statement("wheel", "freespin")}
         else:
             opponent = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id,
-                                                   "badspin").format(spin_text, opponent)}
+            return {"response": system.id_manager.id_statement("wheel", "badspin").format(spin_text, opponent)}
 
 
 class GuessConsonantCommand(Command):
@@ -94,23 +89,23 @@ class GuessConsonantCommand(Command):
         wheelgame = system.wheel_manager.get_game(player)
 
         if wheelgame is None:
-            return {"response": parser.direct_call(system.id_manager.current_id, "nogame")}
+            return {"response": system.id_manager.id_statement("wheel", "nogame")}
         if wheelgame.get_current_player() is not player:
             current_player = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "noturn").format(current_player)}
+            return {"response": system.id_manager.id_statement("wheel", "noturn").format(current_player)}
         if not wheelgame.board.is_valid_character(param):
-            return {"response": parser.direct_call(system.id_manager.current_id, "nocharacter").format(param)}
+            return {"response": system.id_manager.id_statement("wheel", "nocharacter").format(param)}
         if wheelgame.board.is_vowel(param):
-            return {"response": parser.direct_call(system.id_manager.current_id, "noconsonant").format(param)}
+            return {"response": system.id_manager.id_statement("wheel", "noconsonant").format(param)}
         if wheelgame.spin_value == 0 and not wheelgame.freespin:
-            return {"response": parser.direct_call(system.id_manager.current_id, "noguess").format(param)}
+            return {"response": system.id_manager.id_statement("wheel", "noguess").format(param)}
         count = wheelgame.guess_consonant(param)
         if count == 0:
             opponent = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "badguess").format(param, opponent),
+            return {"response": system.id_manager.id_statement("wheel", "badguess").format(param, opponent),
                     "board": str(wheelgame),
                     "scores": wheelgame.get_scores_with_nicknames(system)}
-        return {"response": parser.direct_call(system.id_manager.current_id, "goodguess").format(count, param),
+        return {"response": system.id_manager.id_statement("wheel", "goodguess").format(count, param),
                 "board": str(wheelgame),
                 "scores": wheelgame.get_scores_with_nicknames(system)}
 
@@ -129,25 +124,25 @@ class BuyVowelCommand(Command):
         wheelgame = system.wheel_manager.get_game(player)
 
         if wheelgame is None:
-            return {"response": parser.direct_call(system.id_manager.current_id, "nogame")}
+            return {"response": system.id_manager.id_statement("wheel", "nogame")}
         if wheelgame.get_current_player() is not player:
             current_player = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "noturn").format(current_player)}
+            return {"response": system.id_manager.id_statement("wheel", "noturn").format(current_player)}
         if not wheelgame.board.is_valid_character(param):
-            return {"response": parser.direct_call(system.id_manager.current_id, "nocharacter").format(param)}
+            return {"response": system.id_manager.id_statement("wheel", "nocharacter").format(param)}
         if not wheelgame.board.is_vowel(param):
-            return {"response": parser.direct_call(system.id_manager.current_id, "novowel").format(param)}
+            return {"response": system.id_manager.id_statement("wheel", "novowel").format(param)}
         if wheelgame.spin_value != 0 and not wheelgame.freespin:
-            return {"response": parser.direct_call(system.id_manager.current_id, "spun").format(param)}
+            return {"response": system.id_manager.id_statement("wheel", "spun").format(param)}
         if wheelgame.score[player] < wheelgame.VOWEL_VALUE and not wheelgame.freespin:
-            return {"response": parser.direct_call(system.id_manager.current_id, "wheelcash").format(param)}
+            return {"response": system.id_manager.id_statement("wheel", "wheelcash").format(param)}
         count = wheelgame.buy_vowel(param)
         if count == 0:
             opponent = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "badguess").format(param, opponent),
+            return {"response": system.id_manager.id_statement("wheel", "badguess").format(param, opponent),
                     "board": str(wheelgame),
                     "scores": wheelgame.get_scores_with_nicknames(system)}
-        return {"response": parser.direct_call(system.id_manager.current_id, "goodguess").format(count, param),
+        return {"response": system.id_manager.id_statement("wheel", "goodguess").format(count, param),
                 "board": str(wheelgame),
                 "scores": wheelgame.get_scores_with_nicknames(system)}
 
@@ -165,25 +160,25 @@ class SolveCommand(Command):
         wheelgame = system.wheel_manager.get_game(player)
 
         if wheelgame is None:
-            return {"response": parser.direct_call(system.id_manager.current_id, "nogame")}
+            return {"response": system.id_manager.id_statement("wheel", "nogame")}
         if wheelgame.get_current_player() is not player:
             current_player = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "noturn").format(current_player)}
+            return {"response": system.id_manager.id_statement("wheel", "noturn").format(current_player)}
         if wheelgame.spin_value != 0 and not wheelgame.freespin:
-            return {"response": parser.direct_call(system.id_manager.current_id, "spun").format(param)}
+            return {"response": system.id_manager.id_statement("wheel", "spun").format(param)}
         solved = wheelgame.solve_word(param)
         player_name = system.nickname_manager.get_name(player)
         if solved:
             score_text = wheelgame.get_monetary_value(wheelgame.score[player])
             system.wheel_manager.add_score(player, wheelgame.score[player])
             system.wheel_manager.games.remove(wheelgame)
-            return {"response": parser.direct_call(system.id_manager.current_id, "wheelwin").format(player_name,
-                                                                                                    score_text),
+            return {"response": system.id_manager.id_statement("wheel", "wheelwin").format(player_name,
+                                                                                           score_text),
                     "board": str(wheelgame),
                     "scores": wheelgame.get_scores_with_nicknames(system)}
         else:
             player_name = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "wrongsolve").format(player_name)}
+            return {"response": system.id_manager.id_statement("wheel", "wrongsolve").format(player_name)}
 
 
 class WheelStatusCommand(Command):
@@ -199,9 +194,9 @@ class WheelStatusCommand(Command):
         wheelgame = system.wheel_manager.get_game(player)
 
         if wheelgame is None:
-            return {"response": parser.direct_call(system.id_manager.current_id, "nogame")}
+            return {"response": system.id_manager.id_statement("wheel", "nogame")}
         turn = system.nickname_manager.get_name(wheelgame.get_current_player())
-        return {"response": parser.direct_call(system.id_manager.current_id, "wheelturn").format(turn),
+        return {"response": system.id_manager.id_statement("wheel", "wheelturn").format(turn),
                 "board": str(wheelgame),
                 "scores": wheelgame.get_scores_with_nicknames(system)}
 
@@ -219,9 +214,9 @@ class WheelQuitCommand(Command):
         game_left = system.wheel_manager.leave_game(player)
 
         if game_left:
-            return {"response": parser.direct_call(system.id_manager.current_id, "wheelgone").format(
+            return {"response": system.id_manager.id_statement("wheel", "wheelgone").format(
                 system.nickname_manager.get_name(player))}
-        return {"response": parser.direct_call(system.id_manager.current_id, "nogame")}
+        return {"response": system.id_manager.id_statement("wheel", "nogame")}
 
 
 class WheelScoreCommand(Command):

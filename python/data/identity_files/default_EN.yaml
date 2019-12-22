@@ -1,0 +1,57 @@
+name: Default
+regex: "(default|bot)"
+game: ""
+AI: Normal
+general:
+  call: "Hello!"
+  morning: "Good morning!"
+  night: "Good night!"
+  thanks: "You're welcome!"
+  leave: "Goodbye!"
+  chatty: "I'll talk more often from now on."
+  nonchatty: "I'll be quieter now."
+  error: "That is not a valid command."
+  status: "I am now {}. I will be {}. The current interval between messages is {} seconds."
+  birthday:
+    - "Happy birthday, {}!"
+    - "Happy birthday to you, happy birthday to you, happy birthday, dear {}! Happy birthday to you!"
+    - "Congratulations, {}."
+  reminder:
+    - "I will help you remember!"
+ttt:
+  open: "I have started a new game. {} has the first turn."
+  gamestate: "The current status of the game. {} is making a move against {}:"
+  ownmove: "I will put a {} on {}."
+  genericwin: "{} has won from {}!"
+  win: "I have won. Better luck next time!"
+  tie: "It's a tie. Try again?"
+  loss: "Congratulations, you win!"
+  abandon: "The game between {} and {} has been ended."
+  invalid: "That is not a valid move. Try again."
+wheel:
+  waiting:
+    - "You are now waiting for a game. {} now wait(s) for {} additional players."
+    - "{} are now inside the game lobby. Do you want to join? {} places remain!"
+  twogames: "You can't play two games of wheel at the same time. Please try to win one first."
+  wheelstart: "It is time for the WHEEL! Tonight, we are joined by {}. Are you ready to play? {}, it is your turn first. Spin the wheel!"
+  wheelturn:  "It is {}'s turn."
+  nogame: "You are currently not part of any game of wheel."
+  noturn: "It is not your turn. It is {}'s turn instead."
+  badspin: "I am sorry, that's {}. It is time for the next player. {}, buy, spin, or solve!"
+  freespin: "You have earned a Free Play. Your turn will not end if you guess or solve wrong. In addition, you may buy a vowel for free!"
+  goodspin:
+    - "The wheel shows {}! Time to guess a letter."
+    - "You will earn {} per letter with this spin."
+  nocharacter: "'{}' is not a letter."
+  noconsonant: "'{}' is a vowel. You may only guess consonants."
+  novowel: "'{}' is not a vowel. Try buying a vowel instead."
+  noguess: "It is not time to guess a consonant. Try spinning the wheel first!"
+  badguess: "I am sorry, there are no {}'s on the board. It is {}'s turn now."
+  goodguess: "We have a total of {} {}'s! Well done, it is your turn again!"
+  spun: "Once you have spun the wheel, you must guess a consonant. It is too late to buy or solve."
+  wheelcash: "You do not possess enough money for that."
+  wheelwin:
+    - "CORRECT! Congratulations! {} has won the game, and will go home with {}! That's the end of our show, good night!"
+    - "Correct! {} wins {}!"
+  wrongsolve: "I am sorry, that is not correct. It is {}'s turn."
+  wheelgone: "{} has left the game."

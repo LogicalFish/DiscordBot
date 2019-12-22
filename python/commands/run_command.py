@@ -1,5 +1,4 @@
 import config
-from bot_identity import parser
 from commands.command_error import CommandError
 from .miscellaneous.help_command import HelpCommand
 
@@ -33,7 +32,7 @@ class CommandRunner:
             command = self.get_command(user_call)
             return command.execute(user_param, message, system)
         except CommandError as error:
-            response = "{} {}".format(parser.direct_call(system.id_manager.current_id, "error"),
+            response = "{} {}".format(system.id_manager.id_statement("general", "error"),
                                       self.errors[error.type].format(error.key))
             return {"response": response}
 

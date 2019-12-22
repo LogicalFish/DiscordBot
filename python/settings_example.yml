@@ -3,36 +3,32 @@ sign: '!'
 max_msg_length: 2000
 dir:
   localization:
+    - data
     - localizations
-    - commands_NL.yaml
+    - commands_EN.yaml
   database_file:
     - database
     - database.ini
 identity:
   identity_dir:
-    - bot_identity
     - data
-  morning_regex: (goe(d|i)emorgen|mogg(e|u))
-  night_regex: (\b(wel)?te?rusten?\b|slaap lekker|good night)
-  thanks_regex: ((bedankt|thank you|thanks|dank ?je ?(wel)?),? {})
-  default_identity: default.xml
+    - identity_files
+  default_identity: default_EN.yaml
   identity_files:
-    - identity1.xml
-    - identity2.xml
-  facts_file: facts.xml
-  xml_tags:
-    NAME: name
-    GAME: game
-    ITEM: elem
-    SPEC: special
-    REGEX: regex
-    AI: AI
+    - butler.yaml
+    - robot.yaml
+  facts_file: general_facts.yaml
+  universal_phrases:
+    morning: "(goe(d|i)emorgen|mogg(e|u))"
+    night: "(\b(wel)?te?rusten?\b|slaap lekker|good night)"
+    thanks: "((bedankt|thank you|thanks|dank ?je ?(wel)?),? {})"
   difficulty:
     simple: 1
     easy: 2
     normal: 3
     hard: 4
     expert: 5
+  default_difficulty: 3
 calendar:
   max_event_name: 25
   max_event_description: 255

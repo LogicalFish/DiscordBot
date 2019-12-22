@@ -1,12 +1,12 @@
 from commands.command_superclass import Command
 from commands.command_error import CommandError
-from bot_identity import parser
 
 
 class StatusCommand(Command):
     """
     Command for responding with the bot's (identity manager) status, including banned channels and chat intervals.
     """
+
     def __init__(self):
         super().__init__('bot_status')
 
@@ -16,22 +16,23 @@ class StatusCommand(Command):
     @staticmethod
     def get_status(id_manager):
         """Method for getting the status string. Can be used by other classes if necessary."""
-        return parser.direct_call(id_manager.current_id, "status").format(id_manager.get_chatty_string(),
-                                                                          id_manager.get_bans_string().lower(),
-                                                                          id_manager.interval)
+        return id_manager.id_statement("general", "status").format(id_manager.get_chatty_string(),
+                                                                   id_manager.get_bans_string().lower(),
+                                                                   id_manager.interval)
 
 
 class BanCommand(Command):
     """
     Command for banning the bot's response module from responding from the current channel.
     """
+
     def __init__(self):
         super().__init__('ban')
 
     def execute(self, param, message, system):
         try:
             system.id_manager.ban(message.channel.id)
-            return {"response": parser.direct_call(system.id_manager.current_id, "leave")}
+            return {"response": system.id_manager.id_statement("general", "leave")}
         except ValueError:
             raise CommandError("already_banned", None)
 
@@ -40,13 +41,14 @@ class UnBanCommand(Command):
     """
     Command for unbanning the bot's response module from the current channel.
     """
+
     def __init__(self):
         super().__init__('unban')
 
     def execute(self, param, message, system):
         try:
             system.id_manager.un_ban(message.channel.id)
-            return {"response": parser.direct_call(system.id_manager.current_id, "call")}
+            return {"response": system.id_manager.id_statement("general", "call")}
         except ValueError:
             raise CommandError("not_banned", None)
 
@@ -55,6 +57,7 @@ class ChatToggleCommand(Command):
     """
     Command for toggling the bot's response module.
     """
+
     def __init__(self):
         super().__init__('chattoggle')
 
@@ -65,10 +68,10 @@ class ChatToggleCommand(Command):
         param_bool = self.translate_param(param)
         if not system.id_manager.chatty and param_bool is not False:
             system.id_manager.chatty = True
-            return {"response": parser.direct_call(system.id_manager.current_id, "chatty")}
+            return {"response": system.id_manager.id_statement("general", "chatty")}
         elif system.id_manager.chatty and param_bool is not True:
             system.id_manager.chatty = False
-            return {"response": parser.direct_call(system.id_manager.current_id, "nonchatty")}
+            return {"response": system.id_manager.id_statement("general", "nonchatty")}
         else:
             return {"response": StatusCommand.get_status(system.id_manager)}
 
@@ -90,6 +93,7 @@ class IntervalCommand(Command):
     """
     Command for changing the interval at which the bot is allowed to send messages.
     """
+
     def __init__(self):
         super().__init__('interval')
 
@@ -109,9 +113,9 @@ class IntervalCommand(Command):
             if old_val == identities.interval:
                 return {"response": StatusCommand.get_status(identities)}
             elif old_val < identities.interval:
-                return {"response": parser.direct_call(identities.current_id, "nonchatty")}
+                return {"response": system.id_manager.id_statement("general", "nonchatty")}
             else:
-                return {"response": parser.direct_call(identities.current_id, "chatty")}
+                return {"response": system.id_manager.id_statement("general", "chatty")}
 
         except ValueError:
             raise CommandError("number_not_valid", param)
@@ -121,6 +125,7 @@ class DismissCommand(Command):
     """
     Command for randomly selecting another bot persona.
     """
+
     def __init__(self):
         super().__init__('dismiss')
 

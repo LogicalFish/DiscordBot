@@ -2,7 +2,6 @@ import re
 
 from datetime import timedelta
 
-from bot_identity import parser
 from commands.command_error import CommandError
 from commands.command_superclass import Command
 
@@ -20,7 +19,7 @@ class RemindCommand(Command):
                 time = int(time_str)
                 delta = get_delta(time, unit)
                 system.reminder_manager.add_reminder(delta, "> " + text, message.author)
-                return {"response": parser.direct_call(system.id_manager.current_id, "reminder")}
+                return {"response": system.id_manager.id_statement("general", "reminder")}
             except ValueError:
                 raise CommandError("number_not_valid", time_str)
         else:

@@ -1,0 +1,83 @@
+name: Butlerbot
+regex: "(butler)"
+game: "Cluedo"
+AI: Easy
+general:
+  call:
+    - "At your service, master."
+    - "How may I help you?"
+  morning: "Good morning, master."
+  night: "Have a good night, master."
+  thanks:
+    - "I am at your service."
+    - "No need to thank me, I am merely performing my duty."
+  leave:
+    - "I will leave you alone now, master."
+    - "It has been a pleasure serving. Now I must leave."
+    - "I will be outside. If you have need of me again, do not hesitate to call."
+  chatty:
+    - "Yes, master, I will not hesitate to open my mouth."
+  nonchatty:
+    - "I understand, master."
+    - "Understood. A good servant should be seen, not heard."
+  error:
+    - "I am afraid that is not a valid command, master. I am sorry."
+  status: "A report, master. I will be {}. I am {}. The current interval between messages is {} seconds."
+  birthday:
+    - "Allow me to send you my best wishes for your birthday, your excellency {}."
+    - "Congratulations, master {}."
+  reminder:
+    - "Yes, master."
+    - "I will remind you when the time has come, master."
+ttt:
+  open: "Yes, master. I will start a new game. If it is not too presumptuous, allow me to grant {} the first turn."
+  gamestate: "Yes, master, it is currently {}'s opportunity to make a move. He is going up against {}. Let me display the current game:"
+  ownmove: "I shall make my move ({0}) on {1}, master."
+  genericwin: "It seems your excellency {} has won from master {}. What a splendid game it was."
+  win:
+    - "I apologize for winning, master. I did not mean to."
+    - "I do believe you lost, master. Should I have held back?"
+  tie: "Ah, I believe I have tied against you, master."
+  loss:
+    - "I have never doubted your abilities, master."
+    - "This is why I call you master, master."
+  abandon: "Ah, it seems the game of tic-tac-toe between {} and {} has ended. Such a shame."
+  invalid: "I am sorry, master, but that is not a valid move. I can not allow this."
+wheel:
+  waiting:
+    - "{}, I have received your call. We can fit {} more people in the game room, so I kindly ask you to wait."
+    - "The game will start as soon as {1} more guests arrive. {0}, you may wait inside the parlor for now."
+  twogames:
+    - "I am sorry, good sir or ma'am, but you can not play two games of wheel at the same time."
+    - "If I may be so bold as to make a suggestion? Please finish the previous game of wheel before starting a new one."
+  wheelstart: "Ladies and gentlemen, I will be your host for tonight. May I thank {} for joining us? {}, we will start with your turn."
+  wheelturn:  "Master {}, it is your turn."
+  nogame: "I am sorry, but as you are not part of a game, I must kindly ask you to leave the premises."
+  noturn: "Excuse me, but it is master {}'s turn right now. Please do not disturb them."
+  badspin: "It seems you are not in luck, master. Because of {}, it is time for master {} to take their turn."
+  freespin: "Ah, well done master, you have earned the vaunted Free Play. All actions are now free and open to you."
+  goodspin:
+    - "You have spun {}. Perhaps not much money compared to your riches, but I digress. It is time to guess a consonant."
+    - "Master, you will earn {} per letter with this spin."
+  nocharacter: "Master, allow me to remind you of the fact that '{}' is not a letter."
+  noconsonant: "Master, '{}' is a vowel. You may only guess consonants, master."
+  novowel: "In this game, money can not buy everything, master. '{}' is not a vowel and therefore can't be bought."
+  noguess: "A bit early, master. If I may give a helpful tip? Try spinning the wheel first."
+  badguess: "I am so sorry, master, but there are no {}'s on the board. It is master {}'s turn now."
+  goodguess: "Well done, master. There are a total of {} {}'s on the board."
+  spun: "I am sorry, master, but you must guess a consonant now. I am afraid it is too late for anything else."
+  wheelcash:
+    - "Master, are you alright? You do not possess enough money for that."
+    - "Master, you can not be so poor as to not afford a vowel, right?"
+  wheelwin:
+    - "It pleases me to say that master {} has won the game. They will earn a total of {}."
+    - "That is correct! {} wins {}! A small addition to their sizable fortune, I am certain."
+    - "I bring news. The price of {1} goes to master {0}. That is more money than I have seen in my life."
+  wrongsolve: "I am sorry, that is not the correct answer, master. It is {}'s turn."
+  wheelgone: "I will fetch you your coat, master {}."
+unique:
+  tea:
+    regex: "tea"
+    response:
+      - "Yes sir, I shall fetch you a nice cup of tea."
+      - "Today's tea is Earl Grey, hot. I shall fetch you a cup."

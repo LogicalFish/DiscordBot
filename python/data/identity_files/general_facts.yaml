@@ -1,0 +1,4 @@
+randomfact:
+  regex: "(random fact)"
+  response:
+    - "Did you know? If you add some facts here, the bot will respond to them!"

@@ -1,7 +1,6 @@
 import discord
 from discord.utils import get
 import time
-from bot_identity import parser
 from modules.reactions import reactor
 
 
@@ -50,16 +49,16 @@ class Responder:
                 await message.add_reaction(get(self.client.emojis, name=custom_emoji))
         if "leave" in action:
             if self.identities.chatty and self.system.last_msg+self.identities.interval < time.time():
-                await message.channel.send(parser.direct_call(self.identities.current_id, "leave"))
+                await message.channel.send(self.identities.id_statement("general", "leave"))
             self.identities.current_id = action["leave"]
             await self.change_visual_id()
-            await message.channel.send(parser.direct_call(self.identities.current_id, "call"))
+            await message.channel.send(self.identities.id_statement("general", "call"))
 
     async def change_visual_id(self):
         """
         Helper function that changes the bot's nickname and game that is displayed
         """
-        new_nickname = self.identities.current_id.get_name()
+        new_nickname = self.identities.current_id.name
         new_game = self.identities.current_id.get_game()
         print("Changing bot identity to {}".format(new_nickname))
 
@@ -90,11 +89,11 @@ class Responder:
         :return: A string containing a response &
                 A new identity (or false if the identity should not change).
         """
-        new_id = parser.find_new_id(message.content, self.identities.identities)
+        new_id = self.identities.find_new_id(message.content)
         if len(new_id) and self.identities.current_id not in new_id:
             identity_switch = new_id[0]
-            response = parser.direct_call(identity_switch, "call")
+            response = identity_switch.get_phrase("general", "call")
         else:
             identity_switch = False
-            response = parser.get_response(message.content, self.identities.current_id)
+            response = self.identities.get_identity_response(message.content)
         return response, identity_switch
