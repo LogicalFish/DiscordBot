@@ -33,7 +33,7 @@ class JoinWheelCommand(Command):
                     "board": str(new_game),
                     "scores": new_game.get_scores_with_nicknames(system)}
         if in_game and not changed:
-            return {"response": system.id_manager.id_statement("wheel", "twogames")}
+            raise CommandError("game_duplicate", param)
         wait = system.wheel_manager.get_queue_length()
         contestants = self.get_nicknames_list(system.wheel_manager.queue, system)
         return {"response": system.id_manager.id_statement("wheel", "waiting").format(contestants, wait)}
@@ -62,10 +62,10 @@ class SpinWheelCommand(Command):
         player = message.author
         wheelgame = system.wheel_manager.get_game(player)
         if wheelgame is None:
-            return {"response": system.id_manager.id_statement("wheel", "nogame")}
+            raise CommandError("no_game", param)
         if wheelgame.get_current_player() is not player:
             current_player = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": system.id_manager.id_statement("wheel", "noturn").format(current_player)}
+            raise CommandError("not_turn", current_player)
         spin_value, spin_text = wheelgame.spin_wheel()
         if spin_value > 0:
             return {"response": system.id_manager.id_statement("wheel", "goodspin").format(spin_text)}
@@ -89,16 +89,16 @@ class GuessConsonantCommand(Command):
         wheelgame = system.wheel_manager.get_game(player)
 
         if wheelgame is None:
-            return {"response": system.id_manager.id_statement("wheel", "nogame")}
+            raise CommandError("no_game", param)
         if wheelgame.get_current_player() is not player:
             current_player = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": system.id_manager.id_statement("wheel", "noturn").format(current_player)}
+            raise CommandError("not_turn", current_player)
         if not wheelgame.board.is_valid_character(param):
-            return {"response": system.id_manager.id_statement("wheel", "nocharacter").format(param)}
+            raise CommandError("invalid_character", param)
         if wheelgame.board.is_vowel(param):
-            return {"response": system.id_manager.id_statement("wheel", "noconsonant").format(param)}
+            raise CommandError("not_consonant", param)
         if wheelgame.spin_value == 0 and not wheelgame.freespin:
-            return {"response": system.id_manager.id_statement("wheel", "noguess").format(param)}
+            raise CommandError("no_guess", param)
         count = wheelgame.guess_consonant(param)
         if count == 0:
             opponent = system.nickname_manager.get_name(wheelgame.get_current_player())
@@ -124,18 +124,18 @@ class BuyVowelCommand(Command):
         wheelgame = system.wheel_manager.get_game(player)
 
         if wheelgame is None:
-            return {"response": system.id_manager.id_statement("wheel", "nogame")}
+            raise CommandError("no_game", param)
         if wheelgame.get_current_player() is not player:
             current_player = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": system.id_manager.id_statement("wheel", "noturn").format(current_player)}
+            raise CommandError("not_turn", current_player)
         if not wheelgame.board.is_valid_character(param):
-            return {"response": system.id_manager.id_statement("wheel", "nocharacter").format(param)}
+            raise CommandError("invalid_character", param)
         if not wheelgame.board.is_vowel(param):
-            return {"response": system.id_manager.id_statement("wheel", "novowel").format(param)}
+            raise CommandError("not_vowel", param)
         if wheelgame.spin_value != 0 and not wheelgame.freespin:
-            return {"response": system.id_manager.id_statement("wheel", "spun").format(param)}
+            raise CommandError("already_spun", param)
         if wheelgame.score[player] < wheelgame.VOWEL_VALUE and not wheelgame.freespin:
-            return {"response": system.id_manager.id_statement("wheel", "wheelcash").format(param)}
+            raise CommandError("no_cash", param)
         count = wheelgame.buy_vowel(param)
         if count == 0:
             opponent = system.nickname_manager.get_name(wheelgame.get_current_player())
@@ -160,12 +160,12 @@ class SolveCommand(Command):
         wheelgame = system.wheel_manager.get_game(player)
 
         if wheelgame is None:
-            return {"response": system.id_manager.id_statement("wheel", "nogame")}
+            raise CommandError("no_game", param)
         if wheelgame.get_current_player() is not player:
             current_player = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": system.id_manager.id_statement("wheel", "noturn").format(current_player)}
+            raise CommandError("not_turn", current_player)
         if wheelgame.spin_value != 0 and not wheelgame.freespin:
-            return {"response": system.id_manager.id_statement("wheel", "spun").format(param)}
+            raise CommandError("already_spun", param)
         solved = wheelgame.solve_word(param)
         player_name = system.nickname_manager.get_name(player)
         if solved:
@@ -194,7 +194,7 @@ class WheelStatusCommand(Command):
         wheelgame = system.wheel_manager.get_game(player)
 
         if wheelgame is None:
-            return {"response": system.id_manager.id_statement("wheel", "nogame")}
+            raise CommandError("no_game", param)
         turn = system.nickname_manager.get_name(wheelgame.get_current_player())
         return {"response": system.id_manager.id_statement("wheel", "wheelturn").format(turn),
                 "board": str(wheelgame),
@@ -216,7 +216,7 @@ class WheelQuitCommand(Command):
         if game_left:
             return {"response": system.id_manager.id_statement("wheel", "wheelgone").format(
                 system.nickname_manager.get_name(player))}
-        return {"response": system.id_manager.id_statement("wheel", "nogame")}
+        raise CommandError("no_game", param)
 
 
 class WheelScoreCommand(Command):

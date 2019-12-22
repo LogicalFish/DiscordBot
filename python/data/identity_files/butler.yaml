@@ -47,28 +47,15 @@ wheel:
   waiting:
     - "{}, I have received your call. We can fit {} more people in the game room, so I kindly ask you to wait."
     - "The game will start as soon as {1} more guests arrive. {0}, you may wait inside the parlor for now."
-  twogames:
-    - "I am sorry, good sir or ma'am, but you can not play two games of wheel at the same time."
-    - "If I may be so bold as to make a suggestion? Please finish the previous game of wheel before starting a new one."
   wheelstart: "Ladies and gentlemen, I will be your host for tonight. May I thank {} for joining us? {}, we will start with your turn."
   wheelturn:  "Master {}, it is your turn."
-  nogame: "I am sorry, but as you are not part of a game, I must kindly ask you to leave the premises."
-  noturn: "Excuse me, but it is master {}'s turn right now. Please do not disturb them."
   badspin: "It seems you are not in luck, master. Because of {}, it is time for master {} to take their turn."
   freespin: "Ah, well done master, you have earned the vaunted Free Play. All actions are now free and open to you."
   goodspin:
     - "You have spun {}. Perhaps not much money compared to your riches, but I digress. It is time to guess a consonant."
     - "Master, you will earn {} per letter with this spin."
-  nocharacter: "Master, allow me to remind you of the fact that '{}' is not a letter."
-  noconsonant: "Master, '{}' is a vowel. You may only guess consonants, master."
-  novowel: "In this game, money can not buy everything, master. '{}' is not a vowel and therefore can't be bought."
-  noguess: "A bit early, master. If I may give a helpful tip? Try spinning the wheel first."
   badguess: "I am so sorry, master, but there are no {}'s on the board. It is master {}'s turn now."
   goodguess: "Well done, master. There are a total of {} {}'s on the board."
-  spun: "I am sorry, master, but you must guess a consonant now. I am afraid it is too late for anything else."
-  wheelcash:
-    - "Master, are you alright? You do not possess enough money for that."
-    - "Master, you can not be so poor as to not afford a vowel, right?"
   wheelwin:
     - "It pleases me to say that master {} has won the game. They will earn a total of {}."
     - "That is correct! {} wins {}! A small addition to their sizable fortune, I am certain."

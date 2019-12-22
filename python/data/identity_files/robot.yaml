@@ -50,11 +50,8 @@ wheel:
   waiting:
     - "Initializing game. [**ERROR**]: {} not enough entries. Waiting for {} additional data entries."
     - "{}, please wait. Wait. Wait. Wait. Waiting for {} additional players."
-  twogames: "An exception has occurred: Only one game of wheel is allowed per player."
   wheelstart: "Initializing game. Loading Participants: {}. Selecting player one: {}. Awaiting input."
   wheelturn:  "Awaiting input from {}."
-  nogame: "[**ERROR**]: You are currently not part of any game of wheel."
-  noturn: "**ERROR**, **ERROR**. Cheating detected. Command shut down. Awaiting input from {}."
   badspin:
     - "If Result == {}, current_player = {}."
     - "*BEEP, BOOP,* {}. If this unit could feel, it would be sorry for you. Awaiting input from {}."
@@ -62,14 +59,8 @@ wheel:
   goodspin:
     - "*Beep-boop.* Printing: {}! Awaiting guess."
     - "Result == {}."
-  nocharacter: "[**ERROR**]: '{}' does not equal 'letter'."
-  noconsonant: "[**ERROR**]: '{}' does not equal 'consonant'. Awaiting consonant."
-  novowel: "[**ERROR**]: '{}' does not equal 'vowel'."
-  noguess: "An exception has occurred: No wheel spin has been detected."
   badguess: "Counting {}. Total result: ZERO. Awaiting input from {}."
   goodguess: "Counting {1}. Total result: {0}. Awaiting further input."
-  spun: "An exception has occurred: Wheel spin has already been detected."
-  wheelcash: "[**ERROR**]: current_cash < cost_of_vowel. Increase money before trying again."
   wheelwin:
     - "*BEEP-BOOP.* Winner Detected. CON-GRA-TU-LA-TIONS, INSERT PLAYER NAME HERE [ {} ] HAS WON THE GAME. total_earnings equals {}! Shutting Down..."
   wrongsolve: "**ERROR**. No Match Detected. Awaiting input from {}."
