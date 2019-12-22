@@ -79,7 +79,7 @@
 			<elem>Helaas! Er zijn geen enkele {}'s te vinden. De beurt gaat naar {}!</elem>
 		</badguess>
 		<goodguess>
-			<elem>We hebben een totaal van {} {}s! Goed gedaan, je mag nog een keer!</elem>
+			<elem>We hebben een totaal van {} {}'s! Goed gedaan, je mag nog een keer!</elem>
 		</goodguess>
 		<spun>
 			<elem>Als je het rad eenmaal gedraait hebt, moet je een medeklinker raden.</elem>

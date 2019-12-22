@@ -168,6 +168,8 @@ npc_model:
   race: "Soort"
   class: "Klasse"
   organization: "Organisaties"
+  org_format: "{0}{1} van de {2}."
+  default_rank: "Lid"
 
 dice_roller:
   commands:

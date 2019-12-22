@@ -170,6 +170,8 @@ npc_model:
   race: "Race"
   class: "Class"
   organization: "Organizations"
+  org_format: "{0}{1} of the {2}."
+  default_rank: "Member"
 
 dice_roller:
   commands:

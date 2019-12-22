@@ -56,11 +56,11 @@ class CharacterInfo:
             organizations = [organizations]
         for organization in organizations:
             org_name = organization.get("name")
-            rank = organization.get("rank", "Member")
+            rank = organization.get("rank", localization['default_rank'])
             status = organization.get("status", "")
             if status:
                 status += " "
-            memberships.append("{}{} of the {}.".format(status, rank, org_name))
+            memberships.append(localization['org_format'].format(status, rank, org_name))
         return memberships
 
     def get_race(self):
