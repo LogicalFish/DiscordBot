@@ -94,11 +94,6 @@ def tictactoemove(text, author, system):
         response += parser.direct_call(system.id_manager.current_id, "ownmove").format(game.turn, move) +"\n"
     elif game.players[game.turn] == author:
         move = text[:2].upper()
-        if game.players[game.get_other_player()] != system.bot:
-            response = parser.direct_call(system.id_manager.current_id, "gamestate").format(
-                get_addressable(system, game.players[game.get_other_player()]),
-                get_addressable(system, game.players[game.turn])
-            )
     valid = game.make_move(move)
 
     if not valid and text != "":
@@ -114,6 +109,12 @@ def tictactoemove(text, author, system):
     #If there's a CPU, have him make a move.
     if game.players[game.turn] == system.bot:
         response += tictactoemove("cpu", author, system)[0]
+    if not response:
+        response = parser.direct_call(system.id_manager.current_id, "gamestate").format(
+            get_addressable(system, game.players[game.turn]),
+            get_addressable(system, game.players[game.get_other_player()])
+        )
+
     return response, str(game)
 
 

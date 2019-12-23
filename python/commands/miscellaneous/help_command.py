@@ -6,7 +6,7 @@ from commands.command_error import CommandError
 class HelpCommand(Command):
 
     def __init__(self, command_runner):
-        call = ["help", "commands","hulp", "halp"]
+        call = ["help", "commands", "hulp", "halp"]
         parameters = "*(optional)* Name of a command."
         description = "This command will display a description and necessary parameters of a command. " \
                       "Without parameters, it will display a list of possible commands."
@@ -22,16 +22,16 @@ class HelpCommand(Command):
         else:
             return {"response": "**List of Commands:** {}"
                                 "*Type ``{}{} <command>`` for more information.*".format(self.get_list_of_commands(),
-                                                                                           config.SIGN,
-                                                                                           self.call[0])}
+                                                                                         config.configuration['sign'],
+                                                                                         self.call[0])}
 
     def get_list_of_commands(self):
         result = ""
         for i, command in enumerate(self.command_runner.commands):
-            result += "\t{}{}".format(config.SIGN, command.call[0])
+            result += "\t{}{}".format(config.configuration['sign'], command.call[0])
             if i % 3 == 2:
                 result += "\n"
             else:
-                result += " "*(15-len(command.call[0]))
+                result += " " * (15 - len(command.call[0]))
         result = "```{}```".format(result)
         return result

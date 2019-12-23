@@ -1,7 +1,7 @@
 from bot_identity import parser
 from commands.command_error import CommandError
 from commands.command_superclass import Command
-from modules.nicknames import nickname_config
+from config import configuration
 
 
 class JoinWheelCommand(Command):
@@ -10,10 +10,11 @@ class JoinWheelCommand(Command):
     """
 
     def __init__(self):
-        call = ["wheelme", "joinwheel", "wheelplay"]
-        parameters = "*(optional)* The size of the waiting lobby. Will kick everyone out if lobby becomes too small."
+        call = ["join", "me", "play"]
+        parameters = "*(optional)* The new size of the waiting lobby."
         description = "Adds you to a lobby of players seeking to play Fortunate Wheel. " \
-                      "A game will start when the lobby is full."
+                      "The size of the lobby can be changed at will, and a game will start when the lobby is full." \
+                      "If the size becomes too small, everyone is kicked out of the lobby."
 
         super().__init__(call, parameters, description)
 
@@ -44,13 +45,6 @@ class JoinWheelCommand(Command):
         contestants = self.get_nicknames_list(system.wheel_manager.queue, system)
         return {"response": parser.direct_call(system.id_manager.current_id, "waiting").format(contestants, wait)}
 
-    def in_call(self, command):
-        if command in self.call:
-            return True
-        if "wheel" in command and ("join" in command or "play" in command):
-            return True
-        return False
-
     @staticmethod
     def get_nicknames_list(players, system):
         nicknames = [system.nickname_manager.get_name(p) for p in players]
@@ -69,9 +63,9 @@ class SpinWheelCommand(Command):
     """
 
     def __init__(self):
-        call = ["wheelspin", "spin", "spinwheel", "draai"]
+        call = ["spin", "draai", "roll"]
         parameters = "None."
-        description = "Attempt to spin the wheel in a game to earn money!"
+        description = "Attempt to spin the wheel in a game to earn money! Watch out for Lose A Turn or Bankrupt!"
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
@@ -95,11 +89,6 @@ class SpinWheelCommand(Command):
             return {"response": parser.direct_call(system.id_manager.current_id,
                                                    "badspin").format(spin_text, opponent)}
 
-    def in_call(self, command):
-        if "spin" in command or "draai" in command:
-            return True
-        return False
-
 
 class GuessConsonantCommand(Command):
     """
@@ -107,9 +96,10 @@ class GuessConsonantCommand(Command):
     """
 
     def __init__(self):
-        call = ["wheelguess", "guess", "consonant", "raad"]
-        parameters = "Guess a consonant!"
-        description = "."
+        call = ["guess", "consonant", "raad"]
+        parameters = "The consonant you wish to guess."
+        description = "Guess a consonant after you've spun the wheel! " \
+                      "Keep in mind that if you guess wrong, you lose your turn."
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
@@ -137,11 +127,6 @@ class GuessConsonantCommand(Command):
                 "board": str(wheelgame),
                 "scores": wheelgame.get_scores_with_nicknames(system)}
 
-    def in_call(self, command):
-        if "guess" in command or command.startswith("raad"):
-            return True
-        return False
-
 
 class BuyVowelCommand(Command):
     """
@@ -149,9 +134,11 @@ class BuyVowelCommand(Command):
     """
 
     def __init__(self):
-        call = ["wheelbuy", "buyvowel", "vowel", "klinker"]
-        parameters = "Guess a consonant!"
-        description = "."
+        call = ["buy", "vowel", "koop", "klinker"]
+        parameters = "The vowel you wish to buy."
+        description = "Buy a vowel for 25 silver pieces! " \
+                      "Keep in mind that if the vowel is not on the board, you lose your turn!"
+        # TODO: Fetch 25 from config.
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
@@ -181,11 +168,6 @@ class BuyVowelCommand(Command):
                 "board": str(wheelgame),
                 "scores": wheelgame.get_scores_with_nicknames(system)}
 
-    def in_call(self, command):
-        if "vowel" in command or "klinker" in command or "buy" in command:
-            return True
-        return False
-
 
 class SolveCommand(Command):
     """
@@ -193,9 +175,11 @@ class SolveCommand(Command):
     """
 
     def __init__(self):
-        call = ["wheelsolve", "solve"]
-        parameters = "Try and solve the puzzle!"
-        description = "."
+        call = ["solve", "oplossen"]
+        parameters = "The solution of the puzzle."
+        description = "Try and solve the puzzle! " \
+                      "If you get it right, all the money you won will be added to your score. " \
+                      "If you get it wrong, you lose your turn!"
         super().__init__(call, parameters, description)
 
     def execute(self, param, message, system):
@@ -223,11 +207,6 @@ class SolveCommand(Command):
             player_name = system.nickname_manager.get_name(wheelgame.get_current_player())
             return {"response": parser.direct_call(system.id_manager.current_id, "wrongsolve").format(player_name)}
 
-    def in_call(self, command):
-        if "solve" in command:
-            return True
-        return False
-
 
 class WheelStatusCommand(Command):
     """
@@ -235,7 +214,7 @@ class WheelStatusCommand(Command):
     """
 
     def __init__(self):
-        call = ["wheelstatus", "wheel", "wheelboard"]
+        call = ["status", "board", "wheel"]
         parameters = "None."
         description = "Shows the current game you are in."
         super().__init__(call, parameters, description)
@@ -258,7 +237,7 @@ class WheelQuitCommand(Command):
     """
 
     def __init__(self):
-        call = ["wheelquit", "wheelabandon"]
+        call = ["quit", "abandon"]
         parameters = "None."
         description = "Leave the game you are currently a part of."
         super().__init__(call, parameters, description)
@@ -276,7 +255,7 @@ class WheelQuitCommand(Command):
 class WheelScoreCommand(Command):
 
     def __init__(self):
-        call = ["wheelscore", "highscore"]
+        call = ["score"]
         parameters = "None."
         description = "Check your total winnings from the Game of Wheel."
         super().__init__(call, parameters, description)
@@ -292,7 +271,7 @@ class WheelScoreCommand(Command):
                 if player:
                     player_name = system.nickname_manager.get_name(player)
                     player_score = system.wheel_manager.get_monetary_value(score.score)
-                    spacing = " " * (nickname_config.MAX_NICK_NAME - len(player_name))
+                    spacing = " " * (configuration['nicknames']['max_length'] - len(player_name))
                     line = "{i}: {name}{s}-\t{score}".format(i=len(score_line)+1, s=spacing, name=player_name, score=player_score)
                     score_line.append(line)
             if len(score_line):
@@ -301,7 +280,7 @@ class WheelScoreCommand(Command):
         else:
             player_name = system.nickname_manager.get_name(player)
             score = system.wheel_manager.get_highscore(player)
-            spacing = " " * (nickname_config.MAX_NICK_NAME - len(player_name))
+            spacing = " " * (configuration['nicknames']['max_length'] - len(player_name))
             return {"response": "```{i}: {name}{s}-\t{score}```".format(i=1, s=spacing, name=player_name, score=score)}
 
     def in_call(self, command):

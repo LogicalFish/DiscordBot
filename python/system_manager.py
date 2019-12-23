@@ -18,7 +18,8 @@ class SystemManager:
         ttt_games (dict): A dictionary of currently ongoing games.
     """
 
-    def __init__(self):
+    def __init__(self, configuration):
+        self.configuration = configuration
         self.last_msg = 0
         self.bot = None
         self.ttt_games = {}

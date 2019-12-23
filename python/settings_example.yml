@@ -1,0 +1,116 @@
+secret_token: "[SECRET TOKEN GOES HERE]"
+sign: '!'
+max_msg_length: 2000
+dir:
+  database_file:
+    - database
+    - database.ini
+  errors:
+    - commands
+    - errors
+    - errors_NL.yml
+identity:
+  identity_dir:
+    - bot_identity
+    - data
+  morning_regex: (goe(d|i)emorgen|mogg(e|u))
+  night_regex: (\b(wel)?te?rusten?\b|slaap lekker|good night)
+  thanks_regex: ((bedankt|thank you|thanks|dank ?je ?(wel)?),? {})
+  default_identity: default.xml
+  identity_files:
+    - identity1.xml
+    - identity2.xml
+  facts_file: facts.xml
+  xml_tags:
+    NAME: name
+    GAME: game
+    ITEM: elem
+    SPEC: special
+    REGEX: regex
+    AI: AI
+  difficulty:
+    simple: 1
+    easy: 2
+    normal: 3
+    hard: 4
+    expert: 5
+calendar:
+  max_event_name: 25
+  max_event_description: 255
+  date_format: "%a %d %B, %Y"
+  time_format: "%H:%M"
+  default_shadow: 3
+  max_shadows: 9
+  synonyms:
+    mention: "tag"
+    title: "name"
+    time: "date"
+    reminders: "reminder"
+char_list:
+  list_dir:
+    - modules
+    - characterlist
+    - data
+  lists:
+    - "[insert name of setting here]"
+  for_each_setting_name:
+    file: "[insert filenames here]"
+    owner: "[insert owner_id here]"
+    default_year: 1999
+    color: f0f0f0
+dice:
+  dice_softcap:  20
+  dice_hardcap: 100
+  dice_max_sides: 1000
+nicknames:
+  max_length: 40
+  default_nicknames:
+    - "The Void"
+    - "Ishmael"
+    - "maybe"
+    - "Spartacus"
+minesweeper:
+  max_size: 199
+  AI_table:
+    1:
+      - 6
+      - 4
+    2:
+      - 8
+      - 6
+    3:
+      - 12
+      - 8
+    4:
+      - 14
+      - 10
+    5:
+      - 17
+      - 11
+  AI_bombs:
+    1: 1
+    2: 5
+    3: 14
+    4: 25
+    5: 38
+tic-tac-toe:
+  pieces:
+    - ":x:"
+    - ":o:"
+  empty: ":white_large_square:"
+  canton: ":black_large_square:"
+  rows:
+    - ":one:"
+    - ":two:"
+    - ":three:"
+  columns:
+    - ":regional_indicator_a:"
+    - ":regional_indicator_b:"
+    - ":regional_indicator_c:"
+wheel:
+  words_file:
+    - modules
+    - games
+    - wheel
+    - data
+    - words.xml
