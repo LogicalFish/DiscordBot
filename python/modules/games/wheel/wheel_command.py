@@ -1,4 +1,3 @@
-from bot_identity import parser
 from commands.command_error import CommandError
 from commands.command_superclass import Command
 from config import configuration
@@ -10,13 +9,7 @@ class JoinWheelCommand(Command):
     """
 
     def __init__(self):
-        call = ["join", "me", "play"]
-        parameters = "*(optional)* The new size of the waiting lobby."
-        description = "Adds you to a lobby of players seeking to play Fortunate Wheel. " \
-                      "The size of the lobby can be changed at will, and a game will start when the lobby is full." \
-                      "If the size becomes too small, everyone is kicked out of the lobby."
-
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_join')
 
     def execute(self, param, message, system):
         changed = False
@@ -35,15 +28,15 @@ class JoinWheelCommand(Command):
         if new_game:
             contestants = self.get_nicknames_list(new_game.players, system)
             first_turn = system.nickname_manager.get_name(new_game.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "wheelstart").format(contestants,
-                                                                                                      first_turn),
+            return {"response": system.id_manager.id_statement("wheel", "wheelstart").format(contestants,
+                                                                                             first_turn),
                     "board": str(new_game),
                     "scores": new_game.get_scores_with_nicknames(system)}
         if in_game and not changed:
-            return {"response": parser.direct_call(system.id_manager.current_id, "twogames")}
+            raise CommandError("game_duplicate", param)
         wait = system.wheel_manager.get_queue_length()
         contestants = self.get_nicknames_list(system.wheel_manager.queue, system)
-        return {"response": parser.direct_call(system.id_manager.current_id, "waiting").format(contestants, wait)}
+        return {"response": system.id_manager.id_statement("wheel", "waiting").format(contestants, wait)}
 
     @staticmethod
     def get_nicknames_list(players, system):
@@ -63,31 +56,24 @@ class SpinWheelCommand(Command):
     """
 
     def __init__(self):
-        call = ["spin", "draai", "roll"]
-        parameters = "None."
-        description = "Attempt to spin the wheel in a game to earn money! Watch out for Lose A Turn or Bankrupt!"
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_spin')
 
     def execute(self, param, message, system):
         player = message.author
         wheelgame = system.wheel_manager.get_game(player)
         if wheelgame is None:
-            return {"response": parser.direct_call(system.id_manager.current_id,
-                                                   "nogame")}
+            raise CommandError("no_game", param)
         if wheelgame.get_current_player() is not player:
             current_player = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "noturn").format(current_player)}
+            raise CommandError("not_turn", current_player)
         spin_value, spin_text = wheelgame.spin_wheel()
-        if spin_value > 0:
-            return {"response": parser.direct_call(system.id_manager.current_id,
-                                                   "goodspin").format(spin_text)}
-        elif spin_value == 0:
-            return {"response": parser.direct_call(system.id_manager.current_id,
-                                                   "freespin")}
+        if isinstance(spin_value, int):
+            return {"response": system.id_manager.id_statement("wheel", "goodspin").format(spin_text)}
+        elif spin_value == "FREESPIN":
+            return {"response": system.id_manager.id_statement("wheel", "freespin")}
         else:
             opponent = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id,
-                                                   "badspin").format(spin_text, opponent)}
+            return {"response": system.id_manager.id_statement("wheel", "badspin").format(spin_text, opponent)}
 
 
 class GuessConsonantCommand(Command):
@@ -96,34 +82,30 @@ class GuessConsonantCommand(Command):
     """
 
     def __init__(self):
-        call = ["guess", "consonant", "raad"]
-        parameters = "The consonant you wish to guess."
-        description = "Guess a consonant after you've spun the wheel! " \
-                      "Keep in mind that if you guess wrong, you lose your turn."
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_guess')
 
     def execute(self, param, message, system):
         player = message.author
         wheelgame = system.wheel_manager.get_game(player)
 
         if wheelgame is None:
-            return {"response": parser.direct_call(system.id_manager.current_id, "nogame")}
+            raise CommandError("no_game", param)
         if wheelgame.get_current_player() is not player:
             current_player = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "noturn").format(current_player)}
+            raise CommandError("not_turn", current_player)
         if not wheelgame.board.is_valid_character(param):
-            return {"response": parser.direct_call(system.id_manager.current_id, "nocharacter").format(param)}
+            raise CommandError("invalid_character", param)
         if wheelgame.board.is_vowel(param):
-            return {"response": parser.direct_call(system.id_manager.current_id, "noconsonant").format(param)}
+            raise CommandError("not_consonant", param)
         if wheelgame.spin_value == 0 and not wheelgame.freespin:
-            return {"response": parser.direct_call(system.id_manager.current_id, "noguess").format(param)}
+            raise CommandError("no_guess", param)
         count = wheelgame.guess_consonant(param)
         if count == 0:
             opponent = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "badguess").format(param, opponent),
+            return {"response": system.id_manager.id_statement("wheel", "badguess").format(param, opponent),
                     "board": str(wheelgame),
                     "scores": wheelgame.get_scores_with_nicknames(system)}
-        return {"response": parser.direct_call(system.id_manager.current_id, "goodguess").format(count, param),
+        return {"response": system.id_manager.id_statement("wheel", "goodguess").format(count, param),
                 "board": str(wheelgame),
                 "scores": wheelgame.get_scores_with_nicknames(system)}
 
@@ -134,37 +116,32 @@ class BuyVowelCommand(Command):
     """
 
     def __init__(self):
-        call = ["buy", "vowel", "koop", "klinker"]
-        parameters = "The vowel you wish to buy."
-        description = "Buy a vowel for 25 silver pieces! " \
-                      "Keep in mind that if the vowel is not on the board, you lose your turn!"
-        # TODO: Fetch 25 from config.
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_buy')
 
     def execute(self, param, message, system):
         player = message.author
         wheelgame = system.wheel_manager.get_game(player)
 
         if wheelgame is None:
-            return {"response": parser.direct_call(system.id_manager.current_id, "nogame")}
+            raise CommandError("no_game", param)
         if wheelgame.get_current_player() is not player:
             current_player = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "noturn").format(current_player)}
+            raise CommandError("not_turn", current_player)
         if not wheelgame.board.is_valid_character(param):
-            return {"response": parser.direct_call(system.id_manager.current_id, "nocharacter").format(param)}
+            raise CommandError("invalid_character", param)
         if not wheelgame.board.is_vowel(param):
-            return {"response": parser.direct_call(system.id_manager.current_id, "novowel").format(param)}
+            raise CommandError("not_vowel", param)
         if wheelgame.spin_value != 0 and not wheelgame.freespin:
-            return {"response": parser.direct_call(system.id_manager.current_id, "spun").format(param)}
-        if wheelgame.score[player] < wheelgame.VOWEL_VALUE and not wheelgame.freespin:
-            return {"response": parser.direct_call(system.id_manager.current_id, "wheelcash").format(param)}
+            raise CommandError("already_spun", param)
+        if wheelgame.score[player] < configuration['wheel']['vowel_cost'] and not wheelgame.freespin:
+            raise CommandError("no_cash", param)
         count = wheelgame.buy_vowel(param)
         if count == 0:
             opponent = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "badguess").format(param, opponent),
+            return {"response": system.id_manager.id_statement("wheel", "badguess").format(param, opponent),
                     "board": str(wheelgame),
                     "scores": wheelgame.get_scores_with_nicknames(system)}
-        return {"response": parser.direct_call(system.id_manager.current_id, "goodguess").format(count, param),
+        return {"response": system.id_manager.id_statement("wheel", "goodguess").format(count, param),
                 "board": str(wheelgame),
                 "scores": wheelgame.get_scores_with_nicknames(system)}
 
@@ -175,37 +152,32 @@ class SolveCommand(Command):
     """
 
     def __init__(self):
-        call = ["solve", "oplossen"]
-        parameters = "The solution of the puzzle."
-        description = "Try and solve the puzzle! " \
-                      "If you get it right, all the money you won will be added to your score. " \
-                      "If you get it wrong, you lose your turn!"
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_solve')
 
     def execute(self, param, message, system):
         player = message.author
         wheelgame = system.wheel_manager.get_game(player)
 
         if wheelgame is None:
-            return {"response": parser.direct_call(system.id_manager.current_id, "nogame")}
+            raise CommandError("no_game", param)
         if wheelgame.get_current_player() is not player:
             current_player = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "noturn").format(current_player)}
+            raise CommandError("not_turn", current_player)
         if wheelgame.spin_value != 0 and not wheelgame.freespin:
-            return {"response": parser.direct_call(system.id_manager.current_id, "spun").format(param)}
+            raise CommandError("already_spun", param)
         solved = wheelgame.solve_word(param)
         player_name = system.nickname_manager.get_name(player)
         if solved:
             score_text = wheelgame.get_monetary_value(wheelgame.score[player])
             system.wheel_manager.add_score(player, wheelgame.score[player])
             system.wheel_manager.games.remove(wheelgame)
-            return {"response": parser.direct_call(system.id_manager.current_id, "wheelwin").format(player_name,
-                                                                                                    score_text),
+            return {"response": system.id_manager.id_statement("wheel", "wheelwin").format(player_name,
+                                                                                           score_text),
                     "board": str(wheelgame),
                     "scores": wheelgame.get_scores_with_nicknames(system)}
         else:
             player_name = system.nickname_manager.get_name(wheelgame.get_current_player())
-            return {"response": parser.direct_call(system.id_manager.current_id, "wrongsolve").format(player_name)}
+            return {"response": system.id_manager.id_statement("wheel", "wrongsolve").format(player_name)}
 
 
 class WheelStatusCommand(Command):
@@ -214,19 +186,16 @@ class WheelStatusCommand(Command):
     """
 
     def __init__(self):
-        call = ["status", "board", "wheel"]
-        parameters = "None."
-        description = "Shows the current game you are in."
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_status')
 
     def execute(self, param, message, system):
         player = message.author
         wheelgame = system.wheel_manager.get_game(player)
 
         if wheelgame is None:
-            return {"response": parser.direct_call(system.id_manager.current_id, "nogame")}
+            raise CommandError("no_game", param)
         turn = system.nickname_manager.get_name(wheelgame.get_current_player())
-        return {"response": parser.direct_call(system.id_manager.current_id, "wheelturn").format(turn),
+        return {"response": system.id_manager.id_statement("wheel", "wheelturn").format(turn),
                 "board": str(wheelgame),
                 "scores": wheelgame.get_scores_with_nicknames(system)}
 
@@ -237,28 +206,22 @@ class WheelQuitCommand(Command):
     """
 
     def __init__(self):
-        call = ["quit", "abandon"]
-        parameters = "None."
-        description = "Leave the game you are currently a part of."
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_quit')
 
     def execute(self, param, message, system):
         player = message.author
         game_left = system.wheel_manager.leave_game(player)
 
         if game_left:
-            return {"response": parser.direct_call(system.id_manager.current_id, "wheelgone").format(
+            return {"response": system.id_manager.id_statement("wheel", "wheelgone").format(
                 system.nickname_manager.get_name(player))}
-        return {"response": parser.direct_call(system.id_manager.current_id, "nogame")}
+        raise CommandError("no_game", param)
 
 
 class WheelScoreCommand(Command):
 
     def __init__(self):
-        call = ["score"]
-        parameters = "None."
-        description = "Check your total winnings from the Game of Wheel."
-        super().__init__(call, parameters, description)
+        super().__init__('wheel_score')
 
     def execute(self, param, message, system):
         player = message.author
@@ -272,7 +235,8 @@ class WheelScoreCommand(Command):
                     player_name = system.nickname_manager.get_name(player)
                     player_score = system.wheel_manager.get_monetary_value(score.score)
                     spacing = " " * (configuration['nicknames']['max_length'] - len(player_name))
-                    line = "{i}: {name}{s}-\t{score}".format(i=len(score_line)+1, s=spacing, name=player_name, score=player_score)
+                    line = "{i}: {name}{s}-\t{score}".format(i=len(score_line)+1, s=spacing,
+                                                             name=player_name, score=player_score)
                     score_line.append(line)
             if len(score_line):
                 return {"response": "```{}```".format("\n".join(score_line))}

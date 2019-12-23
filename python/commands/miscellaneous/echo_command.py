@@ -4,10 +4,7 @@ from commands.command_superclass import Command
 class EchoCommand(Command):
 
     def __init__(self):
-        call = ["echo", "parrot", "repeat"]
-        parameters = "A regular message."
-        description = "This command will have the bot repeat your message."
-        super().__init__(call, parameters, description)
+        super().__init__('echo')
 
     def execute(self, param, message, system):
         print("Received '{}' in channel *{}* from user with ID *{}*.".format(message.content,

@@ -2,7 +2,7 @@ import discord
 from discord.utils import get
 import asyncio
 
-from bot_identity import parser
+import config
 
 THIRD_DAY = 8*60*60
 main_channel_names = ["main", "general"]
@@ -26,10 +26,10 @@ async def calendar_task(client, system):
                     if isinstance(channel, discord.TextChannel):
                         tag = get(channel.guild.roles, name=tag_name)
                         if tag:
-                            message = "Reminder for {}!:".format(tag.mention)
+                            message = config.localization['event_model']['reminder_tag'].format(tag.mention)
                             await channel.send(content=message, embed=reminder_embed)
                         else:
-                            await channel.send(content=None, embed=reminder_embed)
+                            await channel.send(embed=reminder_embed)
         await asyncio.sleep(30)
 
 
@@ -45,7 +45,7 @@ async def birthday_task(client, system):
             for channel in channels:
                 birthday_user = system.get_user_by_id(birthday_id, client=client, guild=channel.guild)
                 user_name = system.nickname_manager.get_name(birthday_user)
-                message = parser.direct_call(system.id_manager.current_id, "birthday").format(user_name)
+                message = system.id_manager.id_statement("general", "birthday").format(user_name)
                 await channel.send(message)
         if birthday_ids:
             await asyncio.sleep(THIRD_DAY*2)

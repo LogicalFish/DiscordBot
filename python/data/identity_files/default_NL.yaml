@@ -1,0 +1,49 @@
+name: Default
+regex: "(default|bot)"
+game: ""
+AI: Normal
+general:
+  call: "Hoi!"
+  morning: "Goedemorgen!"
+  night: "Weltrusten!"
+  thanks: "Graag gedaan!"
+  leave: "Doei!"
+  chatty: "Ik zal nu wat spraakzamer zijn"
+  nonchatty: "Ik zal nu stiller zijn."
+  error: "Dat is geen valide commando."
+  status: "Ik ben nu {}. Ik ben {}. De huidige interval tussen berichten is {} seconden."
+  birthday:
+    - "Van harte gefeliciteerd, {}!"
+    - "Er is er een jarig, hoera, hoera, dat kun je wel zien, dat is {}!"
+    - "Van harte gefeliciteerd, {}."
+  reminder:
+    - "Ik help het je wel herinneren!"
+ttt:
+  start_self: "Ik heb een nieuw spel gestart. Ik ben als eerste aan de beurt."
+  start_other: "Ik heb een nieuw spel gestart. {} is als eerste aan de beurt."
+  gamestate: "De huidige status van het spel. {} is aan de beurt tegen {}:"
+  ownmove: "Ik zet {} op {}."
+  genericwin: "{} heeft gewonnen van {}!"
+  win: "Ik heb gewonnen! Volgende keer beter geluk!"
+  tie: "Gelijk spel. Probeer het nog een keer?"
+  loss: "Gefeliciteerd, jij wint!"
+  abandon: "Het spel tussen {} en {} is afgelopen."
+  invalid: "Dat is geen valide zet. Probeer het nog een keer!"
+wheel:
+  waiting:
+    - "Je hebt je ingeschreven! {} wachten nu op {} extra spelers."
+    - "{} wacht(en) op een spel. Wil jij ook meedoen? Er zijn nog {} plekken!"
+  wheelstart: "Het is tijd voor het WIEL! Vanavond hebben wij {} als spelers. Zijn jullie klaar om te spelen? {}, jij mag beginnen! Draai het rad!"
+  wheelturn:  "Het is de beurt van {}!"
+  badspin: "Helaas! Dat is {}! Het is tijd voor de volgende speler. {}, draai het rad, koop een klinker of los de puzzel op!"
+  freespin: "Je hebt een vrije kaart verdient! Als je verkeerd raad, is je beurt niet voorbij! En je mag ook nog eens een klinker kopen of de puzzel proberen op te lossen!"
+  goodspin:
+    - "Het rad draait naar {}! Tijd om een letter te raden."
+    - "Je verdient {} per letter met deze draai! Ga zo door!"
+  badguess: "Helaas! Er zijn geen enkele {}'s te vinden. De beurt gaat naar {}!"
+  goodguess: "We hebben een totaal van {} {}'s! Goed gedaan, je mag nog een keer!"
+  wheelwin:
+    - "CORRECT! Van harte gefeliciteerd! {} is de winnaar, en heeft daarmee een geldprijs van {} gewonnen! Dat is het einde van de show! Tot de volgende keer!"
+    - "Correct! {} wint {}!"
+  wrongsolve: "Helaas, dat is niet het goede antwoord! De beurt gaat naar {}!"
+  wheelgone: "Helaas, {} vertrekt uit dit spelletje."

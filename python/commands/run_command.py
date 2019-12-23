@@ -1,6 +1,3 @@
-from bot_identity import parser
-import yaml
-
 import config
 from commands.command_error import CommandError
 from .miscellaneous.help_command import HelpCommand
@@ -8,7 +5,7 @@ from .miscellaneous.help_command import HelpCommand
 
 class CommandRunner:
 
-    errors = yaml.safe_load(open(config.ERRORS))
+    errors = config.localization['errors']
 
     def __init__(self, commands_list):
         self.commands = commands_list
@@ -35,7 +32,7 @@ class CommandRunner:
             command = self.get_command(user_call)
             return command.execute(user_param, message, system)
         except CommandError as error:
-            response = "{} {}".format(parser.direct_call(system.id_manager.current_id, "error"),
+            response = "{} {}".format(system.id_manager.id_statement("general", "error"),
                                       self.errors[error.type].format(error.key))
             return {"response": response}
 

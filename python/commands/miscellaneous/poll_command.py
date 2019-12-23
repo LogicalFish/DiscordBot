@@ -1,17 +1,13 @@
+from commands.command_superclass import Command
+
 import emoji
 import re
-
-from commands.command_superclass import Command
 
 
 class PollCommand(Command):
 
     def __init__(self):
-        call = ["poll"]
-        parameters = "A regular message, containing emojis marking options."
-        description = "This command will react on the message using the emojis provided within it. " \
-                      "This way, users can 'vote' by selecting the appropriate reaction."
-        super().__init__(call, parameters, description)
+        super().__init__('poll')
 
     def execute(self, param, message, system):
         action = {"react": self.find_emojis(param),

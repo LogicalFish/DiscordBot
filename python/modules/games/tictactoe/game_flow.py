@@ -1,5 +1,5 @@
+import config
 from .game_state import Game
-from bot_identity import parser
 
 
 def tictactoenewgame(author, opponent, system):
@@ -17,7 +17,7 @@ def tictactoenewgame(author, opponent, system):
             game = system.ttt_games[author]
         elif opponent in system.ttt_games:
             game = system.ttt_games[opponent]
-        response = parser.direct_call(system.id_manager.current_id, "gamestate").format(
+        response = system.id_manager.id_statement("ttt", "gamestate").format(
             get_addressable(system, game.players[game.turn]),
             get_addressable(system, game.players[game.get_other_player()])
         )
@@ -28,16 +28,14 @@ def tictactoenewgame(author, opponent, system):
             system.ttt_games[opponent] = game
         current_player = game.players[game.turn]
         if current_player == system.bot:
-            response = parser.direct_call(system.id_manager.current_id, "open").format("Ik ben")
+            response = system.id_manager.id_statement("ttt", "start_self")
             tictactoemove("cpu", author, system)
         else:
-            response = parser.direct_call(system.id_manager.current_id, "open").format(
-                "{} is".format(get_addressable(system, current_player))
-            )
+            response = system.id_manager.id_statement("ttt", "start_other").format(get_addressable(system, current_player))
     return response, str(game)
 
 
-#Ends a Tic-Tac-Toe game and removes all references to it.
+# Ends a Tic-Tac-Toe game and removes all references to it.
 def tictactoeend(author, system):
     """
     Ends a game of tic-tac-toe, and removes all references to it.
@@ -53,10 +51,10 @@ def tictactoeend(author, system):
             system.ttt_games.pop(game.players[key], None)
             if game.players[key] != author:
                 other_player = game.players[key]
-        return parser.direct_call(system.id_manager.current_id, "abandon").format(get_addressable(system, author),
-                                                                                  get_addressable(system, other_player))
+        return system.id_manager.id_statement("ttt", "abandon").format(get_addressable(system, author),
+                                                                       get_addressable(system, other_player))
     else:
-        return parser.direct_call(system.id_manager.current_id, "error")
+        return system.id_manager.id_statement("general", "error")
 
 
 def tictactoemove(text, author, system):
@@ -76,41 +74,41 @@ def tictactoemove(text, author, system):
     if author in system.ttt_games:
         game = system.ttt_games[author]
     else:
-        #Starting a new game if none exists:
+        # Starting a new game if none exists:
         response = "{}\n".format(tictactoenewgame(author, system.bot, system)[0])
         game = system.ttt_games[author]
 
-    #Replying with a status:
+    # Replying with a status:
     if text == "" and response == "":
         opponent = game.players[game.get_other_player()]
         player_name = get_addressable(system, game.players[game.turn])
         opponent_name = get_addressable(system, opponent)
-        response = parser.direct_call(system.id_manager.current_id, "gamestate").format(player_name, opponent_name)
+        response = system.id_manager.id_statement("ttt", "gamestate").format(player_name, opponent_name)
         return response, game
-    #Making a move:
+    # Making a move:
     move = ""
     if game.players[game.turn] == system.bot:
         move = game.get_cpu_move(system.id_manager.get_current_ai())
-        response += parser.direct_call(system.id_manager.current_id, "ownmove").format(game.turn, move) +"\n"
+        response += system.id_manager.id_statement("ttt", "ownmove").format(game.turn, move) + "\n"
     elif game.players[game.turn] == author:
         move = text[:2].upper()
     valid = game.make_move(move)
 
     if not valid and text != "":
-        response = parser.direct_call(system.id_manager.current_id, "invalid")
+        response = system.id_manager.id_statement("ttt", "invalid")
         return response, str(game)
-    #Handling a winstate
+    # Handling a winstate
     win_state, w_p = game.get_status()
     if win_state:
         tictactoeend(author, system)
         response += get_win_response(w_p, game, system)
 
         return response, str(game)
-    #If there's a CPU, have him make a move.
+    # If there's a CPU, have him make a move.
     if game.players[game.turn] == system.bot:
         response += tictactoemove("cpu", author, system)[0]
     if not response:
-        response = parser.direct_call(system.id_manager.current_id, "gamestate").format(
+        response = system.id_manager.id_statement("ttt", "gamestate").format(
             get_addressable(system, game.players[game.turn]),
             get_addressable(system, game.players[game.get_other_player()])
         )
@@ -127,14 +125,14 @@ def get_win_response(winning_player, game, system):
     :return:
     """
     if winning_player == "T":
-        return parser.direct_call(system.id_manager.current_id, "tie")
+        return system.id_manager.id_statement("ttt", "tie")
     else:
         if game.players[winning_player] == system.bot:
-            return parser.direct_call(system.id_manager.current_id, "win")
+            return system.id_manager.id_statement("ttt", "win")
         elif system.bot in game.players.values():
-            return parser.direct_call(system.id_manager.current_id, "loss")
+            return system.id_manager.id_statement("ttt", "loss")
         else:
-            return parser.direct_call(system.id_manager.current_id, "genericwin").format(
+            return system.id_manager.id_statement("ttt", "genericwin").format(
                 get_addressable(system, game.players[winning_player]),
                 get_addressable(system, game.players[game.turn]))
 
@@ -147,6 +145,6 @@ def get_addressable(system, player):
     :return: The name.
     """
     if player == system.bot:
-        return "mij"
+        return config.localization['self_address']
     else:
         return system.nickname_manager.get_name(player)

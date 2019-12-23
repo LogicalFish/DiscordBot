@@ -1,30 +1,20 @@
 import random
 
-from modules.games.wheel.wheel_board import FortunateBoard
+import config
+from modules.games.wheel.wheel_board import WheelBoard
+wheel_config = config.configuration['wheel']
 
 
 class WheelGame:
-    BANKRUPT_SIGN = -10
-    LOSETURN_SIGN = -5
-    FREESPIN_SIGN = 0
-    WILDCARD_SIGN = 50
-
-    WHEEL = [BANKRUPT_SIGN, 90, 50, 65, 50,
-             80, LOSETURN_SIGN, 70, FREESPIN_SIGN, 65,
-             BANKRUPT_SIGN, 60, 50, 55, 60,
-             100, 70, 50, 65, 60,
-             70, 60, WILDCARD_SIGN, 250]
-
-    FREESPIN_VALUE = 50
-    VOWEL_VALUE = 25
 
     def __init__(self, player_set):
-        self.board = FortunateBoard()
+        self.board = WheelBoard()
         self.players = player_set
         self.score = {}
         for player in self.players:
             self.score[player] = 0
         self.turn = random.randrange(0, len(self.players))
+        self.wheel = wheel_config['wheel_layout']
         self.spin_value = 0
         self.freespin = False
 
@@ -36,9 +26,11 @@ class WheelGame:
         return result
 
     def get_scores_with_nicknames(self, system):
-        result = "``\tCategory: {}\t".format(self.board.category)
+        result = "``\t{0}: {1}\t".format(config.localization['wheel']['category'], self.board.category)
         for player in self.players:
-            result += "{}: {}\t".format(system.nickname_manager.get_name(player), "{} sp".format(self.score[player]))
+            result += "{player}: {n} {sp}\t".format(player=system.nickname_manager.get_name(player),
+                                                    n=self.score[player],
+                                                    sp=config.localization['wheel']['sp_a'])
         result += "``"
         return result
 
@@ -59,23 +51,23 @@ class WheelGame:
         if self.spin_value > 0:
             return self.spin_value, self.get_monetary_value(self.spin_value)
         spin = self.random_spin()
-        if spin > 0:
+        if isinstance(spin, int):
             self.spin_value = spin
             return spin, self.get_monetary_value(spin)
-        if spin == self.BANKRUPT_SIGN:
+        if spin == "BANKRUPT":
             self.score[self.get_current_player()] = 0
             self.next_turn()
-            return spin, "BANKRUPT"
-        if spin == self.LOSETURN_SIGN:
+            return spin, config.localization['wheel']['bankrupt']
+        if spin == "LOSETURN":
             self.next_turn()
-            return spin, "LOSE A TURN"
-        if spin == self.FREESPIN_SIGN:
+            return spin, config.localization['wheel']['lose_turn']
+        if spin == "FREESPIN":
             self.freespin = True
-            return spin, "FREE SPIN"
+            return spin, config.localization['wheel']['free_spin']
         return spin, "ERROR"
 
     def random_spin(self):
-        return random.choice(self.WHEEL)
+        return random.choice(self.wheel)
 
     def guess_consonant(self, guess):
         if self.freespin:
@@ -91,15 +83,15 @@ class WheelGame:
 
     def guess_free_consonant(self, guess):
         guess_count = self.board.guess_consonant(guess)
-        self.score[self.get_current_player()] += guess_count * self.FREESPIN_VALUE
+        self.score[self.get_current_player()] += guess_count * wheel_config['freespin_value']
         self.freespin = False
         return guess_count
 
     def buy_vowel(self, guess):
         if self.freespin:
             return self.buy_free_vowel(guess)
-        if self.score[self.get_current_player()] >= self.VOWEL_VALUE:
-            self.score[self.get_current_player()] -= self.VOWEL_VALUE
+        if self.score[self.get_current_player()] >= wheel_config['vowel_cost']:
+            self.score[self.get_current_player()] -= wheel_config['vowel_cost']
             guess_count = self.board.buy_vowel(guess)
             if guess_count == 0:
                 self.next_turn()
@@ -121,6 +113,8 @@ class WheelGame:
     @staticmethod
     def get_monetary_value(number):
         if number % 10 == 0:
-            return "{} goudstukken".format(int(number / 10))
+            return "{n} {gp}{plural}".format(n=int(number / 10), gp=config.localization['wheel']['gp'],
+                                             plural=config.localization['wheel']['plural'])
         else:
-            return "{} zilverstukken".format(number)
+            return "{n} {sp}{plural}".format(n=number, sp=config.localization['wheel']['sp'],
+                                             plural=config.localization['wheel']['plural'])

@@ -6,27 +6,30 @@ class Command:
     Command superclass, defining how a command should be structured.
     """
 
-    def __init__(self, call, parameters="None.", description=""):
+    def __init__(self, name):
         """
         Three values should be initialized during initialization.
-        :param call: A list detailing which phrases should trigger this command.
-        :param parameters: A written explanation of the parameters that the command expects.
-        :param description: A written explanation of what the command does.
+        :param name: A string detailing which section of the localization file contains the command text.
         """
-        self.call = call
-        self.parameters = parameters
-        self.description = description
+        self.name = name
+        self.call = config.localization[self.name]['commands']
+        self.description = config.localization[self.name]['description']
+        if 'parameters' in config.localization[self.name]:
+            self.parameters = config.localization[self.name]['parameters']
+        else:
+            self.parameters = config.localization['no_params']
+        # self.call = call
+        # self.description = description
+        # self.parameters = parameters
 
     def __str__(self):
         """
         As a string, the command should give an explanation of how to call it, what parameters it takes,
         and a description of what it does.
         """
-        return "**Command(s):** *{}*.\n" \
-               "**Description:** {}\n" \
-               "**Parameter(s):** {}".format(self.get_call_string(),
-                                             self.description,
-                                             self.parameters)
+        return config.localization['command_skeleton'].format(self.get_call_string(),
+                                                              self.description,
+                                                              self.parameters)
 
     def get_call_string(self):
         """

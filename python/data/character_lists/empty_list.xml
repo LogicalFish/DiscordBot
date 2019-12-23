@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RULES: You can add or remove any item you want. Just don't leave any empty. You don't need to change the names of any fields.-->
+<root>
+<!--A list of available fields:-->
+<!--	<npc>-->
+<!--		<names>-->
+<!--			<title></title>-->
+<!--			<firstname></firstname>-->
+<!--			<middle></middle>-->
+<!--			<nickname></nickname>-->
+<!--			<surname></surname>-->
+<!--			<monnicker></monnicker>-->
+<!--		</names>-->
+<!--		<gender></gender>-->
+<!--		<race></race>-->
+<!--		<subrace></subrace>-->
+<!--		<class></class>-->
+<!--		<location></location>-->
+<!--		<birthyear></birthyear>-->
+<!--		<deathyear></deathyear>-->
+<!--		<organization>-->
+<!--			<name></name>-->
+<!--			<rank></rank>-->
+<!--			<status></status>-->
+<!--		</organization>-->
+<!--		<description></description>-->
+<!--	</npc>-->
+</root>

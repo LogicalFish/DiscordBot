@@ -1,16 +1,12 @@
 import os
+import yaml
 import random
-from xml.etree import ElementTree
 
 from config import configuration
+display_config = configuration['wheel']['display']
 
 
-class FortunateBoard:
-    # UNICODE_AID = ord('🇦') - ord('a')
-    HIDDEN = "⬜"
-    FREE_SPACE = "⬛"
-    COMMA = "⤵"
-    DASH = "⛔"
+class WheelBoard:
 
     def __init__(self):
         """
@@ -25,18 +21,15 @@ class FortunateBoard:
         for char in self.word:
             if char.isalpha():
                 if char not in self.revealed and not self.solved:
-                    hidden_word += self.HIDDEN
+                    hidden_word += display_config['hidden']
                 else:
-                    # hidden_word += chr(self.UNICODE_AID + ord(char))
-                    hidden_word += ":regional_indicator_{}:".format(char)
-            elif char == ",":
-                hidden_word += self.COMMA
-            elif char == "-" or char == "_":
-                hidden_word += self.DASH
+                    hidden_word += display_config['letter'].format(char)
+            elif char in display_config['punctuation']:
+                hidden_word += display_config['punctuation'][char]
             elif char.isspace():
-                hidden_word += self.FREE_SPACE
-            else:
-                hidden_word += char
+                hidden_word += display_config['space']
+            # else:
+            #     hidden_word += char
         return hidden_word
 
     def guess_consonant(self, guess):
@@ -57,8 +50,6 @@ class FortunateBoard:
         if not self.is_revealed(char):
             self.revealed.append(char.lower())
             return self.word.count(char)
-        # else:
-        # raise ValueError("already_revealed")
         return 0
 
     def solve_word(self, guess):
@@ -74,22 +65,22 @@ class FortunateBoard:
 
     @staticmethod
     def is_vowel(char):
-        if char in ('a', 'e', 'i', 'o', 'u'):
+        if char.lower() in ('a', 'e', 'i', 'o', 'u'):
             return True
         return False
 
     @staticmethod
     def get_random_word():
         word_file = os.path.sep.join(configuration['wheel']['words_file'])
-        word_doc = ElementTree.parse(word_file).getroot()
+        word_doc = yaml.safe_load(open(word_file))
 
-        word_list = word_doc.findall("category/entry")
-        chosen_entry = random.choice(word_list)
-        category_name = "None"
+        categories = list(word_doc.keys())
+        cat_weights = [len(word_doc[cat]) for cat in categories]
 
-        for category in word_doc.iter("category"):
-            if chosen_entry in category.findall("entry"):
-                category_name = category.attrib["name"]
-                break
+        random_category = random.choices(categories, weights=cat_weights)[0]
+        print(random_category)
+        print(word_doc)
+        print(word_doc[random_category])
+        random_word = random.choice(word_doc[random_category])
 
-        return chosen_entry.text.lower(), category_name
+        return random_word.lower(), random_category

@@ -1,7 +1,4 @@
-*.xml
-!default.xml
-settings.yml
-deprecated/
+settings.yaml
 *.ini
 *.txt
 .idea/

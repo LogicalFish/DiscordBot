@@ -11,17 +11,7 @@ from modules.characterlist import npc_trackers
 class ListAllCommand(Command):
 
     def __init__(self):
-        call = ["list", "listall", "npcs"]
-        parameters = "Search parameters (optional)"
-        description = "This command will list all characters that match the search parameters.\n" \
-                      "A search parameter has the shape x=\"Y\"." \
-                      "A list of all possible parameters:\n" \
-                      "\t*name*\n" \
-                      "\t*names.title*\n\t*names.firstname*\n\t*names.middle*\n\t*names.nickname*\n\t*names.surname*\n\t*names.moniker*\n" \
-                      "\t*gender*\n\t*race*\n\t*subrace*\n\t*class*\n\t*location*\n\t*birthyear*\n" \
-                      "\t*organization.name*\n\t*organization.rank*\n\t*organization.status*\n" \
-                      "\t*description*\n"
-        super().__init__(call, parameters, description)
+        super().__init__('list_npcs')
 
     def execute(self, param, message, system):
         parsed = re.findall("([\\w\\.]*)\\s*=\\s*[\"'](.*?)[\"']", param)
@@ -33,7 +23,7 @@ class ListAllCommand(Command):
             npc_list += tracker.get_list_of_npcs(search_tuples)
         npc_list.sort(key=operator.attrgetter("sort_key", "secondary_sort_key"))
 
-        preamble = "Er zijn {} karakters gevonden:\n".format(len(npc_list))
+        preamble = config.localization[self.name]['prefix'].format(len(npc_list))
         response = format_npc_name_list(npc_list, preamble)
         return {"response": response}
 
@@ -41,10 +31,7 @@ class ListAllCommand(Command):
 class WhoIsCommand(Command):
 
     def __init__(self):
-        call = ["whois", "findnpc"]
-        parameters = "The name of the character you wish to find."
-        description = "This command will find a character matching the name, or a list of characters if multiple match."
-        super().__init__(call, parameters, description)
+        super().__init__('who_is_npc')
         self.saved_list = []
 
     def execute(self, param, message, system):
@@ -66,14 +53,13 @@ class WhoIsCommand(Command):
         npc_list.sort(key=operator.attrgetter("sort_key", "secondary_sort_key"))
 
         if len(npc_list) == 0:
-            action = {"response": "Er is geen karakter met die naam gevonden."}
+            action = {"response": config.localization[self.name]['no_npcs']}
         elif len(npc_list) == 1:
             npc = npc_list[0]
             action = {"embed": npc.get_npc_embed()}
         elif len(npc_list) > 1:
             self.saved_list = npc_list
-            preamble = "Er zijn {} karakters gevonden. Specificeer welke je zoekt voor meer informatie:\n".format(
-                len(npc_list))
+            preamble = config.localization[self.name]['multiple_npcs'].format(len(npc_list))
             multi_response = format_npc_name_list(npc_list, preamble)
             action = {"response": multi_response}
         else:
@@ -84,16 +70,13 @@ class WhoIsCommand(Command):
 class GetYearCommand(Command):
 
     def __init__(self):
-        call = ["year", "getyear", "whatyear"]
-        parameters = "None."
-        description = "A Command to request the setting's current year."
-        super().__init__(call, parameters, description)
+        super().__init__('get_year')
 
     def execute(self, param, message, system):
         response = ""
         for tracker in npc_trackers:
             if len(param) == 0 or tracker.name in param:
-                response += "The current year of {} is {}.\n".format(tracker.name, tracker.current_year)
+                response += config.localization[self.name]['response'].format(tracker.name, tracker.current_year)
         if len(response) == 0:
             raise CommandError("invalid_parameter", param)
         return {"response": response}
@@ -102,10 +85,7 @@ class GetYearCommand(Command):
 class AddYearCommand(Command):
 
     def __init__(self):
-        call = ["addyear", "yearup"]
-        parameters = "A number declaring how many years to add. (optional)"
-        description = "A command that can be used by the DM to alter the current year."
-        super().__init__(call, parameters, description)
+        super().__init__('add_year')
 
     def execute(self, param, message, system):
         for tracker in npc_trackers:
@@ -119,8 +99,7 @@ class AddYearCommand(Command):
                         tracker.year_up()
                 else:
                     tracker.year_up()
-                response = "Time has passed since year {1} of {0}. " \
-                           "It is now the year {2}.".format(tracker.name, old_year, tracker.current_year)
+                response = config.localization[self.name]['response'].format(tracker.name, old_year, tracker.current_year)
                 return {"response": response}
         raise CommandError("command_not_allowed", None)
 
@@ -128,7 +107,7 @@ class AddYearCommand(Command):
 def format_npc_name_list(npc_list, preamble):
     npc_name_list = preamble
     name_list = ["**{}.** {}".format(count + 1, npc.get_name()) for count, npc in enumerate(npc_list)]
-    max_reached = "- *etc. (character limit reached)*"
+    max_reached = config.localization['npc_character_limit']
     for name in name_list:
         if len(npc_name_list) + len(name) + len(max_reached) < config.configuration['max_msg_length']:
             npc_name_list += "{}\n".format(name)

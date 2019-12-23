@@ -4,11 +4,13 @@ import discord
 from datetime import timedelta
 from sqlalchemy import Column, Integer, String, DateTime, BigInteger, ARRAY
 
+import config
 from config import configuration
 from database import Base
 from modules.calendar import event_parser
 
 calendar_config = configuration['calendar']
+localization = config.localization['event_model']
 
 
 class Event(Base):
@@ -81,12 +83,14 @@ class Event(Base):
 
     def get_event_embed(self):
         embed = discord.Embed(title=self.name, description=self.description, color=13138175)
-        embed.add_field(name="Date", value=self.date.strftime(calendar_config['date_format']), inline=True)
-        embed.add_field(name="Time", value=self.date.strftime(calendar_config['time_format']), inline=True)
+        embed.add_field(name=localization['date'],
+                        value=self.date.strftime(calendar_config['date_format']), inline=True)
+        embed.add_field(name=localization['time'],
+                        value=self.date.strftime(calendar_config['time_format']), inline=True)
         reminders = self.embed_reminder_in_event()
         if len(reminders):
-            embed.add_field(name="Reminders", value=reminders, inline=False)
-        embed.set_footer(text="ID: {} ● Author: ".format(self.event_id))
+            embed.add_field(name=localization['reminders'], value=reminders, inline=False)
+        embed.set_footer(text=localization['footer'].format(id=self.event_id))
         return embed
 
     def embed_reminder_in_event(self):
@@ -94,20 +98,24 @@ class Event(Base):
         if self.reminder:
             reminder_list = sorted(self.reminder, reverse=True)
             reminders = [str(d) for d in reminder_list]
-            result += "h, ".join(reminders)
-            result += "h in advance.\n"
+            result += "{h}, ".format(h=localization['hours']).join(reminders)
+            result += "{h} {advance}.\n".format(h=localization['hours'], advance=localization['advance'])
         if self.channel:
-            result += "Channel: #{}\n".format(self.channel)
+            result += "{c}: #{channel}\n".format(c=localization['channel'], channel=self.channel)
         if self.tag:
-            result += "Mention: @{}\n".format(self.tag)
+            result += "{m}: @{tag}\n".format(m=localization['mention'], tag=self.tag)
         return result
 
     def describe_short(self):
-        description = "**●** {} - **Event {}:** {}.\n".format(self.display_date(self.date), self.event_id, self.name)
+        description = "**●** {date} - **{e} {id}:** {name}.\n".format(date=self.display_date(self.date),
+                                                                      e=localization['event'],
+                                                                      id=self.event_id, name=self.name)
         return description
 
     def describe_shadow(self):
-        description = "*● {} - Event {}: {}.*\n".format(self.display_date(self.date), self.event_id, self.name)
+        description = "*● {date} - {e} {id}: {name}.*\n".format(date=self.display_date(self.date),
+                                                                e=localization['event'],
+                                                                id=self.event_id, name=self.name)
         return description
 
     @staticmethod
@@ -116,9 +124,9 @@ class Event(Base):
 
     def describe_reminder(self, hours):
         descr = "*{}*".format(self.description) if self.description else ""
-        reminder_description = "{event} starts in {h} hour{s}!\n\n" \
-                               "{description}".format(event=self.name, h=hours, s="s" if hours > 1 else "",
-                                                      description=descr)
+        plural = localization['plural'] if hours > 1 else "",
+        reminder_description = localization['reminder_message'].format(event=self.name, h=hours,
+                                                                       s=plural, description=descr)
         reminder_embed = discord.Embed(title=self.name, description=reminder_description, color=13138175)
         reminder_embed.set_footer(text="ID: {}".format(self.event_id))
 
