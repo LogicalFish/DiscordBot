@@ -3,14 +3,10 @@ import random
 from xml.etree import ElementTree
 
 from config import configuration
+display_config = configuration['wheel']['display']
 
 
-class FortunateBoard:
-    # UNICODE_AID = ord('🇦') - ord('a')
-    HIDDEN = "⬜"
-    FREE_SPACE = "⬛"
-    COMMA = "⤵"
-    DASH = "⛔"
+class WheelBoard:
 
     def __init__(self):
         """
@@ -25,16 +21,13 @@ class FortunateBoard:
         for char in self.word:
             if char.isalpha():
                 if char not in self.revealed and not self.solved:
-                    hidden_word += self.HIDDEN
+                    hidden_word += display_config['hidden']
                 else:
-                    # hidden_word += chr(self.UNICODE_AID + ord(char))
-                    hidden_word += ":regional_indicator_{}:".format(char)
-            elif char == ",":
-                hidden_word += self.COMMA
-            elif char == "-" or char == "_":
-                hidden_word += self.DASH
+                    hidden_word += display_config['letter'].format(char)
+            elif char in display_config['punctuation']:
+                hidden_word += display_config['punctuation'][char]
             elif char.isspace():
-                hidden_word += self.FREE_SPACE
+                hidden_word += display_config['space']
             else:
                 hidden_word += char
         return hidden_word
@@ -57,8 +50,6 @@ class FortunateBoard:
         if not self.is_revealed(char):
             self.revealed.append(char.lower())
             return self.word.count(char)
-        # else:
-        # raise ValueError("already_revealed")
         return 0
 
     def solve_word(self, guess):
@@ -74,7 +65,7 @@ class FortunateBoard:
 
     @staticmethod
     def is_vowel(char):
-        if char in ('a', 'e', 'i', 'o', 'u'):
+        if char.lower() in ('a', 'e', 'i', 'o', 'u'):
             return True
         return False
 

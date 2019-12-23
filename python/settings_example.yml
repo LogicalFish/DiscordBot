@@ -109,3 +109,12 @@ wheel:
     - wheel
     - data
     - words.xml
+  display:
+    letter: ":regional_indicator_{}:"
+    hidden: ":white_large_square:"
+    space: ":black_large_square:"
+    punctuation: {",": ":arrow_heading_down:", "-": ":no_entry:", "_": ":no_entry:"}
+  wheel_layout: [BANKRUPT, 90, 50, 65, 50, 80, LOSETURN, 70, FREESPIN, 65, BANKRUPT, 60,
+                 50, 55, 60, 100, 70, 50, 65, 60, 70, 60, 50, 250]
+  freespin_value: 50
+  vowel_cost: 25

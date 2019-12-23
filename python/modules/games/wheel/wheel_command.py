@@ -67,9 +67,9 @@ class SpinWheelCommand(Command):
             current_player = system.nickname_manager.get_name(wheelgame.get_current_player())
             raise CommandError("not_turn", current_player)
         spin_value, spin_text = wheelgame.spin_wheel()
-        if spin_value > 0:
+        if isinstance(spin_value, int):
             return {"response": system.id_manager.id_statement("wheel", "goodspin").format(spin_text)}
-        elif spin_value == 0:
+        elif spin_value == "FREESPIN":
             return {"response": system.id_manager.id_statement("wheel", "freespin")}
         else:
             opponent = system.nickname_manager.get_name(wheelgame.get_current_player())
@@ -117,7 +117,6 @@ class BuyVowelCommand(Command):
 
     def __init__(self):
         super().__init__('wheel_buy')
-        # TODO: Fetch 25 from config.
 
     def execute(self, param, message, system):
         player = message.author
@@ -134,7 +133,7 @@ class BuyVowelCommand(Command):
             raise CommandError("not_vowel", param)
         if wheelgame.spin_value != 0 and not wheelgame.freespin:
             raise CommandError("already_spun", param)
-        if wheelgame.score[player] < wheelgame.VOWEL_VALUE and not wheelgame.freespin:
+        if wheelgame.score[player] < configuration['wheel']['vowel_cost'] and not wheelgame.freespin:
             raise CommandError("no_cash", param)
         count = wheelgame.buy_vowel(param)
         if count == 0:
