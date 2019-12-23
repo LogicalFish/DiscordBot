@@ -104,11 +104,9 @@ tic-tac-toe:
     - ":regional_indicator_c:"
 wheel:
   words_file:
-    - modules
-    - games
-    - wheel
     - data
-    - words.xml
+    - wheel
+    - word_list.yaml
   display:
     letter: ":regional_indicator_{}:"
     hidden: ":white_large_square:"

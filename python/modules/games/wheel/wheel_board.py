@@ -1,6 +1,6 @@
 import os
+import yaml
 import random
-from xml.etree import ElementTree
 
 from config import configuration
 display_config = configuration['wheel']['display']
@@ -28,8 +28,8 @@ class WheelBoard:
                 hidden_word += display_config['punctuation'][char]
             elif char.isspace():
                 hidden_word += display_config['space']
-            else:
-                hidden_word += char
+            # else:
+            #     hidden_word += char
         return hidden_word
 
     def guess_consonant(self, guess):
@@ -72,15 +72,15 @@ class WheelBoard:
     @staticmethod
     def get_random_word():
         word_file = os.path.sep.join(configuration['wheel']['words_file'])
-        word_doc = ElementTree.parse(word_file).getroot()
+        word_doc = yaml.safe_load(open(word_file))
 
-        word_list = word_doc.findall("category/entry")
-        chosen_entry = random.choice(word_list)
-        category_name = "None"
+        categories = list(word_doc.keys())
+        cat_weights = [len(word_doc[cat]) for cat in categories]
 
-        for category in word_doc.iter("category"):
-            if chosen_entry in category.findall("entry"):
-                category_name = category.attrib["name"]
-                break
+        random_category = random.choices(categories, weights=cat_weights)[0]
+        print(random_category)
+        print(word_doc)
+        print(word_doc[random_category])
+        random_word = random.choice(word_doc[random_category])
 
-        return chosen_entry.text.lower(), category_name
+        return random_word.lower(), random_category
