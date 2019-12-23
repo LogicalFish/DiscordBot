@@ -15,12 +15,13 @@ identity:
     - identity_files
   default_identity: default_EN.yaml
   identity_files:
+    - project_gm.yaml
     - butler.yaml
     - robot.yaml
   facts_file: general_facts.yaml
   universal_phrases:
     morning: "(goe(d|i)emorgen|mogg(e|u))"
-    night: "(\b(wel)?te?rusten?\b|slaap lekker|good night)"
+    night: "(\\b(wel)?te?rusten?\\b|slaap lekker|good night)"
     thanks: "((bedankt|thank you|thanks|dank ?je ?(wel)?),? {})"
   difficulty:
     simple: 1
