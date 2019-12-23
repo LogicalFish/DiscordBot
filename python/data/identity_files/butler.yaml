@@ -30,7 +30,8 @@ general:
     - "Yes, master."
     - "I will remind you when the time has come, master."
 ttt:
-  open: "Yes, master. I will start a new game. If it is not too presumptuous, allow me to grant {} the first turn."
+  start_self: "Yes, master. I will start a new game. If it is not too presumptuous, allow me to grant myself the first turn."
+  start_other: "Yes, master. I will start a new game. If it is not too presumptuous, allow me to grant {} the first turn."
   gamestate: "Yes, master, it is currently {}'s opportunity to make a move. He is going up against {}. Let me display the current game:"
   ownmove: "I shall make my move ({0}) on {1}, master."
   genericwin: "It seems your excellency {} has won from master {}. What a splendid game it was."

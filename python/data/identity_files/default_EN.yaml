@@ -19,7 +19,8 @@ general:
   reminder:
     - "I will help you remember!"
 ttt:
-  open: "I have started a new game. {} has the first turn."
+  start_self: "I have started a new game. I will take the first turn."
+  start_other: "I have started a new game. {} has the first turn."
   gamestate: "The current status of the game. {} is making a move against {}:"
   ownmove: "I will put a {} on {}."
   genericwin: "{} has won from {}!"

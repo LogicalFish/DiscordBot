@@ -19,7 +19,8 @@ general:
   reminder:
     - "Ik help het je wel herinneren!"
 ttt:
-  open: "Ik heb een nieuw spel gestart. {} als eerste aan de beurt."
+  start_self: "Ik heb een nieuw spel gestart. Ik ben als eerste aan de beurt."
+  start_other: "Ik heb een nieuw spel gestart. {} is als eerste aan de beurt."
   gamestate: "De huidige status van het spel. {} is aan de beurt tegen {}:"
   ownmove: "Ik zet {} op {}."
   genericwin: "{} heeft gewonnen van {}!"

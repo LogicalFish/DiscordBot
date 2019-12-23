@@ -28,12 +28,10 @@ def tictactoenewgame(author, opponent, system):
             system.ttt_games[opponent] = game
         current_player = game.players[game.turn]
         if current_player == system.bot:
-            response = system.id_manager.id_statement("ttt", "open").format("Ik ben") #TODO FIX
+            response = system.id_manager.id_statement("ttt", "start_self")
             tictactoemove("cpu", author, system)
         else:
-            response = system.id_manager.id_statement("ttt", "open").format(
-                "{} is".format(get_addressable(system, current_player))
-            )
+            response = system.id_manager.id_statement("ttt", "start_other").format(get_addressable(system, current_player))
     return response, str(game)
 
 

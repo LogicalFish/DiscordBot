@@ -37,7 +37,8 @@ general:
     - "*Beep-boop.* Data has put on Stack. Starting Timer."
     - "Reminder [alpha-five] has been scheduled. Countdown has started."
 ttt:
-  open: "*BEEP.* Initializing Tic-Tac-Toe... Game initalized. Awaiting input from {}."
+  start_self: "Initializing Tic-Tac-Toe... Game initalized. Analyzing first turn... First turn mine."
+  start_other:  "*BEEP.* Initializing Tic-Tac-Toe... Game initalized. Awaiting input from {}."
   gamestate: "DISPLAY STATUS. Awaiting Input from {} against {}:"
   ownmove: "*BEEP, BOOP.* Saving {0} into {1}."
   genericwin: "*Beep-boop.* Statistically spoken, {} has won from {}!"
