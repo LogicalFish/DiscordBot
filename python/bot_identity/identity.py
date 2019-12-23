@@ -61,9 +61,11 @@ class Identity:
     def get_unique_triggers(self):
         """Returns the list of tags unique to the identity, and associated regex attributes."""
         result = {}
+        if "unique" not in self.document:
+            return result
         for key in self.document["unique"]:
             entry = self.document["unique"][key]
-            if "regex" in entry and "response" in entry :
+            if "regex" in entry and "response" in entry:
                 result[key] = "\\b{}\\b".format(entry["regex"])
         return result
 
