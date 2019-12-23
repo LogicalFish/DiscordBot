@@ -44,14 +44,13 @@ calendar:
     reminders: "reminder"
 char_list:
   list_dir:
-    - modules
-    - characterlist
     - data
+    - character_lists
   lists:
-    - "[insert name of setting here]"
-  for_each_setting_name:
-    file: "[insert filenames here]"
-    owner: "[insert owner_id here]"
+    - "setting_name"
+  setting_name:
+    file: "empty_list.xml"
+    owner: 000000000000000001
     default_year: 1999
     color: f0f0f0
 dice:

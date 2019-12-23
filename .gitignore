@@ -1,6 +1,6 @@
 *.xml
 !default.xml
-settings.yml
+settings.yaml
 deprecated/
 *.ini
 *.txt

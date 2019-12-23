@@ -1,14 +1,12 @@
 #!/usr/bin/env python3.7
 import discord
-import yaml
 from modules.reminders import delayed_response
 from system_manager import SystemManager
 from bot_response_unit import Responder
 from bot_tasks import calendar_task, birthday_task, reminder_task
 from commands import MainCommand
 from modules.reactions import reactor
-
-configuration = yaml.safe_load(open("settings.yml"))
+from config import configuration
 
 # Secret Token
 TOKEN = configuration['secret_token']
