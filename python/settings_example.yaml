@@ -6,6 +6,9 @@ dir:
     - data
     - localizations
     - commands_EN.yaml
+  reactions_file:
+    - data
+    - reactions.yaml
 database:
   active: True
   ini_file:
