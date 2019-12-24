@@ -1,15 +1,13 @@
 from .run_command import CommandRunner
 
-from bot_identity.response_commands import StatusCommand, BanCommand, UnBanCommand, ChatToggleCommand, DismissCommand, \
-    IntervalCommand
-from modules.reminders.reminder_command import RemindCommand
+from bot_identity.response_commands import StatusCommand, BanCommand, UnBanCommand, \
+    ChatToggleCommand, DismissCommand, IntervalCommand
 
 from config import configuration
 
 # Complete list of commands that people can access through the bots.
 commands_list = [StatusCommand(), BanCommand(), UnBanCommand(),
-                 ChatToggleCommand(), IntervalCommand(), DismissCommand(),
-                 RemindCommand()]
+                 ChatToggleCommand(), IntervalCommand(), DismissCommand()]
 
 
 if configuration['poll']['active']:
@@ -36,6 +34,10 @@ if configuration['calendar']['active']:
 
     commands_list += [EventCommand(), ListEventCommand(), CreateEventCommand(),
                       EditEventCommand(), DeleteEventCommand(), UnShadowCommand()]
+
+if configuration['remindme']['active']:
+    from modules.reminders.reminder_command import RemindCommand
+    commands_list.append(RemindCommand())
 
 if configuration['character_list']['active']:
     from modules.characterlist.list_commands import ListAllCommand, WhoIsCommand, AddYearCommand, GetYearCommand

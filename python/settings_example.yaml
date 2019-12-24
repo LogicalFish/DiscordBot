@@ -77,6 +77,8 @@ dice:
   dice_softcap:  20
   dice_hardcap: 100
   dice_max_sides: 1000
+remindme:
+  active: True
 tic-tac-toe:
   active: True
   pieces: [":x:", ":o:"]
