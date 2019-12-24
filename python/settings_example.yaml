@@ -33,6 +33,18 @@ identity:
     normal: 3
     hard: 4
     expert: 5
+nicknames:
+  active: True
+  max_length: 40
+  default_nicknames:
+    - "The Void"
+    - "Ishmael"
+    - "maybe"
+    - "Spartacus"
+echo:
+  active: True
+poll:
+  active: True
 calendar:
   active: True
   max_event_name: 25
@@ -65,13 +77,6 @@ dice:
   dice_softcap:  20
   dice_hardcap: 100
   dice_max_sides: 1000
-nicknames:
-  max_length: 40
-  default_nicknames:
-    - "The Void"
-    - "Ishmael"
-    - "maybe"
-    - "Spartacus"
 tic-tac-toe:
   active: True
   pieces: [":x:", ":o:"]

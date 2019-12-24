@@ -2,17 +2,25 @@ from .run_command import CommandRunner
 
 from bot_identity.response_commands import StatusCommand, BanCommand, UnBanCommand, ChatToggleCommand, DismissCommand, \
     IntervalCommand
-from .miscellaneous.echo_command import EchoCommand
-from .miscellaneous.poll_command import PollCommand
 from modules.reminders.reminder_command import RemindCommand
 
 from config import configuration
 
 # Complete list of commands that people can access through the bots.
-commands_list = [EchoCommand(), PollCommand(),
-                 StatusCommand(), BanCommand(), UnBanCommand(),
+commands_list = [StatusCommand(), BanCommand(), UnBanCommand(),
                  ChatToggleCommand(), IntervalCommand(), DismissCommand(),
                  RemindCommand()]
+
+
+if configuration['poll']['active']:
+    from .miscellaneous.poll_command import PollCommand
+    commands_list.append(PollCommand())
+if configuration['nicknames']['active']:
+    from modules.nicknames.nickname_command import CallmeCommand
+    commands_list.append(CallmeCommand())
+if configuration['echo']['active']:
+    from .miscellaneous.echo_command import EchoCommand
+    commands_list.append(EchoCommand())
 
 if configuration['dice']['active']:
     from modules.dice.diceroll_commands import RollCommand, CheatRollCommand, GodRollCommand
@@ -21,10 +29,6 @@ if configuration['dice']['active']:
         commands_list.append(GodRollCommand())
     if configuration['dice']['cheat_module']:
         commands_list.append(CheatRollCommand())
-
-if configuration['nicknames']['active']:
-    from modules.nicknames.nickname_command import CallmeCommand
-    commands_list.append(CallmeCommand())
 
 if configuration['calendar']['active']:
     from modules.calendar.calendar_commands import EventCommand, ListEventCommand, CreateEventCommand, \
