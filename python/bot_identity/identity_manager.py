@@ -109,7 +109,7 @@ class IdentityManager:
 
     def get_current_ai(self):
         """Returns the current game difficulty of the bot."""
-        return self.current_id.get_AI()
+        return self.current_id.get_ai()
 
     def id_statement(self, category, tag):
         response = self.current_id.get_phrase(category, tag)

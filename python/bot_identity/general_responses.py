@@ -1,12 +1,13 @@
 import os
 import yaml
 import random
+from config import BASEDIR
 
 
 class GeneralResponder:
 
     def __init__(self, file_path):
-        file_name = os.path.sep.join(file_path)
+        file_name = os.path.sep.join([BASEDIR] + file_path)
         if os.path.isfile(file_name):
             self.document = yaml.safe_load(open(file_name))
         else:

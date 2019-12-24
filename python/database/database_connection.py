@@ -4,7 +4,7 @@ from configparser import ConfigParser
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
-from config import configuration
+from config import configuration, BASEDIR
 from database import Base
 from database.models import models
 
@@ -12,7 +12,7 @@ from database.models import models
 class DatabaseConnection:
 
     def __init__(self):
-        self.filename = os.path.sep.join(configuration['database']['ini_file'])
+        self.filename = os.path.sep.join([BASEDIR] + configuration['database']['ini_file'])
         self.section = configuration['database']['db_section']
         print('Connecting to the {} database...'.format(self.section))
         # Connect to the database

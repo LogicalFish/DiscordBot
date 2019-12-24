@@ -2,11 +2,11 @@ import os
 import re
 import yaml
 
-from config import configuration
+from config import configuration, BASEDIR
 
 reactions = {}
 if 'reactions_file' in configuration['dir']:
-    reactions_file = os.path.sep.join(configuration['dir']['reactions_file'])
+    reactions_file = os.path.sep.join([BASEDIR] + configuration['dir']['reactions_file'])
     if os.path.isfile(reactions_file):
         reactions = yaml.safe_load(open(reactions_file, encoding="utf8"))
 

@@ -1,9 +1,9 @@
 import os
 
-from config import configuration
+from config import configuration, BASEDIR
 from modules.characterlist.npc_tracker import NPCTracker
 
-data_dir = os.path.sep.join(configuration['character_list']['list_dir'])
+data_dir = os.path.sep.join([BASEDIR] + configuration['character_list']['list_dir'])
 npc_trackers = []
 
 for char_list in configuration['character_list']['lists']:

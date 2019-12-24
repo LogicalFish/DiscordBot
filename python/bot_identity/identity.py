@@ -1,9 +1,8 @@
 import os
-
 import yaml
 import random
 
-from config import configuration
+from config import configuration, BASEDIR
 id_config = configuration['identity']
 
 # Difficulty Translation Table
@@ -18,7 +17,7 @@ class Identity:
     """
 
     def __init__(self, file_path, default=False):
-        self.document = yaml.safe_load(open(os.path.sep.join(file_path)))
+        self.document = yaml.safe_load(open(os.path.sep.join([BASEDIR] + file_path)))
         if not default:
             if "name" not in self.document or "regex" not in self.document:
                 raise IdentityError("Could not create identity. Name or regex fields are missing.")
@@ -29,7 +28,7 @@ class Identity:
         """Returns the value of the game tag, or an empty string if no game-tag is found."""
         return self.document.get("game", "")
 
-    def get_AI(self):
+    def get_ai(self):
         """
         Returns the Difficulty of this identity within games.
         If the value is not within the DIF dictionary or an integer, the default is 3.
