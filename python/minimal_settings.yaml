@@ -1,0 +1,52 @@
+secret_token: "[SECRET TOKEN GOES HERE]"
+sign: '!'
+max_msg_length: 2000
+dir:
+  localization:
+    - data
+    - localizations
+    - commands_EN.yaml
+database:
+  active: False
+identity:
+  identity_dir:
+    - data
+    - identity_files
+  default_identity: default_EN.yaml
+  identity_files:
+    - project_gm.yaml
+    - butler.yaml
+    - robot.yaml
+  facts_file: general_facts.yaml
+  universal_phrases:
+    morning: "(goe(d|i)emorgen|mogg(e|u))"
+    night: "(\\b(wel)?te?rusten?\\b|slaap lekker|good night)"
+    thanks: "((bedankt|thank you|thanks|dank ?je ?(wel)?),? {})"
+  default_difficulty: 3
+  difficulty_table:
+    simple: 1
+    easy: 2
+    normal: 3
+    hard: 4
+    expert: 5
+nicknames:
+  active: False
+  max_length: 40
+echo:
+  active: False
+poll:
+  active: False
+calendar:
+  active: False
+character_list:
+  active: False
+dice:
+  active: False
+remindme:
+  active: False
+tic-tac-toe:
+  active: False
+minesweeper:
+  active: False
+wheel:
+  active: False
