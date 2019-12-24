@@ -59,6 +59,9 @@ character_list:
     default_year: 1999
     color: f0f0f0
 dice:
+  active: True
+  god_module: True
+  cheat_module: True
   dice_softcap:  20
   dice_hardcap: 100
   dice_max_sides: 1000
