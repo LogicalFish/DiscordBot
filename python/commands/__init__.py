@@ -4,9 +4,6 @@ from bot_identity.response_commands import StatusCommand, BanCommand, UnBanComma
     IntervalCommand
 from .miscellaneous.echo_command import EchoCommand
 from .miscellaneous.poll_command import PollCommand
-from modules.games.tictactoe.ttt_commands import ChallengeCommand, PlayGameCommand, AbandonGameCommand
-from modules.games.minesweeper.minesweeper_command import MineSweeperCommand
-from modules.games.wheel.wheel_main_command import MainWheelCommand
 from modules.nicknames.nickname_command import CallmeCommand
 from modules.reminders.reminder_command import RemindCommand
 
@@ -17,10 +14,7 @@ commands_list = [EchoCommand(), PollCommand(),
                  CallmeCommand(),
                  StatusCommand(), BanCommand(), UnBanCommand(),
                  ChatToggleCommand(), IntervalCommand(), DismissCommand(),
-                 ChallengeCommand(), PlayGameCommand(), AbandonGameCommand(),
-                 MineSweeperCommand(),
-                 RemindCommand(),
-                 MainWheelCommand()]
+                 RemindCommand()]
 
 if configuration['dice']['active']:
     from modules.dice.diceroll_commands import RollCommand, CheatRollCommand, GodRollCommand
@@ -41,5 +35,15 @@ if configuration['character_list']['active']:
     from modules.characterlist.list_commands import ListAllCommand, WhoIsCommand, AddYearCommand, GetYearCommand
 
     commands_list += [ListAllCommand(), WhoIsCommand(), GetYearCommand(), AddYearCommand()]
+
+if configuration['tic-tac-toe']['active']:
+    from modules.games.tictactoe.ttt_commands import ChallengeCommand, PlayGameCommand, AbandonGameCommand
+    commands_list += [ChallengeCommand(), PlayGameCommand(), AbandonGameCommand()]
+if configuration['minesweeper']['active']:
+    from modules.games.minesweeper.minesweeper_command import MineSweeperCommand
+    commands_list.append(MineSweeperCommand())
+if configuration['wheel']['active']:
+    from modules.games.wheel.wheel_main_command import MainWheelCommand
+    commands_list.append(MainWheelCommand())
 
 MainCommand = CommandRunner(commands_list)

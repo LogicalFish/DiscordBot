@@ -72,7 +72,15 @@ nicknames:
     - "Ishmael"
     - "maybe"
     - "Spartacus"
+tic-tac-toe:
+  active: True
+  pieces: [":x:", ":o:"]
+  empty: ":white_large_square:"
+  canton: ":black_large_square:"
+  rows: [":one:", ":two:", ":three:"]
+  columns: [":regional_indicator_a:", ":regional_indicator_b:", ":regional_indicator_c:"]
 minesweeper:
+  active: True
   max_size: 199
   AI_table:
     1: [6, 4]
@@ -86,13 +94,8 @@ minesweeper:
     3: 14
     4: 25
     5: 38
-tic-tac-toe:
-  pieces: [":x:", ":o:"]
-  empty: ":white_large_square:"
-  canton: ":black_large_square:"
-  rows: [":one:", ":two:", ":three:"]
-  columns: [":regional_indicator_a:", ":regional_indicator_b:", ":regional_indicator_c:"]
 wheel:
+  active: True
   words_file:
     - data
     - wheel

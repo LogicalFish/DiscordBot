@@ -1,7 +1,6 @@
 from bot_identity.identity_manager import IdentityManager
 from database.database_connection import DatabaseError
 from database.database_manager import DatabaseManager
-from modules.games.wheel.wheel_manager import WheelManager
 from modules.nicknames.nickname_manager import NicknameManager
 from modules.birthday.birthday_manager import BirthdayManager
 from modules.reminders.reminder_manager import ReminderManager
@@ -41,7 +40,11 @@ class SystemManager:
         self.id_manager = IdentityManager(self.database_manager)
         self.nickname_manager = NicknameManager(self.database_manager)
         self.birthday_manager = BirthdayManager(self.database_manager)
-        self.wheel_manager = WheelManager(self.database_manager)
+        if self.configuration['wheel']['active']:
+            from modules.games.wheel.wheel_manager import WheelManager
+            self.wheel_manager = WheelManager(self.database_manager)
+        else:
+            self.wheel_manager = None
         self.reminder_manager = ReminderManager()
 
     @staticmethod
