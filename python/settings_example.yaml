@@ -47,13 +47,13 @@ nicknames:
     - "Spartacus"
 commands:
   nicknames: True
-  echo: True
+  echo: False
   poll: True
   calendar: True
   character_list: True
   dice: True
-  god_dice: True
-  cheat_dice: True
+  god_dice: False
+  cheat_dice: False
   remindme: True
   tic-tac-toe: True
   minesweeper: True
