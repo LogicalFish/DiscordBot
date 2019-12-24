@@ -1,8 +1,6 @@
 from bot_identity.identity_manager import IdentityManager
 from database.database_connection import DatabaseError
 from database.database_manager import DatabaseManager
-from modules.calendar.event_manager import EventManager
-from modules.calendar.time_manager import TimeManager
 from modules.games.wheel.wheel_manager import WheelManager
 from modules.nicknames.nickname_manager import NicknameManager
 from modules.birthday.birthday_manager import BirthdayManager
@@ -32,7 +30,9 @@ class SystemManager:
                 print("Error. {} Database functionality disabled.".format(str(db_error)))
         else:
             self.database_manager = None
-        if self.database_manager:
+        if self.database_manager and self.configuration['calendar']['active']:
+            from modules.calendar.event_manager import EventManager
+            from modules.calendar.time_manager import TimeManager
             self.event_manager = EventManager(self.database_manager)
             self.time_manager = TimeManager(self.event_manager)
         else:

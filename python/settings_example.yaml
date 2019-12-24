@@ -34,6 +34,7 @@ identity:
     hard: 4
     expert: 5
 calendar:
+  active: True
   max_event_name: 25
   max_event_description: 255
   date_format: "%a %d %B, %Y"
