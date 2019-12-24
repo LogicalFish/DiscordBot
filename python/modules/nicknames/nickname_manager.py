@@ -1,7 +1,8 @@
 from database.models.nicknames_model import Nickname
+from modules.nicknames.name_manager import NameManager
 
 
-class NicknameManager:
+class NicknameManager(NameManager):
 
     """
     Class that can keep track of user's nicknames. This way, they can decide what the bot calls them.

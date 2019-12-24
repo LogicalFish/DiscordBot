@@ -147,4 +147,4 @@ def get_addressable(system, player):
     if player == system.bot:
         return config.localization['self_address']
     else:
-        return system.nickname_manager.get_name(player)
+        return system.name_manager.get_name(player)

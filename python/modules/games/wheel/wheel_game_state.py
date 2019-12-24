@@ -28,7 +28,7 @@ class WheelGame:
     def get_scores_with_nicknames(self, system):
         result = "``\t{0}: {1}\t".format(config.localization['wheel']['category'], self.board.category)
         for player in self.players:
-            result += "{player}: {n} {sp}\t".format(player=system.nickname_manager.get_name(player),
+            result += "{player}: {n} {sp}\t".format(player=system.name_manager.get_name(player),
                                                     n=self.score[player],
                                                     sp=config.localization['wheel']['sp_a'])
         result += "``"

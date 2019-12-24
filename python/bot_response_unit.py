@@ -26,7 +26,7 @@ class Responder:
             await self.change_visual_id()
         if "add_id" in action:
             user_from_id = self.system.get_user_by_id(action["add_id"], client=self.client, guild=message.guild)
-            user_name = self.system.nickname_manager.get_name(user_from_id)
+            user_name = self.system.name_manager.get_name(user_from_id)
             if "response" in action:
                 action["response"].format(user_name)
             if "embed" in action:

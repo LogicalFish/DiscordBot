@@ -44,7 +44,7 @@ async def birthday_task(client, system):
             channels = get_main_channels(client)
             for channel in channels:
                 birthday_user = system.get_user_by_id(birthday_id, client=client, guild=channel.guild)
-                user_name = system.nickname_manager.get_name(birthday_user)
+                user_name = system.name_manager.get_name(birthday_user)
                 message = system.id_manager.id_statement("general", "birthday").format(user_name)
                 await channel.send(message)
         if birthday_ids:
