@@ -30,8 +30,6 @@ identity:
     normal: 3
     hard: 4
     expert: 5
-nicknames:
-  max_length: 40
 commands:
   nicknames: False
   echo: False
