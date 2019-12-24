@@ -16,7 +16,7 @@ class StatusCommand(Command):
     @staticmethod
     def get_status(id_manager):
         """Method for getting the status string. Can be used by other classes if necessary."""
-        return id_manager.id_statement("general", "status").format(id_manager.get_chatty_string(),
+        return id_manager.id_statement("general", "status").format(id_manager.get_verbosity_string(),
                                                                    id_manager.get_bans_string().lower(),
                                                                    id_manager.interval)
 
@@ -66,11 +66,11 @@ class ChatToggleCommand(Command):
 
     def execute(self, param, message, system):
         param_bool = self.translate_param(param)
-        if not system.id_manager.chatty and param_bool is not False:
-            system.id_manager.chatty = True
+        if not system.id_manager.verbose and param_bool is not False:
+            system.id_manager.verbose = True
             return {"response": system.id_manager.id_statement("general", "chatty")}
-        elif system.id_manager.chatty and param_bool is not True:
-            system.id_manager.chatty = False
+        elif system.id_manager.verbose and param_bool is not True:
+            system.id_manager.verbose = False
             return {"response": system.id_manager.id_statement("general", "nonchatty")}
         else:
             return {"response": StatusCommand.get_status(system.id_manager)}

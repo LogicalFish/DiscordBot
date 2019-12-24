@@ -48,7 +48,7 @@ class Responder:
             for custom_emoji in action["c_react"]:
                 await message.add_reaction(get(self.client.emojis, name=custom_emoji))
         if "leave" in action:
-            if self.identities.chatty and self.system.last_msg+self.identities.interval < time.time():
+            if self.identities.verbose and self.system.last_msg+self.identities.interval < time.time():
                 await message.channel.send(self.identities.id_statement("general", "leave"))
             self.identities.current_id = action["leave"]
             await self.change_visual_id()
@@ -74,7 +74,7 @@ class Responder:
         action = {}
         response, identity_switch = self.identity_response(message)
         if response:
-            if self.identities.chatty and self.system.last_msg + self.identities.interval < time.time():
+            if self.identities.verbose and self.system.last_msg + self.identities.interval < time.time():
                 action["response"] = response
                 self.system.last_msg = time.time()
         if identity_switch:

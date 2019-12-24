@@ -19,7 +19,6 @@ class Identity:
 
     def __init__(self, file_path, default=False):
         self.document = yaml.safe_load(open(os.path.sep.join(file_path)))
-        # self.root = ElementTree.parse().getroot()
         if not default:
             if "name" not in self.document or "regex" not in self.document:
                 raise IdentityError("Could not create identity. Name or regex fields are missing.")

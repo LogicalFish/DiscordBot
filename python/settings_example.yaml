@@ -22,6 +22,8 @@ identity:
     - butler.yaml
     - robot.yaml
   facts_file: general_facts.yaml
+  default_verbose: True
+  default_interval: 30
   universal_phrases:
     morning: "(goe(d|i)emorgen|mogg(e|u))"
     night: "(\\b(wel)?te?rusten?\\b|slaap lekker|good night)"

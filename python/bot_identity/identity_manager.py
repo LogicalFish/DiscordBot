@@ -1,13 +1,12 @@
 import random
 import re
 
-import config
 from bot_identity.delayed_responses import DelayedResponder
 from bot_identity.general_responses import GeneralResponder
 from bot_identity.identity import Identity, IdentityError
 from database.models.banned_channels_model import BannedChannel
 
-from config import configuration
+from config import configuration, localization
 id_config = configuration['identity']
 
 
@@ -18,7 +17,7 @@ class IdentityManager:
         database (database_manager):
         identities (list): A list that should contain all identities.
         current_id (Identity): The current identity of the bot.
-        chatty (bool): Whether the bot is currently allowed to speak or not.
+        verbose (bool): Whether the bot is currently allowed to speak or not.
         interval (int): the minimum interval in seconds between messages.
         banned_channels (list): List of channels where the bot is 'banned'.
     """
@@ -29,8 +28,8 @@ class IdentityManager:
         self.initialize_identities()
         self.current_id = self.identities[0]
 
-        self.chatty = True
-        self.interval = 0
+        self.verbose = id_config['default_verbose']
+        self.interval = id_config['default_interval']
         self.banned_channels = []
 
         self.database = database_manager
@@ -92,18 +91,15 @@ class IdentityManager:
     def get_bans_string(self):
         """Returns a list of banned channels (if any)"""
         if len(self.banned_channels) == 0:
-            return config.localization['bot_status']['not_banned']
-        result = config.localization['bot_status']['banned']
+            return localization['bot_status']['not_banned']
+        result = localization['bot_status']['banned']
         for channel_id in self.banned_channels:
             result += "<#{}>,".format(channel_id)
         return result[:-1]
 
-    def get_chatty_string(self):
+    def get_verbosity_string(self):
         """Returns a string based on whether the bot is chatty or not."""
-        if self.chatty:
-            return config.localization['bot_status']['chatty']
-        else:
-            return config.localization['bot_status']['not_chatty']
+        return localization['bot_status']['chatty'] if self.verbose else localization['bot_status']['not_chatty']
 
     def get_random_other_id(self):
         """Returns a random id (which is not the current id.)"""
@@ -159,7 +155,6 @@ class IdentityManager:
         Method that goes through a message to find all identities that are mentioned within.
 
         :param message: The message sent by a user.
-        :param id_list: The list of all Identities.
         :return: A list containing all the identities that have been mentioned in the text.
         """
         result = []
@@ -171,4 +166,3 @@ class IdentityManager:
             except IdentityError as ie:
                 print("IdentityError: {} Skipping identity.".format(ie))
         return result
-
