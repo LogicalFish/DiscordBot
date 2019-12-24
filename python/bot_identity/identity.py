@@ -7,7 +7,7 @@ from config import configuration
 id_config = configuration['identity']
 
 # Difficulty Translation Table
-DIF = id_config['difficulty']
+DIF = id_config['difficulty_table']
 
 
 class Identity:

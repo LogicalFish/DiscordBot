@@ -6,9 +6,12 @@ dir:
     - data
     - localizations
     - commands_EN.yaml
-  database_file:
+database:
+  active: True
+  ini_file:
     - database
     - database.ini
+  db_section: 'postgresql'
 identity:
   identity_dir:
     - data
@@ -23,13 +26,13 @@ identity:
     morning: "(goe(d|i)emorgen|mogg(e|u))"
     night: "(\\b(wel)?te?rusten?\\b|slaap lekker|good night)"
     thanks: "((bedankt|thank you|thanks|dank ?je ?(wel)?),? {})"
-  difficulty:
+  default_difficulty: 3
+  difficulty_table:
     simple: 1
     easy: 2
     normal: 3
     hard: 4
     expert: 5
-  default_difficulty: 3
 calendar:
   max_event_name: 25
   max_event_description: 255
@@ -67,21 +70,11 @@ nicknames:
 minesweeper:
   max_size: 199
   AI_table:
-    1:
-      - 6
-      - 4
-    2:
-      - 8
-      - 6
-    3:
-      - 12
-      - 8
-    4:
-      - 14
-      - 10
-    5:
-      - 17
-      - 11
+    1: [6, 4]
+    2: [8, 6]
+    3: [12, 8]
+    4: [14, 10]
+    5: [17, 11]
   AI_bombs:
     1: 1
     2: 5
@@ -89,19 +82,11 @@ minesweeper:
     4: 25
     5: 38
 tic-tac-toe:
-  pieces:
-    - ":x:"
-    - ":o:"
+  pieces: [":x:", ":o:"]
   empty: ":white_large_square:"
   canton: ":black_large_square:"
-  rows:
-    - ":one:"
-    - ":two:"
-    - ":three:"
-  columns:
-    - ":regional_indicator_a:"
-    - ":regional_indicator_b:"
-    - ":regional_indicator_c:"
+  rows: [":one:", ":two:", ":three:"]
+  columns: [":regional_indicator_a:", ":regional_indicator_b:", ":regional_indicator_c:"]
 wheel:
   words_file:
     - data

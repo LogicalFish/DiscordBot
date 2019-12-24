@@ -1,34 +1,40 @@
+import os
 from configparser import ConfigParser
 
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 
-import config
+from config import configuration
 from database import Base
 from database.models import models
 
 
 class DatabaseConnection:
 
-    def __init__(self, filename=config.DB_INI, section='postgresql'):
-        self.filename = filename
-        self.section = section
+    def __init__(self):
+        self.filename = os.path.sep.join(configuration['database']['ini_file'])
+        self.section = configuration['database']['db_section']
         print('Connecting to the PostgreSQL database...')
-        config_url = self.get_url_from_config_dict(self.get_config_params())
         # Connect to the database
         try:
+            config_url = self.get_url_from_config_dict(self.get_config_params())
             self.engine = create_engine(config_url)
             self.engine.connect()
             Base.metadata.create_all(self.engine, checkfirst=True)
         except OperationalError:
             print('No database found. Database functionality disabled.')
             self.engine = None
+        except DatabaseError as db_e:
+            print("Error reading file. {} Database functionality disabled.".format(str(db_e)))
+            self.engine = None
 
-    def get_config_params(self,):
+    def get_config_params(self):
         """ Read the .ini file and get configurations."""
         # Create a parser
         parser = ConfigParser()
         # Read config file
+        if not os.path.isfile(self.filename):
+            raise DatabaseError('No file {0} found.'.format(self.filename))
         parser.read(self.filename)
 
         # Get section
@@ -38,18 +44,21 @@ class DatabaseConnection:
             for param in ini_params:
                 database_parameters[param[0]] = param[1]
         else:
-            raise DatabaseError('Section {0} not found in the {1} file'.format(self.section, self.filename))
+            raise DatabaseError('Section [{0}] not found in the {1} file.'.format(self.section, self.filename))
 
         return database_parameters
 
-    @staticmethod
-    def get_url_from_config_dict(config_dict):
-        config_url = "{0}://{1}:{2}@{3}:{4}/{5}".format(config_dict["drivername"],
-                                                        config_dict["username"],
-                                                        config_dict["password"],
-                                                        config_dict["host"],
-                                                        config_dict["port"],
-                                                        config_dict["database"])
+    def get_url_from_config_dict(self, config_dict):
+        if "drivername" not in config_dict:
+            raise DatabaseError("No valid drivername found in section [{0}] of the {1} file.".format(self.section,
+                                                                                                     self.filename))
+        port = ":{}".format(config_dict["port"]) if "port" in config_dict else ""
+        config_url = "{driver}://{user}:{password}@{host}{port}/{db}".format(driver=config_dict["drivername"],
+                                                                             user=config_dict.get("username", ""),
+                                                                             password=config_dict.get("password", ""),
+                                                                             host=config_dict.get("host", ""),
+                                                                             port=port,
+                                                                             db=config_dict.get("database", ""))
         return config_url
 
 
