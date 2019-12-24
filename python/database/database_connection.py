@@ -14,7 +14,7 @@ class DatabaseConnection:
     def __init__(self):
         self.filename = os.path.sep.join(configuration['database']['ini_file'])
         self.section = configuration['database']['db_section']
-        print('Connecting to the PostgreSQL database...')
+        print('Connecting to the {} database...'.format(self.section))
         # Connect to the database
         try:
             config_url = self.get_url_from_config_dict(self.get_config_params())
@@ -22,11 +22,7 @@ class DatabaseConnection:
             self.engine.connect()
             Base.metadata.create_all(self.engine, checkfirst=True)
         except OperationalError:
-            print('No database found. Database functionality disabled.')
-            self.engine = None
-        except DatabaseError as db_e:
-            print("Error reading file. {} Database functionality disabled.".format(str(db_e)))
-            self.engine = None
+            raise DatabaseError("Database not found.")
 
     def get_config_params(self):
         """ Read the .ini file and get configurations."""

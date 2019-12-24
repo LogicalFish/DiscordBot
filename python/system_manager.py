@@ -1,4 +1,5 @@
 from bot_identity.identity_manager import IdentityManager
+from database.database_connection import DatabaseError
 from database.database_manager import DatabaseManager
 from modules.calendar.event_manager import EventManager
 from modules.calendar.time_manager import TimeManager
@@ -23,12 +24,18 @@ class SystemManager:
         self.last_msg = 0
         self.bot = None
         self.ttt_games = {}
-        self.database_manager = DatabaseManager()
-        if self.database_manager.db.engine is not None:
+        if self.configuration['database']['active']:
+            try:
+                self.database_manager = DatabaseManager()
+            except DatabaseError as db_error:
+                self.database_manager = None
+                print("Error. {} Database functionality disabled.".format(str(db_error)))
+        else:
+            self.database_manager = None
+        if self.database_manager:
             self.event_manager = EventManager(self.database_manager)
             self.time_manager = TimeManager(self.event_manager)
         else:
-            self.database_manager = None
             self.event_manager = None
             self.time_manager = None
         self.id_manager = IdentityManager(self.database_manager)
