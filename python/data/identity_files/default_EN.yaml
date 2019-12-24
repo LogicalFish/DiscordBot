@@ -15,7 +15,6 @@ general:
   birthday:
     - "Happy birthday, {}!"
     - "Happy birthday to you, happy birthday to you, happy birthday, dear {}! Happy birthday to you!"
-    - "Congratulations, {}."
   reminder:
     - "I will help you remember!"
 ttt:
