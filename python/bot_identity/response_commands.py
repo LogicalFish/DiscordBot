@@ -62,16 +62,16 @@ class ChatToggleCommand(Command):
         super().__init__('chattoggle')
 
     def in_call(self, command):
-        return command.startswith(self.call[0])
+        return command in self.call or command.startswith(self.call[0])
 
     def execute(self, param, message, system):
         param_bool = self.translate_param(param)
         if not system.id_manager.verbose and param_bool is not False:
             system.id_manager.verbose = True
-            return {"response": system.id_manager.id_statement("general", "chatty")}
+            return {"response": system.id_manager.id_statement("general", "verbose")}
         elif system.id_manager.verbose and param_bool is not True:
             system.id_manager.verbose = False
-            return {"response": system.id_manager.id_statement("general", "nonchatty")}
+            return {"response": system.id_manager.id_statement("general", "mute")}
         else:
             return {"response": StatusCommand.get_status(system.id_manager)}
 
@@ -113,9 +113,9 @@ class IntervalCommand(Command):
             if old_val == identities.interval:
                 return {"response": StatusCommand.get_status(identities)}
             elif old_val < identities.interval:
-                return {"response": system.id_manager.id_statement("general", "nonchatty")}
+                return {"response": system.id_manager.id_statement("general", "mute")}
             else:
-                return {"response": system.id_manager.id_statement("general", "chatty")}
+                return {"response": system.id_manager.id_statement("general", "verbose")}
 
         except ValueError:
             raise CommandError("number_not_valid", param)

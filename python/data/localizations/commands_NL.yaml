@@ -33,8 +33,8 @@ bot_status:
   description: "Vraag de huidige status van de bot op."
   banned: "Verbannen in "
   not_banned: "Nergens verbannen"
-  chatty: "spraakzaam"
-  not_chatty: "stil"
+  verbose: "spraakzaam"
+  mute: "stil"
 ban:
   commands:
     - "ban"
@@ -46,7 +46,8 @@ unban:
 chattoggle:
   commands:
     - "chat"
-    - "chatty"
+    - "mute"
+    - "stil"
   parameters: "*(optioneel)* T(rue) of Y(es) om alle chat functies in te schakelen. F(alse) of N(ee) om alle chat functies uit te schakelen."
   description: "Dit commando zal alle chat functies in of uit schakelen, afhankelijk van parameters en de huidige stand."
 interval:

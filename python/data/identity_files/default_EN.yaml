@@ -8,8 +8,8 @@ general:
   night: "Good night!"
   thanks: "You're welcome!"
   leave: "Goodbye!"
-  chatty: "I'll talk more often from now on."
-  nonchatty: "I'll be quieter now."
+  verbose: "I'll talk more often from now on."
+  mute: "I'll be quieter now."
   error: "That is not a valid command."
   status: "I am now {}. I will be {}. The current interval between messages is {} seconds."
   birthday:

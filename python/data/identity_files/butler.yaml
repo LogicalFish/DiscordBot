@@ -15,9 +15,9 @@ general:
     - "I will leave you alone now, master."
     - "It has been a pleasure serving. Now I must leave."
     - "I will be outside. If you have need of me again, do not hesitate to call."
-  chatty:
+  verbose:
     - "Yes, master, I will not hesitate to open my mouth."
-  nonchatty:
+  mute:
     - "I understand, master."
     - "Understood. A good servant should be seen, not heard."
   error:

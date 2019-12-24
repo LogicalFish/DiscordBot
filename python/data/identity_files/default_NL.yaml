@@ -8,8 +8,8 @@ general:
   night: "Weltrusten!"
   thanks: "Graag gedaan!"
   leave: "Doei!"
-  chatty: "Ik zal nu wat spraakzamer zijn"
-  nonchatty: "Ik zal nu stiller zijn."
+  verbose: "Ik zal nu wat spraakzamer zijn"
+  mute: "Ik zal nu stiller zijn."
   error: "Dat is geen valide commando."
   status: "Ik ben nu {}. Ik ben {}. De huidige interval tussen berichten is {} seconden."
   birthday:

@@ -98,8 +98,8 @@ class IdentityManager:
         return result[:-1]
 
     def get_verbosity_string(self):
-        """Returns a string based on whether the bot is chatty or not."""
-        return localization['bot_status']['chatty'] if self.verbose else localization['bot_status']['not_chatty']
+        """Returns a string based on whether the bot is verbose or not."""
+        return localization['bot_status']['verbose'] if self.verbose else localization['bot_status']['mute']
 
     def get_random_other_id(self):
         """Returns a random id (which is not the current id.)"""
