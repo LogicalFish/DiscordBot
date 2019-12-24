@@ -2,7 +2,6 @@ import random
 import re
 
 import config
-from bot_identity import general_responses
 from bot_identity.delayed_responses import DelayedResponder
 from bot_identity.general_responses import GeneralResponder
 from bot_identity.identity import Identity, IdentityError
@@ -37,11 +36,14 @@ class IdentityManager:
         self.database = database_manager
         if self.database is not None:
             self.initialize_ban_list()
-        fact_path = id_config['identity_dir'] + [id_config['facts_file']]
-        if reminder_manager:
-            self.responder = DelayedResponder(fact_path, reminder_manager)
+        if "facts_file" in id_config:
+            fact_path = id_config['identity_dir'] + [id_config['facts_file']]
+            if reminder_manager:
+                self.responder = DelayedResponder(fact_path, reminder_manager)
+            else:
+                self.responder = GeneralResponder(fact_path)
         else:
-            self.responder = GeneralResponder(fact_path)
+            self.responder = None
 
     def initialize_identities(self):
         """
@@ -142,12 +144,13 @@ class IdentityManager:
                 response = self.id_statement("general", phrase)
                 return response
 
-        generic_triggers = self.responder.get_triggers()
-        for phrase in generic_triggers:
-            regex = generic_triggers[phrase].lower()
-            matches = re.findall(regex, message.content.lower())
-            if len(matches):
-                return self.responder.get_random_fact(phrase, message)
+        if self.responder:
+            generic_triggers = self.responder.get_triggers()
+            for phrase in generic_triggers:
+                regex = generic_triggers[phrase].lower()
+                matches = re.findall(regex, message.content.lower())
+                if len(matches):
+                    return self.responder.get_random_fact(phrase, message)
 
         return ""
 

@@ -1,5 +1,4 @@
 import os
-
 import yaml
 import random
 
@@ -7,7 +6,12 @@ import random
 class GeneralResponder:
 
     def __init__(self, file_path):
-        self.document = yaml.safe_load(open(os.path.sep.join(file_path)))
+        file_name = os.path.sep.join(file_path)
+        if os.path.isfile(file_name):
+            self.document = yaml.safe_load(open(file_name))
+        else:
+            print("No General Response File Found. Skipping Load")
+            self.document = []
 
     def get_random_fact(self, subject, message):
         if subject in self.document:

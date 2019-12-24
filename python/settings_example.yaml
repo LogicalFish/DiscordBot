@@ -77,7 +77,7 @@ character_list:
     default_year: 1999
     color: f0f0f0
 dice:
-  dice_softcap:  20
+  dice_softcap: 20
   dice_hardcap: 100
   dice_max_sides: 1000
 tic-tac-toe:
