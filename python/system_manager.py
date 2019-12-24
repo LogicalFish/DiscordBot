@@ -29,7 +29,8 @@ class SystemManager:
         else:
             self.database_manager = None
 
-        self.id_manager = IdentityManager(self.database_manager)
+        self.reminder_manager = ReminderManager()
+        self.id_manager = IdentityManager(self.database_manager, self.reminder_manager)
         self.birthday_manager = BirthdayManager(self.database_manager)
 
         if self.database_manager and self.configuration['commands']['calendar']:
@@ -47,8 +48,6 @@ class SystemManager:
         else:
             from modules.nicknames.name_manager import NameManager
             self.name_manager = NameManager()
-
-        self.reminder_manager = ReminderManager()
 
         if self.configuration['commands']['wheel']:
             from modules.games.wheel.wheel_manager import WheelManager

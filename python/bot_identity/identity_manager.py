@@ -3,6 +3,8 @@ import re
 
 import config
 from bot_identity import general_responses
+from bot_identity.delayed_responses import DelayedResponder
+from bot_identity.general_responses import GeneralResponder
 from bot_identity.identity import Identity, IdentityError
 from database.models.banned_channels_model import BannedChannel
 
@@ -22,7 +24,7 @@ class IdentityManager:
         banned_channels (list): List of channels where the bot is 'banned'.
     """
 
-    def __init__(self, database_manager):
+    def __init__(self, database_manager, reminder_manager=None):
         self.default_id = None
         self.identities = []
         self.initialize_identities()
@@ -35,6 +37,11 @@ class IdentityManager:
         self.database = database_manager
         if self.database is not None:
             self.initialize_ban_list()
+        fact_path = id_config['identity_dir'] + [id_config['facts_file']]
+        if reminder_manager:
+            self.responder = DelayedResponder(fact_path, reminder_manager)
+        else:
+            self.responder = GeneralResponder(fact_path)
 
     def initialize_identities(self):
         """
@@ -122,7 +129,7 @@ class IdentityManager:
         unique_triggers = self.current_id.get_unique_triggers()
         for phrase in unique_triggers:
             regex = unique_triggers[phrase].lower()
-            matches = re.findall(regex, message.lower())
+            matches = re.findall(regex, message.content.lower())
             if len(matches):
                 response = self.current_id.get_phrase("unique", phrase)
                 return response
@@ -130,17 +137,17 @@ class IdentityManager:
         universal_triggers = id_config["universal_phrases"]
         for phrase in universal_triggers:
             regex = universal_triggers[phrase].format(self.current_id.regex).lower()
-            matches = re.findall(regex, message.lower())
+            matches = re.findall(regex, message.content.lower())
             if len(matches):
                 response = self.id_statement("general", phrase)
                 return response
 
-        generic_triggers = general_responses.get_triggers()
+        generic_triggers = self.responder.get_triggers()
         for phrase in generic_triggers:
             regex = generic_triggers[phrase].lower()
-            matches = re.findall(regex, message.lower())
+            matches = re.findall(regex, message.content.lower())
             if len(matches):
-                return general_responses.get_random_fact(phrase)
+                return self.responder.get_random_fact(phrase, message)
 
         return ""
 

@@ -73,7 +73,7 @@ class Responder:
         """
         action = {}
         response, identity_switch = self.identity_response(message)
-        if len(response):
+        if response:
             if self.identities.chatty and self.system.last_msg + self.identities.interval < time.time():
                 action["response"] = response
                 self.system.last_msg = time.time()
@@ -95,5 +95,5 @@ class Responder:
             response = identity_switch.get_phrase("general", "call")
         else:
             identity_switch = False
-            response = self.identities.get_identity_response(message.content)
+            response = self.identities.get_identity_response(message)
         return response, identity_switch
