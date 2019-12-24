@@ -6,7 +6,6 @@ from sqlalchemy.exc import OperationalError
 
 from config import configuration, BASEDIR
 from database import Base
-from database.models import models
 
 
 class DatabaseConnection:
@@ -17,6 +16,7 @@ class DatabaseConnection:
         print('Connecting to the {} database...'.format(self.section))
         # Connect to the database
         try:
+            from database.models import models
             config_url = self.get_url_from_config_dict(self.get_config_params())
             self.engine = create_engine(config_url)
             self.engine.connect()

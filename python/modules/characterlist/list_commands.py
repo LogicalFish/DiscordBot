@@ -14,7 +14,7 @@ class ListAllCommand(Command):
         super().__init__('list_npcs')
 
     def execute(self, param, message, system):
-        parsed = re.findall("([\\w\\.]*)\\s*=\\s*[\"'](.*?)[\"']", param)
+        parsed = re.findall("([\\w.]*)\\s*=\\s*[\"'](.*?)[\"']", param)
         search_tuples = []
         for r in parsed:
             search_tuples.append((r[0], r[1]))
@@ -99,7 +99,9 @@ class AddYearCommand(Command):
                         tracker.year_up()
                 else:
                     tracker.year_up()
-                response = config.localization[self.name]['response'].format(tracker.name, old_year, tracker.current_year)
+                response = config.localization[self.name]['response'].format(tracker.name,
+                                                                             old_year,
+                                                                             tracker.current_year)
                 return {"response": response}
         raise CommandError("command_not_allowed", None)
 

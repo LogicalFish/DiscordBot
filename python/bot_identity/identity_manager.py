@@ -134,7 +134,7 @@ class IdentityManager:
 
         universal_triggers = id_config["universal_phrases"]
         for phrase in universal_triggers:
-            regex = universal_triggers[phrase].format(self.current_id.regex).lower()
+            regex = universal_triggers[phrase].format(bot_regex=self.current_id.regex).lower()
             matches = re.findall(regex, message.content.lower())
             if len(matches):
                 response = self.id_statement("general", phrase)

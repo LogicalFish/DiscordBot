@@ -13,4 +13,3 @@ for char_list in configuration['character_list']['lists']:
                                    owner=details['owner'],
                                    year=details['default_year'],
                                    color=int(details['color'], 16)))
-
