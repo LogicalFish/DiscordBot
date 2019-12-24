@@ -5,9 +5,9 @@ from config import configuration
 
 models = [BannedChannel, Birthday, Nickname]
 
-if configuration['calendar']['active']:
+if configuration['commands']['calendar']:
     from database.models.event_model import Event
     models.append(Event)
-if configuration['wheel']['active']:
+if configuration['commands']['wheel']:
     from database.models.high_score_model import Score
     models.append(Score)

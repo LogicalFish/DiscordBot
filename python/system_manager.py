@@ -29,7 +29,10 @@ class SystemManager:
         else:
             self.database_manager = None
 
-        if self.database_manager and self.configuration['calendar']['active']:
+        self.id_manager = IdentityManager(self.database_manager)
+        self.birthday_manager = BirthdayManager(self.database_manager)
+
+        if self.database_manager and self.configuration['commands']['calendar']:
             from modules.calendar.event_manager import EventManager
             from modules.calendar.time_manager import TimeManager
             self.event_manager = EventManager(self.database_manager)
@@ -38,22 +41,20 @@ class SystemManager:
             self.event_manager = None
             self.time_manager = None
 
-        self.id_manager = IdentityManager(self.database_manager)
-        self.birthday_manager = BirthdayManager(self.database_manager)
-
-        if self.configuration['nicknames']['active']:
+        if self.configuration['commands']['nicknames']:
             from modules.nicknames.nickname_manager import NicknameManager
             self.name_manager = NicknameManager(self.database_manager)
         else:
             from modules.nicknames.name_manager import NameManager
             self.name_manager = NameManager()
 
-        if self.configuration['wheel']['active']:
+        self.reminder_manager = ReminderManager()
+
+        if self.configuration['commands']['wheel']:
             from modules.games.wheel.wheel_manager import WheelManager
             self.wheel_manager = WheelManager(self.database_manager)
         else:
             self.wheel_manager = None
-        self.reminder_manager = ReminderManager()
 
     @staticmethod
     def get_user_by_id(user_id, client=None, guild=None):

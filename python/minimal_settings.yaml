@@ -30,23 +30,17 @@ identity:
     hard: 4
     expert: 5
 nicknames:
-  active: False
   max_length: 40
-echo:
-  active: False
-poll:
-  active: False
-calendar:
-  active: False
-character_list:
-  active: False
-dice:
-  active: False
-remindme:
-  active: False
-tic-tac-toe:
-  active: False
-minesweeper:
-  active: False
-wheel:
-  active: False
+commands:
+  nicknames: False
+  echo: False
+  poll: False
+  calendar: False
+  character_list: False
+  dice: False
+  god_dice: False
+  cheat_dice: False
+  remindme: False
+  tic-tac-toe: False
+  minesweeper: False
+  wheel: False
