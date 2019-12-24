@@ -46,7 +46,8 @@ calendar:
     title: "name"
     time: "date"
     reminders: "reminder"
-char_list:
+character_list:
+  active: True
   list_dir:
     - data
     - character_lists

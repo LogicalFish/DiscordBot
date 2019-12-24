@@ -10,7 +10,6 @@ from modules.games.minesweeper.minesweeper_command import MineSweeperCommand
 from modules.games.wheel.wheel_main_command import MainWheelCommand
 from modules.nicknames.nickname_command import CallmeCommand
 from modules.reminders.reminder_command import RemindCommand
-from modules.characterlist.list_commands import ListAllCommand, WhoIsCommand, AddYearCommand, GetYearCommand
 
 from config import configuration
 
@@ -23,7 +22,6 @@ commands_list = [EchoCommand(), PollCommand(),
                  ChallengeCommand(), PlayGameCommand(), AbandonGameCommand(),
                  MineSweeperCommand(),
                  RemindCommand(),
-                 ListAllCommand(), WhoIsCommand(), GetYearCommand(), AddYearCommand(),
                  MainWheelCommand()]
 
 if configuration['calendar']['active']:
@@ -33,5 +31,9 @@ if configuration['calendar']['active']:
     commands_list += [EventCommand(), ListEventCommand(), CreateEventCommand(),
                       EditEventCommand(), DeleteEventCommand(), UnShadowCommand()]
 
+if configuration['character_list']['active']:
+    from modules.characterlist.list_commands import ListAllCommand, WhoIsCommand, AddYearCommand, GetYearCommand
+
+    commands_list += [ListAllCommand(), WhoIsCommand(), GetYearCommand(), AddYearCommand()]
 
 MainCommand = CommandRunner(commands_list)
