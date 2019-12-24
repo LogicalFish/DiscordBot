@@ -30,7 +30,7 @@ identity:
   universal_phrases:
     morning: "(goe(d|i)emorgen|mogg(e|u))"
     night: "(\\b(wel)?te?rusten?\\b|slaap lekker|good night)"
-    thanks: "((bedankt|thank you|thanks|dank ?je ?(wel)?),? {})"
+    thanks: "((bedankt|thank you|thanks|dank ?je ?(wel)?),? {bot_regex})"
   default_difficulty: 3
   difficulty_table:
     simple: 1
