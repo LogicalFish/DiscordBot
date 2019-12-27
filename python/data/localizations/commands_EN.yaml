@@ -34,8 +34,8 @@ bot_status:
   description: "Inquire about the current chat-status of the bot."
   banned: "banned in "
   not_banned: "Not banned anywhere"
-  chatty: "talkative"
-  not_chatty: "quiet"
+  verbose: "talkative"
+  mute: "quiet"
 ban:
   commands:
     - "ban"
@@ -47,7 +47,8 @@ unban:
 chattoggle:
   commands:
     - "chat"
-    - "chatty"
+    - "mute"
+    - "verbosity"
   parameters: "*(optional)* T(rue) or Y(es) to allow all chat. F(alse) or N(o) to suppress all chat."
   description: "This command will suppress or allow all bot chat functions."
 interval:

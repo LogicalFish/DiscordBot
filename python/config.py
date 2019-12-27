@@ -1,9 +1,9 @@
 import os
 import yaml
 
-configuration = yaml.safe_load(open("settings.yaml"))
-localization_file = os.path.sep.join(configuration['dir']['localization'])
-localization = yaml.safe_load(open(localization_file, encoding="utf8"))
+BASEDIR = os.path.dirname(os.path.abspath(__file__))
 
-# Directories and Files
-DB_INI = os.path.sep.join(configuration['dir']['database_file'])
+configuration_file = os.path.sep.join([BASEDIR, "settings.yaml"])
+configuration = yaml.safe_load(open(configuration_file))
+localization_file = os.path.sep.join([BASEDIR] + configuration['dir']['localization'])
+localization = yaml.safe_load(open(localization_file, encoding="utf8"))

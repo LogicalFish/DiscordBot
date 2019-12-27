@@ -20,9 +20,9 @@ general:
     - "Gratitude received. You are welcome."
   leave:
     - "Shutting down..."
-  chatty:
+  verbose:
     - "*Beep boop.* Chat-subroutine activated! Prepare for words."
-  nonchatty:
+  mute:
     - "*Beep.* Will conserve power by ceasing chat functions. Understood."
     - "*Beep boop.* Chat-subroutine deactivated!"
   error:

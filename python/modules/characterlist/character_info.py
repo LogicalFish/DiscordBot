@@ -1,8 +1,8 @@
 import discord
-
 import config
 
 localization = config.localization['npc_model']
+
 
 class CharacterInfo:
 
@@ -38,7 +38,8 @@ class CharacterInfo:
             return moniker
         return "-"
 
-    def alter_possible_list_to_string(self, list_candidate, alter_function):
+    @staticmethod
+    def alter_possible_list_to_string(list_candidate, alter_function):
         if type(list_candidate) == list:
             alter_list = []
             for item in list_candidate:
@@ -91,7 +92,9 @@ class CharacterInfo:
             return "-"
 
     def get_npc_embed(self):
-        embed = discord.Embed(title=self.get_name(), description=self.profile.get("description", ""), color=self.color_value)
+        embed = discord.Embed(title=self.get_name(),
+                              description=self.profile.get("description", ""),
+                              color=self.color_value)
 
         embed.add_field(name=localization['gender'], value=self.profile.get("gender", "-"), inline=True)
         embed.add_field(name=localization['age'], value=self.get_age(), inline=True)

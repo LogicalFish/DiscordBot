@@ -27,8 +27,8 @@ class MineSweeperCommand(Command):
                 dividing_factor = 8 - system.id_manager.get_current_ai()
                 bomb_count = int(dimensions[0]*dimensions[1]/dividing_factor)
         else:
-            dimensions = mine_config['AI_table'][system.id_manager.get_current_ai()]
-            bomb_count = mine_config['AI_bombs'][system.id_manager.get_current_ai()]
+            dimensions = mine_config['AI_table'][system.id_manager.get_current_ai()][0]
+            bomb_count = mine_config['AI_table'][system.id_manager.get_current_ai()][1]
         try:
             minefield = minesweeper.create_minefield(dimensions, bomb_count)
             minefield_string = minesweeper.minefield_to_string(minefield)

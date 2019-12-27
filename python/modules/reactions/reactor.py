@@ -1,28 +1,41 @@
-from modules.reactions import heartful, watbeer
+import os
+import re
+import yaml
+
+from config import configuration, BASEDIR
+
+reactions = {}
+if 'reactions_file' in configuration['dir']:
+    reactions_file = os.path.sep.join([BASEDIR] + configuration['dir']['reactions_file'])
+    if os.path.isfile(reactions_file):
+        reactions = yaml.safe_load(open(reactions_file, encoding="utf8"))
 
 
 def get_reaction_to_reaction(reaction):
-    """
-    Method for determining if an emoji reaction should be reacted to by an emoji.
-    :param reaction: The reaction.
-    :return: An Action array. (See Bot Response Unit)
-    """
-    if heartful.is_heart_emoji(reaction.emoji):
-        return {"react": [reaction.emoji]}
-    if watbeer.is_raccoon_emoji(reaction.emoji):
-        return {"react": [reaction.emoji]}
+    for category in reactions:
+        if "emoji_triggers" in reactions[category] and reaction.emoji in reactions[category]["emoji_triggers"]:
+            return {"react": [reaction.emoji]}
+        elif "custom_emoji" in reactions[category]:
+            custom_string = "<:{}:{}>".format(reactions[category]["custom_emoji"]["name"],
+                                              reactions[category]["custom_emoji"]["id"])
+            if str(reaction.emoji) == custom_string:
+                return {"react": [reaction.emoji]}
     return {}
 
 
 def get_reaction_to_message(message):
-    """
-    Method for determining if a message should be reacted to.
-    :param message: The message.
-    :return: An Action array. (See Bot Response Unit)
-    """
-    reaction = heartful.get_heart_in_message(message.content)
-    custom_reaction = []
-    if watbeer.contains_racoons(message.content):
-        reaction.append(watbeer.RACCOON_EMOJI)
-        custom_reaction.append(watbeer.RACCOON_EMOJI_NAME)
-    return reaction, custom_reaction
+    response_list = []
+    custom_response_list = []
+    for category in reactions:
+        if "emoji_triggers" in reactions[category]:
+            for emoji in reactions[category]["emoji_triggers"]:
+                if emoji in message.content:
+                    response_list.append(emoji)
+        if "text_triggers" in reactions[category]:
+            matches = re.findall(reactions[category]["text_triggers"], message.content)
+            if len(matches):
+                if "emoji_response" in reactions[category]:
+                    response_list += reactions[category]["emoji_response"]
+                if "custom_emoji" in reactions[category]:
+                    custom_response_list.append(reactions[category]["custom_emoji"]["name"])
+    return response_list, custom_response_list

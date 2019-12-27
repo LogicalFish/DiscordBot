@@ -2,7 +2,7 @@ import os
 import yaml
 import random
 
-from config import configuration
+from config import configuration, BASEDIR
 display_config = configuration['wheel']['display']
 
 
@@ -71,7 +71,7 @@ class WheelBoard:
 
     @staticmethod
     def get_random_word():
-        word_file = os.path.sep.join(configuration['wheel']['words_file'])
+        word_file = os.path.sep.join([BASEDIR] + configuration['wheel']['words_file'])
         word_doc = yaml.safe_load(open(word_file))
 
         categories = list(word_doc.keys())

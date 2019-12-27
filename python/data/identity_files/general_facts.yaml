@@ -1,4 +1,11 @@
 randomfact:
   regex: "(random fact)"
   response:
-    - "Did you know? If you add some facts here, the bot will respond to them!"
+    - "Did you know? If you add some facts here, the bot will respond with them!"
+delayedresponse:
+  delay:
+    min: 2
+    max: 3
+  regex: "(slowpoke)"
+  response:
+    - "I am not slow!"

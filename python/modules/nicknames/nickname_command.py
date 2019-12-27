@@ -5,7 +5,6 @@ from commands.command_superclass import Command
 
 
 class CallmeCommand(Command):
-
     """
     Command class for adding a nickname for the caller.
     """
@@ -16,11 +15,12 @@ class CallmeCommand(Command):
 
     def execute(self, param, message, system):
         if len(param):
-            system.nickname_manager.add_nickname(message.author.id,
-                                                 param[:config.configuration['nicknames']['max_length']])
+            system.name_manager.add_nickname(message.author.id,
+                                             param[:config.configuration['nicknames']['max_length']])
         else:
-            system.nickname_manager.add_nickname(message.author.id, self.get_default_name())
-        return {"response": config.localization[self.name]['response'].format(system.nickname_manager.get_name(message.author))}
+            system.name_manager.add_nickname(message.author.id, self.get_default_name())
+        return {
+            "response": config.localization[self.name]['response'].format(system.name_manager.get_name(message.author))}
 
     @staticmethod
     def get_default_name():

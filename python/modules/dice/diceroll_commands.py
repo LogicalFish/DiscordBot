@@ -21,7 +21,7 @@ class RollCommand(Command):
         self.description = self.description.format(configuration['sign'], self.call[0])
 
     def execute(self, param, message, system):
-        author = system.nickname_manager.get_name(message.author)
+        author = system.name_manager.get_name(message.author)
         action = {"response": "{}, ".format(author)}
 
         parallel_list = param.split("|")

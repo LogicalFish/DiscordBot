@@ -15,6 +15,7 @@ class CommandRunner:
     def run_command(self, params, message, system):
         """
         Method to run a specified command.
+        :param params: The parameters given to the command
         :param message: The message object containing the command.
         :param system: The system meta-object, containing information about the current state of the bot.
         :return: a action dictionary containing six possible actions:
@@ -47,10 +48,11 @@ class CommandRunner:
                 return c
         raise CommandError("command_not_found", call)
 
-    def split_message(self, full_command):
+    @staticmethod
+    def split_message(full_command):
         """
         Splits a message's contents in two halves.
-        :param message: A message.
+        :param full_command: The full command
         :return: command : A string containing the first word of the message. (The 'command')
                 user_param : A string containing the rest of the message. (The 'parameters')
         """

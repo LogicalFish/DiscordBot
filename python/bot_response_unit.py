@@ -26,7 +26,7 @@ class Responder:
             await self.change_visual_id()
         if "add_id" in action:
             user_from_id = self.system.get_user_by_id(action["add_id"], client=self.client, guild=message.guild)
-            user_name = self.system.nickname_manager.get_name(user_from_id)
+            user_name = self.system.name_manager.get_name(user_from_id)
             if "response" in action:
                 action["response"].format(user_name)
             if "embed" in action:
@@ -48,7 +48,7 @@ class Responder:
             for custom_emoji in action["c_react"]:
                 await message.add_reaction(get(self.client.emojis, name=custom_emoji))
         if "leave" in action:
-            if self.identities.chatty and self.system.last_msg+self.identities.interval < time.time():
+            if self.identities.verbose and self.system.last_msg+self.identities.interval < time.time():
                 await message.channel.send(self.identities.id_statement("general", "leave"))
             self.identities.current_id = action["leave"]
             await self.change_visual_id()
@@ -73,8 +73,8 @@ class Responder:
         """
         action = {}
         response, identity_switch = self.identity_response(message)
-        if len(response):
-            if self.identities.chatty and self.system.last_msg + self.identities.interval < time.time():
+        if response:
+            if self.identities.verbose and self.system.last_msg + self.identities.interval < time.time():
                 action["response"] = response
                 self.system.last_msg = time.time()
         if identity_switch:
@@ -95,5 +95,5 @@ class Responder:
             response = identity_switch.get_phrase("general", "call")
         else:
             identity_switch = False
-            response = self.identities.get_identity_response(message.content)
+            response = self.identities.get_identity_response(message)
         return response, identity_switch

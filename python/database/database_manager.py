@@ -6,8 +6,9 @@ from database.database_connection import DatabaseConnection
 class DatabaseManager:
     """Manager for the database."""
 
-    db = DatabaseConnection()
-    Session = sessionmaker(bind=db.engine)
+    def __init__(self):
+        self.db = DatabaseConnection()
+        self.Session = sessionmaker(bind=self.db.engine)
 
     def insert(self, item):
         """

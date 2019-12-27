@@ -1,12 +1,12 @@
 import random
 import re
 
-import config
-from bot_identity import general_responses
+from bot_identity.delayed_responses import DelayedResponder
+from bot_identity.general_responses import GeneralResponder
 from bot_identity.identity import Identity, IdentityError
 from database.models.banned_channels_model import BannedChannel
 
-from config import configuration
+from config import configuration, localization
 id_config = configuration['identity']
 
 
@@ -17,24 +17,32 @@ class IdentityManager:
         database (database_manager):
         identities (list): A list that should contain all identities.
         current_id (Identity): The current identity of the bot.
-        chatty (bool): Whether the bot is currently allowed to speak or not.
+        verbose (bool): Whether the bot is currently allowed to speak or not.
         interval (int): the minimum interval in seconds between messages.
         banned_channels (list): List of channels where the bot is 'banned'.
     """
 
-    def __init__(self, database_manager):
+    def __init__(self, database_manager, reminder_manager=None):
         self.default_id = None
         self.identities = []
         self.initialize_identities()
         self.current_id = self.identities[0]
 
-        self.chatty = True
-        self.interval = 0
+        self.verbose = id_config['default_verbose']
+        self.interval = id_config['default_interval']
         self.banned_channels = []
 
         self.database = database_manager
         if self.database is not None:
             self.initialize_ban_list()
+        if "facts_file" in id_config:
+            fact_path = id_config['identity_dir'] + [id_config['facts_file']]
+            if reminder_manager:
+                self.responder = DelayedResponder(fact_path, reminder_manager)
+            else:
+                self.responder = GeneralResponder(fact_path)
+        else:
+            self.responder = None
 
     def initialize_identities(self):
         """
@@ -83,18 +91,15 @@ class IdentityManager:
     def get_bans_string(self):
         """Returns a list of banned channels (if any)"""
         if len(self.banned_channels) == 0:
-            return config.localization['bot_status']['not_banned']
-        result = config.localization['bot_status']['banned']
+            return localization['bot_status']['not_banned']
+        result = localization['bot_status']['banned']
         for channel_id in self.banned_channels:
             result += "<#{}>,".format(channel_id)
         return result[:-1]
 
-    def get_chatty_string(self):
-        """Returns a string based on whether the bot is chatty or not."""
-        if self.chatty:
-            return config.localization['bot_status']['chatty']
-        else:
-            return config.localization['bot_status']['not_chatty']
+    def get_verbosity_string(self):
+        """Returns a string based on whether the bot is verbose or not."""
+        return localization['bot_status']['verbose'] if self.verbose else localization['bot_status']['mute']
 
     def get_random_other_id(self):
         """Returns a random id (which is not the current id.)"""
@@ -104,7 +109,7 @@ class IdentityManager:
 
     def get_current_ai(self):
         """Returns the current game difficulty of the bot."""
-        return self.current_id.get_AI()
+        return self.current_id.get_ai()
 
     def id_statement(self, category, tag):
         response = self.current_id.get_phrase(category, tag)
@@ -122,25 +127,26 @@ class IdentityManager:
         unique_triggers = self.current_id.get_unique_triggers()
         for phrase in unique_triggers:
             regex = unique_triggers[phrase].lower()
-            matches = re.findall(regex, message.lower())
+            matches = re.findall(regex, message.content.lower())
             if len(matches):
                 response = self.current_id.get_phrase("unique", phrase)
                 return response
 
         universal_triggers = id_config["universal_phrases"]
         for phrase in universal_triggers:
-            regex = universal_triggers[phrase].format(self.current_id.regex).lower()
-            matches = re.findall(regex, message.lower())
+            regex = universal_triggers[phrase].format(bot_regex=self.current_id.regex).lower()
+            matches = re.findall(regex, message.content.lower())
             if len(matches):
                 response = self.id_statement("general", phrase)
                 return response
 
-        generic_triggers = general_responses.get_triggers()
-        for phrase in generic_triggers:
-            regex = generic_triggers[phrase].lower()
-            matches = re.findall(regex, message.lower())
-            if len(matches):
-                return general_responses.get_random_fact(phrase)
+        if self.responder:
+            generic_triggers = self.responder.get_triggers()
+            for phrase in generic_triggers:
+                regex = generic_triggers[phrase].lower()
+                matches = re.findall(regex, message.content.lower())
+                if len(matches):
+                    return self.responder.get_random_fact(phrase, message)
 
         return ""
 
@@ -149,7 +155,6 @@ class IdentityManager:
         Method that goes through a message to find all identities that are mentioned within.
 
         :param message: The message sent by a user.
-        :param id_list: The list of all Identities.
         :return: A list containing all the identities that have been mentioned in the text.
         """
         result = []
@@ -161,4 +166,3 @@ class IdentityManager:
             except IdentityError as ie:
                 print("IdentityError: {} Skipping identity.".format(ie))
         return result
-

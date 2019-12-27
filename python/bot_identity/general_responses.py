@@ -1,23 +1,29 @@
 import os
 import yaml
 import random
-
-from config import configuration
-
-fact_file = os.path.sep.join(configuration['identity']['identity_dir'] + [configuration['identity']['facts_file']])
-document = yaml.safe_load(open(fact_file))
+from config import BASEDIR
 
 
-def get_random_fact(subject):
-    if subject in document:
-        return random.choice(document[subject]["response"])
-    return None
+class GeneralResponder:
 
+    def __init__(self, file_path):
+        file_name = os.path.sep.join([BASEDIR] + file_path)
+        if os.path.isfile(file_name):
+            self.document = yaml.safe_load(open(file_name))
+        else:
+            print("No General Response File Found. Skipping Load")
+            self.document = []
 
-def get_triggers():
-    """Returns the list of tags unique to the identity, and associated regex attributes."""
-    result = {}
-    for key in document:
-        if "regex" in document[key] and "response" in document[key]:
-            result[key] = document[key]["regex"]
-    return result
+    def get_random_fact(self, subject, message):
+        if subject in self.document:
+            return random.choice(self.document[subject]["response"])
+        return None
+
+    def get_triggers(self):
+        """Returns the list of tags unique to the identity, and associated regex attributes."""
+        result = {}
+        for key in self.document:
+            entry = self.document[key]
+            if "regex" in entry and "response" in entry:
+                result[key] = entry["regex"]
+        return result

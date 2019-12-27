@@ -8,9 +8,9 @@ class Board:
     """
     BOARD class. Keeps track of a Tic-Tac-Toe board, and handles any changes to it.
     Attributes:
-        DIMENSION: The Dimension of the Game-Board. Should be kept at 3 unless you know what you're doing.
-        ROWS: String/List containing the three labels for each row.
-        COLUMNS: String/List containing the three labels for each column.
+        self.DIMENSION: The Dimension of the Game-Board. Should be kept at 3 unless you know what you're doing.
+        self.ROWS: String/List containing the three labels for each row.
+        self.COLUMNS: String/List containing the three labels for each column.
         board: two-dimensional list, containing a 3x3 playing board.
     """
     DIMENSION = 3
@@ -61,7 +61,7 @@ class Board:
         if not isinstance(move, str):
             return False
         if len(move) >= 2 and move[0] in self.COLUMNS and move[1] in self.ROWS:
-            v = ord(move[0].lower()) - 97 #Converts Alphabetical order to number. (A=0)
+            v = ord(move[0].lower()) - 97  # Converts Alphabetical order to number. (A=0)
             h = int(move[1])-1
 
             if self.board[h][v] == ttt_config['empty']:
@@ -112,11 +112,11 @@ class Board:
         if tile[0] in self.COLUMNS and tile[1] in self.ROWS:
             v = ord(tile[0].lower()) - 97
             h = int(tile[1]) - 1
-        for x in [-1,1]:
-            if 0 <= v-x < self.DIMENSION:
-                result.append(self.board[h][v-x])
-            if 0 <= h-x < self.DIMENSION:
-                result.append(self.board[h-x][v])
+            for x in [-1, 1]:
+                if 0 <= v-x < self.DIMENSION:
+                    result.append(self.board[h][v-x])
+                if 0 <= h-x < self.DIMENSION:
+                    result.append(self.board[h-x][v])
         return result
 
     def get_opposite(self, tile):
