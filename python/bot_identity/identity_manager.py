@@ -8,6 +8,7 @@ from bot_identity.identity import Identity, IdentityError
 from database.models.banned_channels_model import BannedChannel
 
 from config import configuration, localization
+
 id_config = configuration['identity']
 
 logger = logging.getLogger(__name__)
@@ -133,6 +134,8 @@ class IdentityManager:
             matches = re.findall(regex, message.content.lower())
             if len(matches):
                 response = self.current_id.get_phrase("unique", phrase)
+                logger.info("Identity {} is responding to unique trigger '{}' with phrase: "
+                            "'{}'".format(self.current_id, phrase, response))
                 return response
 
         universal_triggers = id_config["universal_phrases"]
@@ -141,6 +144,8 @@ class IdentityManager:
             matches = re.findall(regex, message.content.lower())
             if len(matches):
                 response = self.id_statement("general", phrase)
+                logger.info("Identity {} responding to universal trigger '{}' with phrase: "
+                            "'{}'".format(self.current_id, phrase, response))
                 return response
 
         if self.responder:
@@ -149,7 +154,9 @@ class IdentityManager:
                 regex = generic_triggers[phrase].lower()
                 matches = re.findall(regex, message.content.lower())
                 if len(matches):
-                    return self.responder.get_random_fact(phrase, message)
+                    response = self.responder.get_random_fact(phrase, message)
+                    logger.info("Bot responding to generic trigger '{}' with phrase: '{}'".format(phrase, response))
+                    return response
 
         return ""
 

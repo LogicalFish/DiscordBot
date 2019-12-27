@@ -1,12 +1,14 @@
 import re
-
 import config
-# from config import configuration
+import logging
+
 from commands.command_error import CommandError
 from commands.command_superclass import Command
 from database.models.event_model import Event
 from modules.calendar import event_parser
 from modules.calendar.event_parser import EventError
+
+logger = logging.getLogger("modules.calendar.commands")
 
 
 class EventCommand(Command):
@@ -116,6 +118,8 @@ class CreateEventCommand(Command):
         try:
             event_dict = event_parser.parse_event_string(param)
             event_dict["author"] = message.author.id
+            logger.info("Attempting to create an event with the following parameters: {}".format(event_dict))
+
             if "channel" not in event_dict.keys() and message.guild:
                 event_dict["channel"] = message.channel.name
             if "name" not in event_dict:
@@ -156,6 +160,7 @@ class EditEventCommand(Command):
         try:
             event_id = int(id_str)
             event = system.event_manager.get_event(event_id)
+            logger.info("Attempting to edit event {} with the following parameters: {}".format(event_id, event_dict))
             if event is None:
                 raise CommandError("event_not_found", event_id)
             if event.author != message.author.id:
@@ -189,6 +194,7 @@ class DeleteEventCommand(Command):
             raise CommandError("database_error", None)
         try:
             event_id = int(param)
+            logger.info("Attempting to delete event {}.".format(event_id))
 
             event = system.event_manager.get_event(event_id)
             if event is None:
@@ -230,6 +236,7 @@ class UnShadowCommand(Command):
             raise CommandError("event_not_found", param)
         event_id = int(parameter_match[1])
         shadow_id = int(parameter_match[2])
+        logger.info("Attempting to unshadow event {}-{}.".format(event_id, shadow_id))
         if 0 >= shadow_id or shadow_id >= self.calendar_config['max_shadows']:
             raise CommandError("invalid_shadow", param)
 

@@ -22,6 +22,7 @@ async def calendar_task(client, system):
         logger.debug("Checking the calendar for reminders.")
         reminders = system.time_manager.clock_pass()
         for date, reminder_embed, channel_name, tag_name in reminders:
+            logger.info("Sending event reminder in channel {}.".format(channel_name))
             if len(channel_name):
                 channels = filter(lambda ch: ch.name == channel_name, client.get_all_channels())
                 for channel in channels:
@@ -49,6 +50,7 @@ async def birthday_task(client, system):
                 birthday_user = system.get_user_by_id(birthday_id, client=client, guild=channel.guild)
                 user_name = system.name_manager.get_name(birthday_user)
                 message = system.id_manager.id_statement("general", "birthday").format(user_name)
+                logger.info("Wishing user {} a happy birthday in channel {}.".format(user_name, channel))
                 await channel.send(message)
         if birthday_ids:
             await asyncio.sleep(THIRD_DAY*2)
@@ -66,6 +68,7 @@ async def reminder_task(client, system):
         reminder_list = system.reminder_manager.get_all_reminders()
         for reminder in reminder_list:
             date, message, owner = reminder
+            logger.info("Sending reminder '{}' to {}.".format(message, owner))
             await owner.send(content=message)
         await asyncio.sleep(60)
 

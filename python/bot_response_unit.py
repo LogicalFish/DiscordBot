@@ -84,7 +84,6 @@ class Responder:
         response, identity_switch = self.identity_response(message)
         if response:
             if self.identities.verbose and self.system.last_msg + self.identities.interval < time.time():
-                logging.debug("Sending the following response: ".format(response))
                 action["response"] = response
                 self.system.last_msg = time.time()
         if identity_switch:
