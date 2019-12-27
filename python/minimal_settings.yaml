@@ -30,6 +30,8 @@ identity:
     normal: 3
     hard: 4
     expert: 5
+birthdays:
+  channels: ["main", "general"]
 commands:
   nicknames: False
   echo: False
