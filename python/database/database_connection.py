@@ -1,4 +1,5 @@
 import os
+import logging
 from configparser import ConfigParser
 
 from sqlalchemy import create_engine
@@ -7,13 +8,15 @@ from sqlalchemy.exc import OperationalError
 from config import configuration, BASEDIR
 from database import Base
 
+logger = logging.getLogger(__name__)
+
 
 class DatabaseConnection:
 
     def __init__(self):
         self.filename = os.path.sep.join([BASEDIR] + configuration['database']['ini_file'])
         self.section = configuration['database']['db_section']
-        print('Connecting to the {} database...'.format(self.section))
+        logger.info('Connecting to the {} database...'.format(self.section))
         # Connect to the database
         try:
             from database.models import models
@@ -21,6 +24,7 @@ class DatabaseConnection:
             self.engine = create_engine(config_url)
             self.engine.connect()
             Base.metadata.create_all(self.engine, checkfirst=True)
+            logger.info('Connected to the database at {}'.format(config_url))
         except OperationalError:
             raise DatabaseError("Database not found.")
 

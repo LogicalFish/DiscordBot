@@ -21,8 +21,6 @@ class NPCTracker:
         for search_tuple in search_tuples:
             if search_tuple[0].lower() == "list":
                 if search_tuple[1].lower() != self.name.lower():
-                    print(search_tuple[1])
-                    print(self.name)
                     return []
             elif search_tuple[0].lower() == "any":
                 search_tree = query_tree.find_npcs_by_any(search_tuple[1], search_tree)

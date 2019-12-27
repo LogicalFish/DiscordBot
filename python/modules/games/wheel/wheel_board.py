@@ -78,9 +78,7 @@ class WheelBoard:
         cat_weights = [len(word_doc[cat]) for cat in categories]
 
         random_category = random.choices(categories, weights=cat_weights)[0]
-        print(random_category)
-        print(word_doc)
-        print(word_doc[random_category])
+
         random_word = random.choice(word_doc[random_category])
 
         return random_word.lower(), random_category

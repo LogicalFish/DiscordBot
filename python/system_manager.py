@@ -1,8 +1,11 @@
+import logging
 from bot_identity.identity_manager import IdentityManager
 from database.database_connection import DatabaseError
 from database.database_manager import DatabaseManager
 from modules.birthday.birthday_manager import BirthdayManager
 from modules.reminders.reminder_manager import ReminderManager
+
+logger = logging.getLogger(__name__)
 
 
 class SystemManager:
@@ -25,7 +28,7 @@ class SystemManager:
                 self.database_manager = DatabaseManager()
             except DatabaseError as db_error:
                 self.database_manager = None
-                print("Error. {} Database functionality disabled.".format(str(db_error)))
+                logger.warning("Error. {} Database functionality disabled.".format(str(db_error)))
         else:
             self.database_manager = None
 

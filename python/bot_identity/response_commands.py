@@ -1,6 +1,9 @@
 from commands.command_superclass import Command
 from commands.command_error import CommandError
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class StatusCommand(Command):
     """
@@ -109,7 +112,7 @@ class IntervalCommand(Command):
         try:
             old_val = identities.interval
             identities.interval = int(param)
-            print("Changing the interval from {} to {}".format(old_val, identities.interval))
+            logger.info("Changing the interval from {} to {}".format(old_val, identities.interval))
             if old_val == identities.interval:
                 return {"response": StatusCommand.get_status(identities)}
             elif old_val < identities.interval:

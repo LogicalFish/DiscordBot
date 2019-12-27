@@ -2,6 +2,9 @@ import discord
 from discord.utils import get
 import time
 from modules.reactions import reactor
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Responder:
@@ -33,19 +36,25 @@ class Responder:
                 new_footer = action["embed"].footer.text + user_name
                 action["embed"].set_footer(text=new_footer)
         if "response" in action:
+            logging.debug("Sending message: {}".format(action["response"]))
             await message.channel.send(action["response"])
             if "board" in action and action["board"]:
+                logging.debug("Attaching board to message.")
                 await message.channel.send(action["board"])
             if "scores" in action and action["scores"]:
+                logging.debug("Attaching scores to message.")
                 await message.channel.send(action["scores"])
         if "embed" in action:
+            logging.debug("Sending Embed.")
             embed = action["embed"]
             await message.channel.send(embed=embed)
         if "react" in action:
             for emoji in action["react"]:
+                logging.debug("Adding the following reaction: {}.".format(emoji))
                 await message.add_reaction(emoji)
         if "c_react" in action:
             for custom_emoji in action["c_react"]:
+                logging.debug("Adding the following reaction: {}.".format(custom_emoji))
                 await message.add_reaction(get(self.client.emojis, name=custom_emoji))
         if "leave" in action:
             if self.identities.verbose and self.system.last_msg+self.identities.interval < time.time():
@@ -60,7 +69,7 @@ class Responder:
         """
         new_nickname = self.identities.current_id.name
         new_game = self.identities.current_id.get_game()
-        print("Changing bot identity to {}".format(new_nickname))
+        logger.info("Changing bot identity to {}".format(new_nickname))
 
         for server in self.client.guilds:
             await server.me.edit(nick=new_nickname)
@@ -75,6 +84,7 @@ class Responder:
         response, identity_switch = self.identity_response(message)
         if response:
             if self.identities.verbose and self.system.last_msg + self.identities.interval < time.time():
+                logging.debug("Sending the following response: ".format(response))
                 action["response"] = response
                 self.system.last_msg = time.time()
         if identity_switch:
