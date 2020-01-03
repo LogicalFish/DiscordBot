@@ -1,6 +1,9 @@
 from commands.command_superclass import Command
 from modules.games.tictactoe import game_flow as game
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class ChallengeCommand(Command):
 
@@ -16,7 +19,7 @@ class ChallengeCommand(Command):
             challenged = message.mentions[0]
         else:
             challenged = system.bot
-        print("Starting a new game between {} and {}".format(message.author.name, challenged.name))
+        logger.info("Starting a new game between {} and {}".format(message.author.name, challenged.name))
         response, board = game.tictactoenewgame(message.author, challenged, system)
         return {"response": response, "board": board}
 
@@ -41,7 +44,7 @@ class PlayGameCommand(Command):
         return True
 
     def execute(self, param, message, system):
-        print("{} is attempting move _{}_".format(message.author.name, param))
+        logger.info("{} is attempting move _{}_".format(message.author.name, param))
         response, board = game.tictactoemove(param, message.author, system)
         return {"response": response, "board": board}
 
@@ -56,5 +59,5 @@ class AbandonGameCommand(Command):
         super().__init__('tic_tac_toe_abandon')
 
     def execute(self, param, message, system):
-        print("{} has abandoned their game".format(message.author.name))
+        logger.info("{} has abandoned their game".format(message.author.name))
         return {"response": game.tictactoeend(message.author, system)}

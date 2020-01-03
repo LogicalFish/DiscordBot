@@ -1,11 +1,17 @@
 #!/usr/bin/env python3.7
 import discord
+import logging
 from system_manager import SystemManager
 from bot_response_unit import Responder
 from bot_tasks import calendar_task, birthday_task, reminder_task
 from commands import MainCommand
 from modules.reactions import reactor
 from config import configuration
+
+logging.basicConfig(format='%(asctime)s %(levelname)-8s %(name)-32s %(message)s',
+                    level=logging.INFO,
+                    datefmt='%Y-%m-%d %H:%M:%S')
+logger = logging.getLogger(__name__)
 
 # Secret Token
 TOKEN = configuration['secret_token']
@@ -20,7 +26,7 @@ async def on_ready():
     """
     Method that is called when the bot is ready.
     """
-    print("The bot is ready.")
+    logger.info("The bot is ready.")
     system.bot = client.user
     # Add Bot Birthday & Nickname into any database.
     if system.database_manager:
@@ -54,12 +60,14 @@ async def on_reaction_add(reaction, user):
 
 
 try:
-    calendar_task = client.loop.create_task(calendar_task(client, system))
+    if configuration['commands']['calendar']:
+        calendar_task = client.loop.create_task(calendar_task(client, system))
     birthday_task = client.loop.create_task(birthday_task(client, system))
-    reminder_task = client.loop.create_task(reminder_task(client, system))
+    if configuration['commands']['remindme']:
+        reminder_task = client.loop.create_task(reminder_task(client, system))
     client.run(TOKEN)
 except TypeError:
-    print("\nKeyboard interrupt received. Shutting down...")
+    logger.info("\nKeyboard interrupt received. Shutting down...")
     if not client.loop.is_closed():
         calendar_task.cancel()
         birthday_task.cancel()
@@ -67,4 +75,4 @@ except TypeError:
         client.loop.close()
     client.close()
 finally:
-    print("\nClient Closed. Goodbye.")
+    logger.info("\nClient Closed. Goodbye.")

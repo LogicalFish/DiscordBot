@@ -1,6 +1,9 @@
 from commands.command_error import CommandError
 from commands.command_superclass import Command
 from config import configuration
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class JoinWheelCommand(Command):
@@ -24,8 +27,10 @@ class JoinWheelCommand(Command):
         player = message.author
         in_game = system.wheel_manager.player_in_game(player)
         if not in_game:
+            logger.info("Adding user {} to the wheel queue.".format(player))
             new_game = system.wheel_manager.add_to_queue(player)
         if new_game:
+            logger.info("Creating a new game of Wheel with the following players: {}.".format(new_game.players))
             contestants = self.get_nicknames_list(new_game.players, system)
             first_turn = system.name_manager.get_name(new_game.get_current_player())
             return {"response": system.id_manager.id_statement("wheel", "wheelstart").format(contestants,

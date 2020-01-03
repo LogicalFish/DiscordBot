@@ -45,6 +45,8 @@ nicknames:
     - "Ishmael"
     - "maybe"
     - "Spartacus"
+birthdays:
+  channels: ["main", "general"]
 commands:
   nicknames: True
   echo: False

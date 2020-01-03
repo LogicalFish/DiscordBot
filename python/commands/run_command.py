@@ -1,6 +1,9 @@
 import config
+import logging
 from commands.command_error import CommandError
 from .miscellaneous.help_command import HelpCommand
+
+logger = logging.getLogger(__name__)
 
 
 class CommandRunner:
@@ -28,7 +31,7 @@ class CommandRunner:
         """
         user_call, user_param = self.split_message(params)
         user_call = user_call.lower()
-        print("Attempting to execute the {} command from {}".format(user_call, message.author.name))
+        logger.info("Attempting to execute the {} command from {}".format(user_call, message.author.name))
         try:
             command = self.get_command(user_call)
             return command.execute(user_param, message, system)

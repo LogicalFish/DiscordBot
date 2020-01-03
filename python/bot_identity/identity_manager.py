@@ -1,5 +1,6 @@
 import random
 import re
+import logging
 
 from bot_identity.delayed_responses import DelayedResponder
 from bot_identity.general_responses import GeneralResponder
@@ -7,7 +8,10 @@ from bot_identity.identity import Identity, IdentityError
 from database.models.banned_channels_model import BannedChannel
 
 from config import configuration, localization
+
 id_config = configuration['identity']
+
+logger = logging.getLogger(__name__)
 
 
 class IdentityManager:
@@ -54,10 +58,10 @@ class IdentityManager:
                 new_identity = Identity(configuration['identity']['identity_dir'] + [file])
                 self.identities.append(new_identity)
             except IdentityError as ie:
-                print("IdentityError: {0} Skipping identity {1}.".format(ie, file))
+                logger.warning("IdentityError: {0} Skipping identity {1}.".format(ie, file))
                 continue
             except FileNotFoundError:
-                print("File {0} not found. Skipping identity {0}.".format(file))
+                logger.warning("File {0} not found. Skipping identity {0}.".format(file))
                 continue
 
     def initialize_ban_list(self):
@@ -71,7 +75,7 @@ class IdentityManager:
     def ban(self, channel_id):
         """Adds a channel to the banned list and logs the change."""
         if channel_id not in self.banned_channels:
-            print("Banning the following channel: {}".format(channel_id))
+            logger.info("Banning the following channel: {}".format(channel_id))
             if self.database is not None:
                 self.database.insert(BannedChannel(channel_id))
             self.banned_channels.append(channel_id)
@@ -81,7 +85,7 @@ class IdentityManager:
     def un_ban(self, channel_id):
         """Removes a channel from the banned list and logs the change."""
         if channel_id in self.banned_channels:
-            print("Unbanning the following channel: {}".format(channel_id))
+            logger.info("Unbanning the following channel: {}".format(channel_id))
             if self.database is not None:
                 self.database.delete(BannedChannel, channel_id)
             self.banned_channels.remove(channel_id)
@@ -130,6 +134,8 @@ class IdentityManager:
             matches = re.findall(regex, message.content.lower())
             if len(matches):
                 response = self.current_id.get_phrase("unique", phrase)
+                logger.info("Identity {} is responding to unique trigger '{}' with phrase: "
+                            "'{}'".format(self.current_id, phrase, response))
                 return response
 
         universal_triggers = id_config["universal_phrases"]
@@ -138,6 +144,8 @@ class IdentityManager:
             matches = re.findall(regex, message.content.lower())
             if len(matches):
                 response = self.id_statement("general", phrase)
+                logger.info("Identity {} responding to universal trigger '{}' with phrase: "
+                            "'{}'".format(self.current_id, phrase, response))
                 return response
 
         if self.responder:
@@ -146,7 +154,9 @@ class IdentityManager:
                 regex = generic_triggers[phrase].lower()
                 matches = re.findall(regex, message.content.lower())
                 if len(matches):
-                    return self.responder.get_random_fact(phrase, message)
+                    response = self.responder.get_random_fact(phrase, message)
+                    logger.info("Bot responding to generic trigger '{}' with phrase: '{}'".format(phrase, response))
+                    return response
 
         return ""
 
@@ -164,5 +174,5 @@ class IdentityManager:
                 if len(matches):
                     result.append(identity)
             except IdentityError as ie:
-                print("IdentityError: {} Skipping identity.".format(ie))
+                logger.warning("IdentityError: {} Skipping identity.".format(ie))
         return result

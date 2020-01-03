@@ -1,11 +1,13 @@
 import re
 import operator
-
+import logging
 import config
 from commands.command_error import CommandError
 from commands.command_superclass import Command
 
 from modules.characterlist import npc_trackers
+
+logger = logging.getLogger(__name__)
 
 
 class ListAllCommand(Command):
@@ -16,8 +18,9 @@ class ListAllCommand(Command):
     def execute(self, param, message, system):
         parsed = re.findall("([\\w.]*)\\s*=\\s*[\"'](.*?)[\"']", param)
         search_tuples = []
-        for r in parsed:
-            search_tuples.append((r[0], r[1]))
+        for r0, r1 in parsed:
+            search_tuples.append((r0, r1))
+        logger.info("Looking for character matching the following search terms: {}".format(search_tuples))
         npc_list = []
         for tracker in npc_trackers:
             npc_list += tracker.get_list_of_npcs(search_tuples)
@@ -41,6 +44,7 @@ class WhoIsCommand(Command):
                 npc = self.saved_list[list_number]
                 action = {"embed": npc.get_npc_embed()}
                 return action
+        logger.info("Looking for characters named: {}".format(param))
         npc_list = []
         score = 0
         for tracker in npc_trackers:

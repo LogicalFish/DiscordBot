@@ -8,9 +8,9 @@ if configuration['database']['active']:
     from database.models.nicknames_model import Nickname
     models = [BannedChannel, Nickname, Birthday]
 
-if configuration['commands']['calendar']:
-    from database.models.event_model import Event
-    models.append(Event)
-if configuration['commands']['wheel']:
-    from database.models.high_score_model import Score
-    models.append(Score)
+    if configuration['commands']['calendar']:
+        from database.models.event_model import Event
+        models.append(Event)
+    if configuration['commands']['wheel']:
+        from database.models.high_score_model import Score
+        models.append(Score)

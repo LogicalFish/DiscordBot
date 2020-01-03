@@ -1,7 +1,10 @@
 import os
 import yaml
 import random
+import logging
 from config import BASEDIR
+
+logger = logging.getLogger(__name__)
 
 
 class GeneralResponder:
@@ -11,7 +14,7 @@ class GeneralResponder:
         if os.path.isfile(file_name):
             self.document = yaml.safe_load(open(file_name))
         else:
-            print("No General Response File Found. Skipping Load")
+            logging.warning("No general response file found. No responses has been loaded.")
             self.document = []
 
     def get_random_fact(self, subject, message):

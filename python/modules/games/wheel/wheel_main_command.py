@@ -1,7 +1,7 @@
 from commands.command_superclass import Command
 from commands import CommandRunner
 
-from modules.games.wheel.wheel_command import JoinWheelCommand, SpinWheelCommand, GuessConsonantCommand, \
+from modules.games.wheel.wheel_commands import JoinWheelCommand, SpinWheelCommand, GuessConsonantCommand, \
     BuyVowelCommand, SolveCommand, WheelStatusCommand, WheelQuitCommand, WheelScoreCommand
 
 

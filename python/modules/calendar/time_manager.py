@@ -1,7 +1,9 @@
 import operator
 from datetime import datetime
-
+import logging
 from modules.calendar.reminder_queue import ReminderQueue
+
+logger = logging.getLogger(__name__)
 
 
 class TimeManager:
@@ -20,8 +22,10 @@ class TimeManager:
         for event in events:
             if event.date < datetime.now():
                 if event.recur:
+                    logger.info("Event {} has expired. Event wil be moved to new date and time.".format(event.event_id))
                     self.event_manager.recur_event(event.event_id)
                 else:
+                    logger.info("Event {} has expired. Removing the event from the calendar.".format(event.event_id))
                     self.event_manager.delete_event(event.event_id)
             else:
                 break
@@ -31,6 +35,7 @@ class TimeManager:
         This method checks whether the reminder queue needs to be rebuilt.
         """
         if self.event_manager.altered:
+            logger.debug("Events have been altered. Rebuilding reminder queue.")
             self.event_manager.altered = False
             self.queue.clear()
             self.queue.build_queue(self.event_manager.get_all_events())

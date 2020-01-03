@@ -24,6 +24,9 @@ class Identity:
             self.name = self.document["name"]
             self.regex = "\\b{}\\b".format(self.document["regex"])
 
+    def __str__(self):
+        return self.name
+
     def get_game(self):
         """Returns the value of the game tag, or an empty string if no game-tag is found."""
         return self.document.get("game", "")

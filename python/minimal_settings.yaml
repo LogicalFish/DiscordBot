@@ -15,14 +15,9 @@ identity:
   default_identity: default_EN.yaml
   identity_files:
     - project_gm.yaml
-    - butler.yaml
-    - robot.yaml
   default_verbose: False
   default_interval: 0
-  universal_phrases:
-    morning: "(goe(d|i)emorgen|mogg(e|u))"
-    night: "(\\b(wel)?te?rusten?\\b|slaap lekker|good night)"
-    thanks: "((bedankt|thank you|thanks|dank ?je ?(wel)?),? {bot_regex})"
+  universal_phrases: []
   default_difficulty: 3
   difficulty_table:
     simple: 1
@@ -30,6 +25,8 @@ identity:
     normal: 3
     hard: 4
     expert: 5
+birthdays:
+  channels: ["main", "general"]
 commands:
   nicknames: False
   echo: False
