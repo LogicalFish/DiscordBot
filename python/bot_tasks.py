@@ -45,7 +45,7 @@ async def birthday_task(client, system):
         logger.debug("Checking the Birthday Manager for birthdays.")
         birthday_ids = system.birthday_manager.get_today_birthdays()
         for birthday_id in birthday_ids:
-            channels = get_main_channels(client)
+            channels = get_main_channels(client, system)
             for channel in channels:
                 birthday_user = system.get_user_by_id(birthday_id, client=client, guild=channel.guild)
                 user_name = system.name_manager.get_name(birthday_user)
