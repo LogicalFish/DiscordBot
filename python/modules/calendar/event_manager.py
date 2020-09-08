@@ -84,6 +84,7 @@ class EventManager:
         event.recur_self()
         session.commit()
         session.close()
+        self.altered = True
         return new_event
 
     def recur_event(self, id_no):
@@ -95,3 +96,4 @@ class EventManager:
         event.recur_self()
         session.commit()
         session.close()
+        self.altered = True
