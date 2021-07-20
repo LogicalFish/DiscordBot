@@ -47,7 +47,7 @@ async def birthday_task(client, system):
         for birthday_id in birthday_ids:
             channels = get_main_channels(client, system)
             for channel in channels:
-                birthday_user = system.get_user_by_id(birthday_id, client=client, guild=channel.guild)
+                birthday_user = await system.get_user_by_id(birthday_id, client=client, guild=channel.guild)
                 user_name = system.name_manager.get_name(birthday_user)
                 message = system.id_manager.id_statement("general", "birthday").format(user_name)
                 logger.info("Wishing user {} a happy birthday in channel {}.".format(user_name, channel))

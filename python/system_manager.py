@@ -59,7 +59,7 @@ class SystemManager:
             self.wheel_manager = None
 
     @staticmethod
-    def get_user_by_id(user_id, client=None, guild=None):
+    async def get_user_by_id(user_id, client=None, guild=None):
         """
         Method for obtaining a name when all you have is an ID.
         :param user_id: The user ID
@@ -69,7 +69,7 @@ class SystemManager:
         """
         user = None
         if client:
-            user = client.get_user(user_id)
+            user = await client.fetch_user(user_id)
         elif guild:
-            user = guild.get_member(user_id)
+            user = await guild.fetch_member(user_id)
         return user
